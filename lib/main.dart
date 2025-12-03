@@ -1024,53 +1024,77 @@ class _AccueilPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: kPrimaryBlue.withOpacity(0.2), width: 2),
         boxShadow: [
           BoxShadow(
-            color: kPrimaryBlue.withOpacity(0.15),
+            color: kPrimaryBlue.withOpacity(0.1),
             blurRadius: 30,
-            offset: const Offset(0, 10),
+            offset: const Offset(0, 15),
           ),
         ],
       ),
       child: Column(
         children: [
-          // En-tête
+          // En-tête avec dégradé bleu
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [kPrimaryBlue, kPrimaryBlue.withOpacity(0.8)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [kDarkBlue, kPrimaryBlue],
               ),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(22),
+                topRight: Radius.circular(22),
               ),
             ),
             child: Row(
               children: [
+                // Badge numéro avec accent orange
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    gradient: const LinearGradient(
+                      colors: [kAccentOrange, kAccentYellow],
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: kAccentOrange.withOpacity(0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: const Text(
                     '06',
                     style: TextStyle(
-                      color: kPrimaryBlue,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
-                const Text(
-                  'Alpes-Maritimes',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Text(
+                    'Alpes-Maritimes',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
                   ),
+                ),
+                // Icône
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.location_on, color: Colors.white, size: 22),
                 ),
               ],
             ),
@@ -1134,58 +1158,81 @@ class _AccueilPage extends StatelessWidget {
 
   /// Carte du Var (83) avec villes positionnées
   Widget _buildMapCard83() {
-    const varColor = Color(0xFF7C4DFF);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: kAccentOrange.withOpacity(0.3), width: 2),
         boxShadow: [
           BoxShadow(
-            color: varColor.withOpacity(0.15),
+            color: kAccentOrange.withOpacity(0.1),
             blurRadius: 30,
-            offset: const Offset(0, 10),
+            offset: const Offset(0, 15),
           ),
         ],
       ),
       child: Column(
         children: [
-          // En-tête
+          // En-tête avec dégradé orange/jaune
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [varColor, varColor.withOpacity(0.8)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [kAccentOrange, Color(0xFFFF9800)],
               ),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(22),
+                topRight: Radius.circular(22),
               ),
             ),
             child: Row(
               children: [
+                // Badge numéro avec accent bleu
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    gradient: const LinearGradient(
+                      colors: [kDarkBlue, kPrimaryBlue],
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: kDarkBlue.withOpacity(0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: const Text(
                     '83',
                     style: TextStyle(
-                      color: varColor,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
-                const Text(
-                  'Var',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                const SizedBox(width: 16),
+                const Expanded(
+                  child: Text(
+                    'Var',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
                   ),
+                ),
+                // Icône
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.location_on, color: Colors.white, size: 22),
                 ),
               ],
             ),
@@ -1201,25 +1248,25 @@ class _AccueilPage extends StatelessWidget {
                 children: [
                   // Positions basées sur la vraie géographie
                   // Fréjus (est côte) - PRINCIPALE
-                  _buildCityMarker('Fréjus', 0.86, 0.55, varColor, isMain: true),
+                  _buildCityMarker('Fréjus', 0.86, 0.55, kAccentOrange, isMain: true),
                   // Saint-Raphaël (est côte)
-                  _buildCityMarker('St-Raphaël', 0.90, 0.52, varColor),
+                  _buildCityMarker('St-Raphaël', 0.90, 0.52, kAccentOrange),
                   // Sainte-Maxime (golfe St-Tropez)
-                  _buildCityMarker('Ste-Maxime', 0.80, 0.62, varColor),
+                  _buildCityMarker('Ste-Maxime', 0.80, 0.62, kAccentOrange),
                   // Saint-Tropez
-                  _buildCityMarker('St-Tropez', 0.74, 0.70, varColor),
+                  _buildCityMarker('St-Tropez', 0.74, 0.70, kAccentOrange),
                   // Draguignan (intérieur nord-est)
-                  _buildCityMarker('Draguignan', 0.68, 0.25, varColor),
+                  _buildCityMarker('Draguignan', 0.68, 0.25, kAccentOrange),
                   // Toulon (sud-ouest côte) - PRINCIPALE
-                  _buildCityMarker('Toulon', 0.25, 0.78, varColor, isMain: true),
+                  _buildCityMarker('Toulon', 0.25, 0.78, kAccentOrange, isMain: true),
                   // Hyères (sud, près presqu'île Giens)
-                  _buildCityMarker('Hyères', 0.48, 0.82, varColor),
+                  _buildCityMarker('Hyères', 0.48, 0.82, kAccentOrange),
                   // Bandol (ouest côte)
-                  _buildCityMarker('Bandol', 0.10, 0.75, varColor),
+                  _buildCityMarker('Bandol', 0.10, 0.75, kAccentOrange),
                   // La Seyne-sur-Mer (près Toulon)
-                  _buildCityMarker('La Seyne', 0.18, 0.78, varColor),
+                  _buildCityMarker('La Seyne', 0.18, 0.78, kAccentOrange),
                   // Brignoles (intérieur centre)
-                  _buildCityMarker('Brignoles', 0.42, 0.35, varColor),
+                  _buildCityMarker('Brignoles', 0.42, 0.35, kAccentOrange),
                 ],
               ),
             ),
@@ -1230,7 +1277,7 @@ class _AccueilPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on, color: varColor, size: 18),
+                const Icon(Icons.location_on, color: kAccentOrange, size: 18),
                 const SizedBox(width: 6),
                 Text(
                   'Intervention dans tout le département',
@@ -3809,12 +3856,13 @@ class _AlpesMaritimesMapPainter extends CustomPainter {
 class _VarMapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    // Couleurs orange/jaune pour le Var
     final paint = Paint()
-      ..color = const Color(0xFF7C4DFF).withOpacity(0.12)
+      ..color = const Color(0xFFFF9800).withOpacity(0.12)
       ..style = PaintingStyle.fill;
     
     final borderPaint = Paint()
-      ..color = const Color(0xFF7C4DFF).withOpacity(0.4)
+      ..color = const Color(0xFFFF9800).withOpacity(0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.5;
 
