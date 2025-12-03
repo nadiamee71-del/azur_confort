@@ -1,0 +1,80 @@
+============================================================
+IMAGES REQUISES POUR LE SITE AZUR CONFORT
+============================================================
+
+Placez vos images dans ce dossier (assets/images/).
+Formats acceptés : .jpg, .jpeg, .png, .webp
+
+============================================================
+LISTE DES IMAGES À AJOUTER :
+============================================================
+
+1. hero_background.jpg
+   - Description : Photo de fond pour la bannière principale (Hero)
+   - Dimensions : 1920x1080 pixels minimum (format paysage)
+   - Suggestions : 
+     * Photo d'un technicien au travail
+     * Vue de la Côte d'Azur
+     * Climatiseur ou équipement professionnel
+     * Photo de l'équipe ou du véhicule
+
+2. service_climatisation.jpg
+   - Description : Photo pour l'onglet "Climatisation"
+   - Dimensions : 800x600 pixels minimum (format paysage)
+   - Suggestions :
+     * Climatiseur mural installé
+     * Technicien installant une clim
+     * Unité intérieure/extérieure
+
+3. service_frigoriste.jpg
+   - Description : Photo pour l'onglet "Frigoriste"
+   - Dimensions : 800x600 pixels minimum (format paysage)
+   - Suggestions :
+     * Chambre froide professionnelle
+     * Vitrine réfrigérée de commerce
+     * Équipement frigorifique
+
+4. service_pac.jpg
+   - Description : Photo pour l'onglet "Pompes à chaleur"
+   - Dimensions : 800x600 pixels minimum (format paysage)
+   - Suggestions :
+     * Unité extérieure de PAC
+     * Installation de pompe à chaleur
+     * Ballon thermodynamique
+
+5. service_chauffage.jpg
+   - Description : Photo pour l'onglet "Chauffage"
+   - Dimensions : 800x600 pixels minimum (format paysage)
+   - Suggestions :
+     * Chaudière moderne
+     * Radiateur design
+     * Plancher chauffant en installation
+
+6. service_plomberie.jpg
+   - Description : Photo pour l'onglet "Plomberie"
+   - Dimensions : 800x600 pixels minimum (format paysage)
+   - Suggestions :
+     * Salle de bain moderne
+     * Robinetterie de qualité
+     * Plombier au travail
+
+============================================================
+CONSEILS POUR DE BONNES PHOTOS :
+============================================================
+
+- Privilégiez des photos professionnelles et lumineuses
+- Évitez les photos floues ou de mauvaise qualité
+- Les photos de votre propre travail sont idéales
+- Format paysage (horizontal) recommandé
+- Résolution minimum : 72 dpi pour le web
+
+============================================================
+APRÈS AVOIR AJOUTÉ LES IMAGES :
+============================================================
+
+1. Assurez-vous que les noms de fichiers correspondent exactement
+2. Relancez l'application : flutter run -d chrome
+3. Les images apparaîtront automatiquement
+
+============================================================
+

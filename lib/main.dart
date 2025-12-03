@@ -1,0 +1,5344 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:html' as html;
+
+// ============================================================================
+// CONSTANTES DE COULEURS - PALETTE BLEU / BLANC / JAUNE-ORANGÉ
+// ============================================================================
+
+// Bleus (froid / climatisation / frigoriste)
+const Color kPrimaryBlue = Color(0xFF2196F3);
+const Color kDarkBlue = Color(0xFF1565C0);
+const Color kLightBlue = Color(0xFFE3F2FD);
+const Color kIceBlue = Color(0xFFBBDEFB);
+
+// Jaune-Orangé (chaud / chauffage / feu)
+const Color kAccentOrange = Color(0xFFFF9800);
+const Color kAccentYellow = Color(0xFFFFB300);
+const Color kWarmOrange = Color(0xFFE65100);
+
+// Fond blanc/gris très clair
+const Color kBackgroundColor = Color(0xFFFAFAFA);
+const Color kWhite = Color(0xFFFFFFFF);
+
+// ============================================================================
+// NUMÉRO DE TÉLÉPHONE
+// ============================================================================
+const String kPhoneNumber = '0746559768';
+const String kPhoneNumberFormatted = '07 46 55 97 68';
+
+/// Ouvre le numéro de téléphone (appel)
+/// Utilise window.location.href pour les liens tel: (plus fiable)
+void launchPhone() {
+  if (kIsWeb) {
+    html.window.location.href = 'tel:$kPhoneNumber';
+  }
+}
+
+/// Ouvre WhatsApp avec le numéro
+void launchWhatsApp() {
+  if (kIsWeb) {
+    html.window.open('https://wa.me/33${kPhoneNumber.substring(1)}', '_blank');
+  }
+}
+
+/// Ouvre le client email
+void launchEmail() {
+  if (kIsWeb) {
+    html.window.location.href = 'mailto:contact@azur-confort.fr';
+  }
+}
+
+// ============================================================================
+// POINT D'ENTRÉE
+// ============================================================================
+
+void main() {
+  runApp(const AzurConfortApp());
+}
+
+// ============================================================================
+// APPLICATION PRINCIPALE
+// ============================================================================
+
+class AzurConfortApp extends StatelessWidget {
+  const AzurConfortApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Azur Confort - Artisan Frigoriste',
+      theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: kPrimaryBlue,
+          secondary: kAccentYellow,
+        ),
+        scaffoldBackgroundColor: kBackgroundColor,
+        fontFamily: 'Segoe UI',
+      ),
+      home: const AzurConfortHome(),
+    );
+  }
+}
+
+// ============================================================================
+// PAGE PRINCIPALE
+// ============================================================================
+
+class AzurConfortHome extends StatefulWidget {
+  const AzurConfortHome({super.key});
+
+  @override
+  State<AzurConfortHome> createState() => _AzurConfortHomeState();
+}
+
+class _AzurConfortHomeState extends State<AzurConfortHome> {
+  int _selectedPageIndex = 0;
+
+  // Clé globale pour permettre la navigation depuis les enfants
+  static _AzurConfortHomeState? _instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _instance = this;
+  }
+
+  /// Permet de naviguer vers une page depuis n'importe où
+  static void navigateToPage(int index) {
+    _instance?._goToPage(index);
+  }
+
+  void _goToPage(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 700;
+    
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.black.withOpacity(0.05),
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 70,
+        title: Row(
+          children: [
+            // ============================================================
+            // LOGO DESIGN - En attendant le vrai logo
+            // ============================================================
+            Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [kPrimaryBlue, kDarkBlue],
+                ),
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: kPrimaryBlue.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Icône flocon (froid)
+                    const Icon(Icons.ac_unit, color: kPrimaryBlue, size: 20),
+                    Container(
+                      width: 1,
+                      height: 16,
+                      margin: const EdgeInsets.symmetric(horizontal: 6),
+                      color: Colors.grey.shade300,
+                    ),
+                    // Icône flamme (chaud)
+                    const Icon(Icons.local_fire_department, color: kAccentOrange, size: 20),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            // Nom de l'entreprise
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [kDarkBlue, kPrimaryBlue],
+                  ).createShader(bounds),
+                  child: Text(
+                    'AZUR',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: isMobile ? 16 : 20,
+                      letterSpacing: 2,
+                      height: 1,
+                    ),
+                  ),
+                ),
+                Text(
+                  'CONFORT',
+                  style: TextStyle(
+                    color: kAccentOrange,
+                    fontWeight: FontWeight.w600,
+                    fontSize: isMobile ? 10 : 12,
+                    letterSpacing: 3,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          // Navigation - version adaptative
+          if (!isMobile) ...[
+            _buildNavButton('Accueil', 0, Icons.home_outlined),
+            _buildNavButton('À propos', 1, Icons.info_outline),
+            _buildNavButton('Contact', 2, Icons.mail_outline),
+            const SizedBox(width: 16),
+          ] else ...[
+            // Menu hamburger pour mobile
+            PopupMenuButton<int>(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: kLightBlue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.menu, color: kDarkBlue),
+              ),
+              offset: const Offset(0, 50),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              onSelected: (index) => setState(() => _selectedPageIndex = index),
+              itemBuilder: (context) => [
+                _buildPopupMenuItem(0, 'Accueil', Icons.home_outlined),
+                _buildPopupMenuItem(1, 'À propos', Icons.info_outline),
+                _buildPopupMenuItem(2, 'Contact', Icons.mail_outline),
+              ],
+            ),
+            const SizedBox(width: 12),
+          ],
+        ],
+      ),
+      body: Stack(
+        children: [
+          // Pages principales
+          IndexedStack(
+            index: _selectedPageIndex,
+            children: const [
+              _AccueilPage(),
+              _AProposPage(),
+              _ContactPage(),
+            ],
+          ),
+          // Chatbot flottant (toujours visible)
+          const AzurChatbot(),
+        ],
+      ),
+    );
+  }
+
+  PopupMenuItem<int> _buildPopupMenuItem(int index, String text, IconData icon) {
+    final isSelected = _selectedPageIndex == index;
+    return PopupMenuItem<int>(
+      value: index,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isSelected ? kPrimaryBlue.withOpacity(0.1) : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: isSelected ? kPrimaryBlue : Colors.grey.shade600,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              text,
+              style: TextStyle(
+                color: isSelected ? kPrimaryBlue : Colors.black87,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                fontSize: 15,
+              ),
+            ),
+            if (isSelected) ...[
+              const Spacer(),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: kPrimaryBlue,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavButton(String text, int index, IconData icon) {
+    final isSelected = _selectedPageIndex == index;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => setState(() => _selectedPageIndex = index),
+          borderRadius: BorderRadius.circular(12),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            decoration: BoxDecoration(
+              gradient: isSelected
+                  ? const LinearGradient(colors: [kPrimaryBlue, kDarkBlue])
+                  : null,
+              color: isSelected ? null : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              border: isSelected
+                  ? null
+                  : Border.all(color: Colors.grey.shade200, width: 1.5),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: kPrimaryBlue.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  size: 18,
+                  color: isSelected ? Colors.white : Colors.grey.shade600,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : kDarkBlue,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// PAGE ACCUEIL - DESIGN WAOUH
+// ============================================================================
+
+class _AccueilPage extends StatelessWidget {
+  const _AccueilPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // HERO SECTION (compact)
+          _buildHeroSection(context),
+          // NOS SERVICES DÉTAILLÉS (remonté, sans doublon)
+          _buildServicesSection(context),
+          // ZONES D'INTERVENTION
+          _buildZonesSection(context),
+          // POURQUOI NOUS
+          _buildWhyUsSection(context),
+          // FOOTER
+          _buildFooter(context),
+        ],
+      ),
+    );
+  }
+
+  // ======================== HERO SECTION ========================
+  // Photo de fond avec overlay bleu semi-transparent
+  Widget _buildHeroSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 800;
+
+    return Container(
+      width: double.infinity,
+      // Hauteur réduite pour un hero plus compact
+      constraints: BoxConstraints(
+        minHeight: isMobile ? 400 : 480,
+      ),
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          // ============================================================
+          // IMAGE DE FOND - Photo chauffage/artisan
+          // Alignement adaptatif pour garder la partie importante visible
+          // - Desktop : aligné à droite pour voir l'artisan/clim
+          // - Mobile : centré
+          // ============================================================
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/service_chauffage.png',
+              fit: BoxFit.cover,
+              // Alignement adaptatif : sur grand écran, on privilégie le côté droit
+              // où se trouve généralement l'artisan/la climatisation
+              alignment: isMobile ? Alignment.center : Alignment.centerRight,
+              // Gestion d'erreur si l'image n'existe pas
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback : dégradé bleu si pas d'image
+                return Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF0D47A1),
+                        Color(0xFF1565C0),
+                        Color(0xFF1E88E5),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          
+          // ============================================================
+          // OVERLAY BLEU LÉGER - On voit bien la photo
+          // ============================================================
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    const Color(0xFF0D47A1).withOpacity(0.55),
+                    const Color(0xFF1565C0).withOpacity(0.45),
+                    const Color(0xFF1E88E5).withOpacity(0.40),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          
+          // Motifs décoratifs (cercles)
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 400,
+              height: 400,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.05),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -150,
+            left: -150,
+            child: Container(
+              width: 500,
+              height: 500,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.03),
+              ),
+            ),
+          ),
+          
+          // Flocons décoratifs
+          ...List.generate(8, (i) => Positioned(
+            top: 50.0 + (i * 60),
+            left: (i.isEven ? 50.0 : screenWidth - 100) + (i * 30 % 200),
+            child: Icon(
+              Icons.ac_unit,
+              color: Colors.white.withOpacity(0.1),
+              size: 30 + (i * 5).toDouble(),
+            ),
+          )),
+          
+          // Contenu principal - padding réduit pour hero compact
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 24 : 80,
+              vertical: isMobile ? 40 : 60,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: isMobile
+                    ? _buildHeroContentMobile()
+                    : _buildHeroContentDesktop(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroContentDesktop() {
+    return Row(
+      children: [
+        // Texte à gauche
+        Expanded(
+          flex: 6,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Badge
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                decoration: BoxDecoration(
+                  color: kAccentYellow,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: kAccentYellow.withOpacity(0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.bolt, color: Colors.black87, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      'Intervention rapide 06 & 83',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+              // Titre
+              const Text(
+                'Votre confort,',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 56,
+                  fontWeight: FontWeight.w300,
+                  height: 1.1,
+                ),
+              ),
+              ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Colors.white, kAccentYellow],
+                ).createShader(bounds),
+                child: const Text(
+                  'notre priorité.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 56,
+                    fontWeight: FontWeight.bold,
+                    height: 1.1,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Sous-titre
+              Text(
+                'Climatisation • Pompes à chaleur • Plomberie • Chauffage',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Artisan frigoriste qualifié sur toute la Côte d\'Azur',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 40),
+              // Boutons
+              Row(
+                children: [
+                  _buildHeroButton(
+                    'Appeler maintenant',
+                    Icons.phone,
+                    true,
+                  ),
+                  const SizedBox(width: 16),
+                  _buildHeroButton(
+                    'Demander un devis',
+                    Icons.description_outlined,
+                    false,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 48),
+              // Stats
+              Row(
+                children: [
+                  _buildStat('10+', 'Ans d\'expérience'),
+                  const SizedBox(width: 48),
+                  _buildStat('500+', 'Clients satisfaits'),
+                  const SizedBox(width: 48),
+                  _buildStat('24h', 'Intervention rapide'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        // Illustration à droite
+        Expanded(
+          flex: 4,
+          child: _buildHeroIllustration(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroContentMobile() {
+    return Column(
+      children: [
+        // Badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: kAccentYellow,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.bolt, color: Colors.black87, size: 18),
+              SizedBox(width: 6),
+              Text(
+                'Intervention rapide 06 & 83',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 32),
+        // Titre
+        const Text(
+          'Votre confort,',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 36,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        const Text(
+          'notre priorité.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: kAccentYellow,
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Climatisation • PAC • Plomberie • Chauffage',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.9),
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 32),
+        // Boutons
+        _buildHeroButton('Appeler maintenant', Icons.phone, true),
+        const SizedBox(height: 12),
+        _buildHeroButton('Demander un devis', Icons.description_outlined, false),
+        const SizedBox(height: 32),
+        // Stats en ligne
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildStatMobile('10+', 'Ans'),
+            _buildStatMobile('500+', 'Clients'),
+            _buildStatMobile('24h', 'Réponse'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroButton(String text, IconData icon, bool isPrimary) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: isPrimary
+            ? [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ]
+            : null,
+      ),
+      child: ElevatedButton.icon(
+        onPressed: () {
+          if (isPrimary) {
+            // Appeler maintenant
+            launchPhone();
+          } else {
+            // Demander un devis - naviguer vers la page Contact
+            _AzurConfortHomeState.navigateToPage(2);
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isPrimary ? Colors.white : Colors.transparent,
+          foregroundColor: isPrimary ? kDarkBlue : Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(
+              color: isPrimary ? Colors.transparent : Colors.white,
+              width: 2,
+            ),
+          ),
+          elevation: 0,
+        ),
+        icon: Icon(icon, size: 22),
+        label: Text(
+          text,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStat(String value, String label) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            color: kAccentYellow,
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 14,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatMobile(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            color: kAccentYellow,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroIllustration() {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Cercle de fond
+          Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  Colors.white.withOpacity(0.15),
+                  Colors.white.withOpacity(0.05),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
+          // Icône principale
+          Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.1),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 2,
+              ),
+            ),
+            child: const Icon(
+              Icons.ac_unit,
+              size: 100,
+              color: Colors.white,
+            ),
+          ),
+          // Icônes orbitales
+          ..._buildOrbitalIcons(),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildOrbitalIcons() {
+    final icons = [
+      Icons.thermostat,
+      Icons.water_drop,
+      Icons.local_fire_department,
+      Icons.build,
+    ];
+    return List.generate(4, (i) {
+      final angle = i * 3.14159 / 2;
+      return Positioned(
+        left: 150 + 120 * (i == 0 || i == 3 ? 1 : -1).toDouble(),
+        top: 150 + 120 * (i < 2 ? -1 : 1).toDouble(),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 20,
+              ),
+            ],
+          ),
+          child: Icon(
+            icons[i],
+            color: kPrimaryBlue,
+            size: 28,
+          ),
+        ),
+      );
+    });
+  }
+
+  // ======================== SERVICES RAPIDES ========================
+  Widget _buildQuickServices(BuildContext context) {
+    // Services avec couleurs bleu (froid) et orange (chaud)
+    final services = [
+      {'icon': Icons.ac_unit, 'title': 'Climatisation', 'color': kPrimaryBlue},
+      {'icon': Icons.severe_cold, 'title': 'Frigoriste', 'color': kDarkBlue},
+      {'icon': Icons.local_fire_department, 'title': 'Chauffage', 'color': kAccentOrange},
+      {'icon': Icons.thermostat, 'title': 'Pompe à chaleur', 'color': kAccentYellow},
+      {'icon': Icons.water_drop, 'title': 'Plomberie', 'color': kPrimaryBlue},
+    ];
+
+    return Transform.translate(
+      offset: const Offset(0, -50),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1000),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 40,
+                    offset: const Offset(0, 20),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: services.map((s) => Expanded(
+                  child: _buildQuickServiceItem(
+                    s['icon'] as IconData,
+                    s['title'] as String,
+                    s['color'] as Color,
+                  ),
+                )).toList(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickServiceItem(IconData icon, String title, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: color, size: 32),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ======================== SERVICES AVEC ONGLETS ========================
+  Widget _buildServicesSection(BuildContext context) {
+    return const _ServicesTabSection();
+  }
+
+  // ======================== ZONES D'INTERVENTION ========================
+  Widget _buildZonesSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 900;
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 40),
+      padding: const EdgeInsets.symmetric(vertical: 60),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            kPrimaryBlue.withOpacity(0.03),
+            const Color(0xFF7C4DFF).withOpacity(0.03),
+          ],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1300),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                _buildSectionTitle(
+                  'Zones d\'intervention',
+                  'Nous intervenons sur toute la Côte d\'Azur',
+                ),
+                const SizedBox(height: 48),
+                // Cartes géographiques
+                if (isMobile)
+                  Column(
+                    children: [
+                      _buildMapCard06(),
+                      const SizedBox(height: 24),
+                      _buildMapCard83(),
+                    ],
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _buildMapCard06()),
+                      const SizedBox(width: 24),
+                      Expanded(child: _buildMapCard83()),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Carte des Alpes-Maritimes (06) avec villes positionnées
+  Widget _buildMapCard06() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: kPrimaryBlue.withOpacity(0.15),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // En-tête
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [kPrimaryBlue, kPrimaryBlue.withOpacity(0.8)],
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    '06',
+                    style: TextStyle(
+                      color: kPrimaryBlue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                const Text(
+                  'Alpes-Maritimes',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Carte
+          Container(
+            height: 320,
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            child: CustomPaint(
+              painter: _AlpesMaritimesMapPainter(),
+              child: Stack(
+                children: [
+                  // Positions basées sur la vraie géographie
+                  // Menton (extrême est, côte)
+                  _buildCityMarker('Menton', 0.94, 0.48, kPrimaryBlue),
+                  // Monaco
+                  _buildCityMarker('Monaco', 0.90, 0.54, const Color(0xFFE91E63)),
+                  // Nice (centre-est côte) - PRINCIPALE
+                  _buildCityMarker('Nice', 0.72, 0.62, kPrimaryBlue, isMain: true),
+                  // Cagnes-sur-Mer (ouest de Nice)
+                  _buildCityMarker('Cagnes', 0.54, 0.68, kPrimaryBlue),
+                  // Antibes (sud-ouest)
+                  _buildCityMarker('Antibes', 0.40, 0.75, kPrimaryBlue),
+                  // Cannes (sud-ouest) - PRINCIPALE
+                  _buildCityMarker('Cannes', 0.18, 0.78, kPrimaryBlue, isMain: true),
+                  // Grasse (intérieur nord-ouest)
+                  _buildCityMarker('Grasse', 0.22, 0.52, kPrimaryBlue),
+                  // Vence (intérieur)
+                  _buildCityMarker('Vence', 0.48, 0.45, kPrimaryBlue),
+                  // Mougins (entre Cannes et Grasse)
+                  _buildCityMarker('Mougins', 0.25, 0.62, kPrimaryBlue),
+                  // Saint-Martin-Vésubie (montagne)
+                  _buildCityMarker('St-Martin', 0.72, 0.18, kPrimaryBlue),
+                ],
+              ),
+            ),
+          ),
+          // Légende
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.location_on, color: kPrimaryBlue, size: 18),
+                const SizedBox(width: 6),
+                Text(
+                  'Intervention dans tout le département',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Carte du Var (83) avec villes positionnées
+  Widget _buildMapCard83() {
+    const varColor = Color(0xFF7C4DFF);
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: varColor.withOpacity(0.15),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // En-tête
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [varColor, varColor.withOpacity(0.8)],
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    '83',
+                    style: TextStyle(
+                      color: varColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                const Text(
+                  'Var',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Carte
+          Container(
+            height: 320,
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            child: CustomPaint(
+              painter: _VarMapPainter(),
+              child: Stack(
+                children: [
+                  // Positions basées sur la vraie géographie
+                  // Fréjus (est côte) - PRINCIPALE
+                  _buildCityMarker('Fréjus', 0.86, 0.55, varColor, isMain: true),
+                  // Saint-Raphaël (est côte)
+                  _buildCityMarker('St-Raphaël', 0.90, 0.52, varColor),
+                  // Sainte-Maxime (golfe St-Tropez)
+                  _buildCityMarker('Ste-Maxime', 0.80, 0.62, varColor),
+                  // Saint-Tropez
+                  _buildCityMarker('St-Tropez', 0.74, 0.70, varColor),
+                  // Draguignan (intérieur nord-est)
+                  _buildCityMarker('Draguignan', 0.68, 0.25, varColor),
+                  // Toulon (sud-ouest côte) - PRINCIPALE
+                  _buildCityMarker('Toulon', 0.25, 0.78, varColor, isMain: true),
+                  // Hyères (sud, près presqu'île Giens)
+                  _buildCityMarker('Hyères', 0.48, 0.82, varColor),
+                  // Bandol (ouest côte)
+                  _buildCityMarker('Bandol', 0.10, 0.75, varColor),
+                  // La Seyne-sur-Mer (près Toulon)
+                  _buildCityMarker('La Seyne', 0.18, 0.78, varColor),
+                  // Brignoles (intérieur centre)
+                  _buildCityMarker('Brignoles', 0.42, 0.35, varColor),
+                ],
+              ),
+            ),
+          ),
+          // Légende
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.location_on, color: varColor, size: 18),
+                const SizedBox(width: 6),
+                Text(
+                  'Intervention dans tout le département',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Marqueur de ville sur la carte
+  Widget _buildCityMarker(String name, double left, double top, Color color, {bool isMain = false}) {
+    return Positioned(
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              Positioned(
+                left: constraints.maxWidth * left - (isMain ? 8 : 5),
+                top: constraints.maxHeight * top - (isMain ? 8 : 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Point
+                    Container(
+                      width: isMain ? 16 : 10,
+                      height: isMain ? 16 : 10,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: color.withOpacity(0.4),
+                            blurRadius: isMain ? 8 : 4,
+                            spreadRadius: isMain ? 2 : 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    // Nom de la ville
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: isMain ? color : Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        name,
+                        style: TextStyle(
+                          color: isMain ? Colors.white : Colors.black87,
+                          fontSize: isMain ? 11 : 9,
+                          fontWeight: isMain ? FontWeight.bold : FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  // ======================== POURQUOI NOUS ========================
+  Widget _buildWhyUsSection(BuildContext context) {
+    return Container(
+      color: kWhite,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              _buildSectionTitle(
+                'Pourquoi nous choisir ?',
+                'Artisan frigoriste de confiance sur la Côte d\'Azur',
+              ),
+              const SizedBox(height: 48),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth > 800;
+                  return isWide
+                      ? Row(
+                          children: [
+                            Expanded(child: _buildWhyUsItem(Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
+                            const SizedBox(width: 24),
+                            Expanded(child: _buildWhyUsItem(Icons.flash_on, 'Réactivité', 'Intervention sous 24h', kAccentOrange)),
+                            const SizedBox(width: 24),
+                            Expanded(child: _buildWhyUsItem(Icons.description, 'Transparence', 'Devis gratuit détaillé', kPrimaryBlue)),
+                            const SizedBox(width: 24),
+                            Expanded(child: _buildWhyUsItem(Icons.thumb_up, 'Garantie', 'Satisfaction assurée', kAccentYellow)),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(child: _buildWhyUsItem(Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
+                                const SizedBox(width: 16),
+                                Expanded(child: _buildWhyUsItem(Icons.flash_on, 'Réactivité', 'Intervention 24h', kAccentOrange)),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(child: _buildWhyUsItem(Icons.description, 'Transparence', 'Devis gratuit', kPrimaryBlue)),
+                                const SizedBox(width: 16),
+                                Expanded(child: _buildWhyUsItem(Icons.thumb_up, 'Garantie', 'Satisfaction', kAccentYellow)),
+                              ],
+                            ),
+                          ],
+                        );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhyUsItem(IconData icon, String title, String subtitle, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: kBackgroundColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 32),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ======================== FOOTER ========================
+  Widget _buildFooter(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [kDarkBlue, Color(0xFF1565C0)],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.ac_unit, color: Colors.white, size: 32),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'AZUR CONFORT',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Artisan frigoriste sur la Côte d\'Azur (06 & 83)',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Text(
+                '© 2025 Azur Confort - Tous droits réservés',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.5),
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ======================== HELPERS ========================
+  Widget _buildSectionTitle(String title, String subtitle) {
+    return Column(
+      children: [
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          subtitle,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey.shade600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ============================================================================
+// SECTION SERVICES AVEC ONGLETS (TabBar + TabBarView)
+// ============================================================================
+
+class _ServicesTabSection extends StatefulWidget {
+  const _ServicesTabSection();
+
+  @override
+  State<_ServicesTabSection> createState() => _ServicesTabSectionState();
+}
+
+class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  // Définition des services avec leurs détails
+  // ⚠️ IMAGES : Placez vos images dans assets/images/
+  final List<_ServiceData> _services = [
+    _ServiceData(
+      id: 'clim',
+      title: 'Climatisation',
+      icon: Icons.ac_unit,
+      color: kPrimaryBlue,
+      description: 'Installation, entretien et dépannage de systèmes de climatisation pour particuliers et professionnels.',
+      prestations: [
+        'Installation clim monosplit',
+        'Installation clim multisplit',
+        'Entretien annuel',
+        'Dépannage et réparation',
+        'Remplacement de climatiseur',
+      ],
+      imagePath: 'assets/images/service_climatisation.png',
+    ),
+    _ServiceData(
+      id: 'frigo',
+      title: 'Frigoriste',
+      icon: Icons.severe_cold,
+      color: kDarkBlue,
+      description: 'Expert en froid commercial et industriel : chambres froides, vitrines réfrigérées, équipements frigorifiques.',
+      prestations: [
+        'Chambres froides positives/négatives',
+        'Vitrines réfrigérées',
+        'Meubles frigorifiques',
+        'Groupes froids',
+        'Maintenance préventive',
+      ],
+      imagePath: 'assets/images/service_frigoriste.png',
+    ),
+    _ServiceData(
+      id: 'pac',
+      title: 'Pompes à chaleur',
+      icon: Icons.thermostat,
+      color: kAccentYellow,
+      description: 'Solutions écologiques et économiques pour chauffer et rafraîchir votre habitat toute l\'année.',
+      prestations: [
+        'PAC Air/Air réversible',
+        'PAC Air/Eau',
+        'Ballon thermodynamique',
+        'Entretien annuel PAC',
+        'Dépannage et SAV',
+      ],
+      imagePath: 'assets/images/service_pac.jpg',
+    ),
+    _ServiceData(
+      id: 'chauffage',
+      title: 'Chauffage',
+      icon: Icons.local_fire_department,
+      color: kAccentOrange,
+      description: 'Installation et maintenance de systèmes de chauffage performants pour votre confort thermique.',
+      prestations: [
+        'Chaudières gaz/fioul',
+        'Radiateurs électriques',
+        'Plancher chauffant',
+        'Entretien chaudière',
+        'Dépannage chauffage',
+      ],
+      imagePath: 'assets/images/service_chauffage.png',
+    ),
+    _ServiceData(
+      id: 'plomberie',
+      title: 'Plomberie',
+      icon: Icons.water_drop,
+      color: kPrimaryBlue,
+      description: 'Dépannage, installation et rénovation de tous vos équipements sanitaires et canalisations.',
+      prestations: [
+        'Dépannage fuite d\'eau',
+        'Installation sanitaires',
+        'Rénovation salle de bain',
+        'Débouchage canalisations',
+        'Chauffe-eau / cumulus',
+      ],
+      imagePath: 'assets/images/service_plomberie.png',
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: _services.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
+    return Container(
+      color: kWhite,
+      // Padding réduit en haut pour remonter la section
+      padding: const EdgeInsets.only(top: 30, bottom: 50),
+      child: Column(
+        children: [
+          // Titre de section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                const Text(
+                  'Nos Services',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Froid, chaud, eau : des solutions complètes pour votre confort',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          
+          // TabBar - Onglets cliquables
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: kLightBlue,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  padding: const EdgeInsets.all(6),
+                  labelPadding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 20),
+                  indicator: BoxDecoration(
+                    color: kWhite,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: kPrimaryBlue.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  labelColor: kDarkBlue,
+                  unselectedLabelColor: kPrimaryBlue.withOpacity(0.7),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                  tabs: _services.map((service) {
+                    return Tab(
+                      height: isMobile ? 50 : 56,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(service.icon, size: isMobile ? 18 : 22),
+                          const SizedBox(width: 8),
+                          Text(service.title),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
+          
+          // TabBarView - Contenu des onglets avec swipe
+          SizedBox(
+            height: isMobile ? 480 : 400,
+            child: TabBarView(
+              controller: _tabController,
+              children: _services.map((service) {
+                return _buildServiceContent(service, isMobile);
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Contenu d'un onglet de service
+  Widget _buildServiceContent(_ServiceData service, bool isMobile) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Container(
+            padding: EdgeInsets.all(isMobile ? 20 : 32),
+            decoration: BoxDecoration(
+              color: kBackgroundColor,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: service.color.withOpacity(0.2)),
+            ),
+            child: isMobile
+                ? _buildMobileContent(service)
+                : _buildDesktopContent(service),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDesktopContent(_ServiceData service) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ============================================================
+        // COLONNE GAUCHE - IMAGE DU SERVICE
+        // ⚠️ Placez vos images dans assets/images/
+        // ============================================================
+        Expanded(
+          flex: 4,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              height: 280,
+              decoration: BoxDecoration(
+                color: service.color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Image du service
+                  Image.asset(
+                    service.imagePath,
+                    fit: BoxFit.cover,
+                    // Fallback si l'image n'existe pas
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              service.color.withOpacity(0.3),
+                              service.color.withOpacity(0.1),
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                service.icon,
+                                size: 80,
+                                color: service.color.withOpacity(0.5),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'Image à ajouter',
+                                style: TextStyle(
+                                  color: service.color.withOpacity(0.7),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  // Overlay léger en bas pour le badge
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.6),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: service.color,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              service.icon,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            service.title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 32),
+        
+        // ============================================================
+        // COLONNE CENTRALE - Description et bouton
+        // ============================================================
+        Expanded(
+          flex: 4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Titre
+              Text(
+                service.title,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: service.color,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Description
+              Text(
+                service.description,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey.shade700,
+                  height: 1.7,
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Bouton devis
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Naviguer vers la page Contact
+                  _AzurConfortHomeState.navigateToPage(2);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: service.color,
+                  foregroundColor: kWhite,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.description, size: 18),
+                label: const Text(
+                  'Demander un devis',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 32),
+        
+        // ============================================================
+        // COLONNE DROITE - Prestations
+        // ============================================================
+        Expanded(
+          flex: 3,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: kWhite,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: service.color.withOpacity(0.2)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nos prestations',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: service.color,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                ...service.prestations.map((prestation) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: service.color.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.check,
+                            color: service.color,
+                            size: 14,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            prestation,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileContent(_ServiceData service) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ============================================================
+        // IMAGE DU SERVICE (Mobile)
+        // ============================================================
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            height: 160,
+            width: double.infinity,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Image
+                Image.asset(
+                  service.imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            service.color.withOpacity(0.3),
+                            service.color.withOpacity(0.1),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          service.icon,
+                          size: 60,
+                          color: service.color.withOpacity(0.5),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                // Overlay avec titre
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: service.color,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(
+                            service.icon,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          service.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        
+        // Description
+        Text(
+          service.description,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey.shade700,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 16),
+        
+        // Prestations (version compacte)
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: kWhite,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: service.color.withOpacity(0.2)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Nos prestations',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: service.color,
+                ),
+              ),
+              const SizedBox(height: 10),
+              ...service.prestations.map((prestation) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    children: [
+                      Icon(Icons.check_circle, color: service.color, size: 16),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          prestation,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        
+        // Bouton
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              // Naviguer vers la page Contact
+              _AzurConfortHomeState.navigateToPage(2);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: service.color,
+              foregroundColor: kWhite,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            icon: const Icon(Icons.description, size: 16),
+            label: const Text(
+              'Demander un devis',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Données d'un service
+class _ServiceData {
+  final String id;
+  final String title;
+  final IconData icon;
+  final Color color;
+  final String description;
+  final List<String> prestations;
+  final String imagePath; // Chemin vers l'image du service
+
+  _ServiceData({
+    required this.id,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.description,
+    required this.prestations,
+    required this.imagePath,
+  });
+}
+
+// ============================================================================
+// PAGE À PROPOS - DESIGN PROFESSIONNEL
+// ============================================================================
+
+class _AProposPage extends StatelessWidget {
+  const _AProposPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 800;
+    
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Hero immersif
+          _buildHeroSection(isMobile),
+          // Section "Qui sommes-nous"
+          _buildWhoWeAre(isMobile),
+          // Chiffres clés
+          _buildKeyNumbers(isMobile),
+          // Nos domaines d'expertise
+          _buildExpertiseDomains(isMobile),
+          // Engagement qualité
+          _buildQualityCommitment(isMobile),
+          // Nos valeurs
+          _buildCoreValues(isMobile),
+          // Call to action
+          _buildCallToAction(isMobile),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroSection(bool isMobile) {
+    return Container(
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: isMobile ? 300 : 400),
+      child: Stack(
+        children: [
+          // Image de fond
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/service_climatisation.png',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kDarkBlue, kPrimaryBlue],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Overlay dégradé
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    kDarkBlue.withOpacity(0.95),
+                    kDarkBlue.withOpacity(0.7),
+                    kPrimaryBlue.withOpacity(0.5),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Contenu
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 24 : 80,
+              vertical: isMobile ? 50 : 80,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: Column(
+                  crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                  children: [
+                    // Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: kAccentOrange,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: const Text(
+                        'Depuis plus de 10 ans',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Votre partenaire',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: isMobile ? 24 : 32,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Text(
+                      'confort thermique',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: isMobile ? 36 : 52,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 500),
+                      child: Text(
+                        'Artisan frigoriste qualifié, nous accompagnons les particuliers et professionnels de la Côte d\'Azur dans tous leurs projets de climatisation, chauffage et plomberie.',
+                        textAlign: isMobile ? TextAlign.center : TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.85),
+                          fontSize: 16,
+                          height: 1.6,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWhoWeAre(bool isMobile) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: 60,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: isMobile
+              ? Column(
+                  children: [
+                    _buildWhoWeAreImage(),
+                    const SizedBox(height: 40),
+                    _buildWhoWeAreText(),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(flex: 5, child: _buildWhoWeAreImage()),
+                    const SizedBox(width: 60),
+                    Expanded(flex: 6, child: _buildWhoWeAreText()),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhoWeAreImage() {
+    return Container(
+      height: 350,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: kPrimaryBlue.withOpacity(0.2),
+            blurRadius: 30,
+            offset: const Offset(0, 15),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              'assets/images/service_pac.jpg',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                color: kLightBlue,
+                child: const Icon(Icons.engineering, size: 80, color: kPrimaryBlue),
+              ),
+            ),
+            // Badge flottant
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.verified, color: kPrimaryBlue, size: 24),
+                    SizedBox(width: 10),
+                    Text(
+                      'Certifié RGE',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: kDarkBlue,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhoWeAreText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: kLightBlue,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: const Text(
+            'QUI SOMMES-NOUS',
+            style: TextStyle(
+              color: kPrimaryBlue,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              letterSpacing: 1.5,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        const Text(
+          'L\'expertise au service\nde votre confort',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: kDarkBlue,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Azur Confort est une entreprise artisanale spécialisée dans les métiers du froid et du chaud. Basés sur la Côte d\'Azur, nous intervenons dans les Alpes-Maritimes (06) et le Var (83) pour tous vos besoins en climatisation, chauffage, pompes à chaleur et plomberie.',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey.shade700,
+            height: 1.7,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Notre force : une équipe réactive, des conseils personnalisés et un travail soigné pour garantir votre satisfaction.',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey.shade700,
+            height: 1.7,
+          ),
+        ),
+        const SizedBox(height: 30),
+        // Points forts
+        Wrap(
+          spacing: 24,
+          runSpacing: 16,
+          children: [
+            _buildMiniFeature(Icons.schedule, 'Intervention 24h'),
+            _buildMiniFeature(Icons.thumb_up, 'Devis gratuit'),
+            _buildMiniFeature(Icons.eco, 'Solutions éco'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMiniFeature(IconData icon, String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: kAccentOrange.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: kAccentOrange, size: 20),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          text,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildKeyNumbers(bool isMobile) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 50),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [kDarkBlue, kPrimaryBlue],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: isMobile
+                ? Column(
+                    children: [
+                      _buildNumberCard('10+', 'Années d\'expérience', Icons.calendar_today),
+                      const SizedBox(height: 24),
+                      _buildNumberCard('500+', 'Clients satisfaits', Icons.people),
+                      const SizedBox(height: 24),
+                      _buildNumberCard('24h', 'Délai d\'intervention', Icons.flash_on),
+                      const SizedBox(height: 24),
+                      _buildNumberCard('100%', 'Devis gratuits', Icons.description),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Expanded(child: _buildNumberCard('10+', 'Années d\'expérience', Icons.calendar_today)),
+                      Expanded(child: _buildNumberCard('500+', 'Clients satisfaits', Icons.people)),
+                      Expanded(child: _buildNumberCard('24h', 'Délai d\'intervention', Icons.flash_on)),
+                      Expanded(child: _buildNumberCard('100%', 'Devis gratuits', Icons.description)),
+                    ],
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNumberCard(String number, String label, IconData icon) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: kAccentYellow, size: 28),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          number,
+          style: const TextStyle(
+            fontSize: 42,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(0.85),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpertiseDomains(bool isMobile) {
+    return Container(
+      color: kBackgroundColor,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: 70,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              const Text(
+                'Nos domaines d\'expertise',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: kDarkBlue,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Des solutions complètes pour votre confort thermique',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              const SizedBox(height: 50),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth > 900) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: _buildDomainCard(Icons.ac_unit, 'Froid', 'Climatisation, chambres froides, vitrines réfrigérées, maintenance frigorifique', kPrimaryBlue, ['Clim monosplit/multisplit', 'Chambres froides', 'Vitrines réfrigérées'])),
+                        const SizedBox(width: 24),
+                        Expanded(child: _buildDomainCard(Icons.local_fire_department, 'Chaud', 'Chauffage, pompes à chaleur air/air et air/eau, chaudières, radiateurs', kAccentOrange, ['Pompes à chaleur', 'Chaudières gaz/fioul', 'Plancher chauffant'])),
+                        const SizedBox(width: 24),
+                        Expanded(child: _buildDomainCard(Icons.water_drop, 'Eau', 'Plomberie, sanitaires, dépannage fuites, installation et rénovation', kPrimaryBlue, ['Dépannage fuites', 'Installation sanitaires', 'Chauffe-eau'])),
+                      ],
+                    );
+                  }
+                  return Column(
+                    children: [
+                      _buildDomainCard(Icons.ac_unit, 'Froid', 'Climatisation, chambres froides, vitrines réfrigérées', kPrimaryBlue, ['Clim monosplit/multisplit', 'Chambres froides', 'Vitrines réfrigérées']),
+                      const SizedBox(height: 20),
+                      _buildDomainCard(Icons.local_fire_department, 'Chaud', 'Chauffage, pompes à chaleur, chaudières', kAccentOrange, ['Pompes à chaleur', 'Chaudières', 'Plancher chauffant']),
+                      const SizedBox(height: 20),
+                      _buildDomainCard(Icons.water_drop, 'Eau', 'Plomberie, sanitaires, dépannage', kPrimaryBlue, ['Dépannage fuites', 'Installation sanitaires', 'Chauffe-eau']),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDomainCard(IconData icon, String title, String description, Color color, List<String> features) {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [color, color.withOpacity(0.7)],
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, color: Colors.white, size: 28),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey.shade600,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 20),
+          ...features.map((f) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                Icon(Icons.check_circle, color: color, size: 20),
+                const SizedBox(width: 10),
+                Text(f, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+              ],
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQualityCommitment(bool isMobile) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: 70,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(color: Colors.grey.shade200),
+          bottom: BorderSide(color: Colors.grey.shade200),
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: kPrimaryBlue.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.verified_user, color: kPrimaryBlue, size: 40),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Notre engagement qualité',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: kDarkBlue,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'En tant qu\'artisan frigoriste qualifié, nous nous engageons à fournir un travail soigné et professionnel. Nous respectons scrupuleusement les normes en vigueur et utilisons exclusivement des équipements de qualité pour garantir la performance et la durabilité de vos installations.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.grey.shade700,
+                  height: 1.8,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                decoration: BoxDecoration(
+                  color: kLightBlue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text(
+                  '« Notre objectif : votre confort thermique optimal, été comme hiver, tout en maîtrisant votre consommation d\'énergie. »',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: kDarkBlue,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCoreValues(bool isMobile) {
+    return Container(
+      color: kBackgroundColor,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: 70,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: Column(
+            children: [
+              const Text(
+                'Nos valeurs',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: kDarkBlue,
+                ),
+              ),
+              const SizedBox(height: 50),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth > 800) {
+                    return Row(
+                      children: [
+                        Expanded(child: _buildValueCard(Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur. Nous comprenons l\'urgence de vos besoins.', kAccentOrange)),
+                        const SizedBox(width: 24),
+                        Expanded(child: _buildValueCard(Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise. Nous vous expliquons chaque intervention.', kPrimaryBlue)),
+                        const SizedBox(width: 24),
+                        Expanded(child: _buildValueCard(Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque. Votre satisfaction est notre priorité.', kAccentYellow)),
+                      ],
+                    );
+                  }
+                  return Column(
+                    children: [
+                      _buildValueCard(Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur.', kAccentOrange),
+                      const SizedBox(height: 20),
+                      _buildValueCard(Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise.', kPrimaryBlue),
+                      const SizedBox(height: 20),
+                      _buildValueCard(Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque.', kAccentYellow),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildValueCard(IconData icon, String title, String description, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 32),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCallToAction(bool isMobile) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: 60,
+      ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [kDarkBlue, kPrimaryBlue],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Column(
+            children: [
+              const Text(
+                'Prêt à améliorer votre confort ?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Contactez-nous pour un devis gratuit et personnalisé',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white.withOpacity(0.85),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                alignment: WrapAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: launchPhone,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: kDarkBlue,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    icon: const Icon(Icons.phone),
+                    label: const Text('Appeler maintenant', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => _AzurConfortHomeState.navigateToPage(2),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white, width: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    icon: const Icon(Icons.mail),
+                    label: const Text('Demander un devis', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// PAGE CONTACT - DESIGN PROFESSIONNEL
+// ============================================================================
+
+class _ContactPage extends StatefulWidget {
+  const _ContactPage();
+
+  @override
+  State<_ContactPage> createState() => _ContactPageState();
+}
+
+class _ContactPageState extends State<_ContactPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _messageController = TextEditingController();
+  String? _selectedService;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _cityController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          child: Container(
+            padding: const EdgeInsets.all(32),
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.check_circle, color: Colors.green.shade600, size: 48),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Message envoyé !',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: kDarkBlue,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Merci pour votre demande. Notre équipe vous recontactera dans les plus brefs délais.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey.shade600,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kPrimaryBlue,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    child: const Text(
+                      'Parfait !',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      _formKey.currentState!.reset();
+      setState(() => _selectedService = null);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 900;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Hero section
+          _buildContactHero(isMobile),
+          // Contenu principal
+          Container(
+            color: kBackgroundColor,
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 20 : 80,
+              vertical: 60,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: isMobile
+                    ? Column(
+                        children: [
+                          _buildContactInfo(),
+                          const SizedBox(height: 40),
+                          _buildContactForm(),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 4, child: _buildContactInfo()),
+                          const SizedBox(width: 50),
+                          Expanded(flex: 6, child: _buildContactForm()),
+                        ],
+                      ),
+              ),
+            ),
+          ),
+          // Zone d'intervention
+          _buildInterventionZone(isMobile),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactHero(bool isMobile) {
+    return Container(
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: isMobile ? 280 : 350),
+      child: Stack(
+        children: [
+          // Image de fond
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/contact_hero.png',
+              fit: BoxFit.cover,
+              alignment: isMobile ? Alignment.center : Alignment.centerRight,
+              errorBuilder: (context, error, stackTrace) => Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [kDarkBlue, kPrimaryBlue],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Overlay dégradé
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    kDarkBlue.withOpacity(0.9),
+                    kDarkBlue.withOpacity(0.7),
+                    kPrimaryBlue.withOpacity(0.5),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Contenu
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 24 : 80,
+              vertical: isMobile ? 50 : 70,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.mail_outline, color: Colors.white, size: 40),
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Contactez-nous',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Une question ? Un projet ? Besoin d\'un devis ?\nNotre équipe est à votre écoute.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white.withOpacity(0.9),
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Nos coordonnées',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: kDarkBlue,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Plusieurs moyens de nous joindre',
+          style: TextStyle(
+            fontSize: 15,
+            color: Colors.grey.shade600,
+          ),
+        ),
+        const SizedBox(height: 32),
+        
+        // Carte téléphone
+        _buildContactCard(
+          icon: Icons.phone,
+          iconColor: Colors.white,
+          iconBgColor: kPrimaryBlue,
+          title: 'Téléphone',
+          subtitle: 'Du lundi au samedi',
+          value: kPhoneNumberFormatted,
+          onTap: launchPhone,
+          actionLabel: 'Appeler',
+          actionIcon: Icons.call,
+        ),
+        const SizedBox(height: 20),
+        
+        // Carte WhatsApp
+        _buildContactCard(
+          icon: Icons.chat,
+          iconColor: Colors.white,
+          iconBgColor: const Color(0xFF25D366),
+          title: 'WhatsApp',
+          subtitle: 'Réponse rapide',
+          value: 'Envoyer un message',
+          onTap: launchWhatsApp,
+          actionLabel: 'Ouvrir',
+          actionIcon: Icons.open_in_new,
+        ),
+        const SizedBox(height: 20),
+        
+        // Carte Email
+        _buildContactCard(
+          icon: Icons.email,
+          iconColor: Colors.white,
+          iconBgColor: kAccentOrange,
+          title: 'Email',
+          subtitle: 'Pour vos demandes détaillées',
+          value: 'contact@azur-confort.fr',
+          onTap: launchEmail,
+          actionLabel: 'Écrire',
+          actionIcon: Icons.send,
+        ),
+        const SizedBox(height: 32),
+        
+        // Horaires
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: kLightBlue,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.schedule, color: kPrimaryBlue, size: 24),
+                  SizedBox(width: 12),
+                  Text(
+                    'Horaires',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: kDarkBlue,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildScheduleRow('Lundi - Vendredi', '8h00 - 19h00'),
+              const SizedBox(height: 8),
+              _buildScheduleRow('Samedi', '9h00 - 17h00'),
+              const SizedBox(height: 8),
+              _buildScheduleRow('Urgences', '7j/7', isHighlight: true),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactCard({
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBgColor,
+    required String title,
+    required String subtitle,
+    required String value,
+    required VoidCallback onTap,
+    required String actionLabel,
+    required IconData actionIcon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: iconBgColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: iconColor, size: 26),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: kDarkBlue,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: onTap,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: iconBgColor.withOpacity(0.1),
+              foregroundColor: iconBgColor,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            icon: Icon(actionIcon, size: 18),
+            label: Text(actionLabel, style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScheduleRow(String day, String hours, {bool isHighlight = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          day,
+          style: TextStyle(
+            fontSize: 14,
+            color: isHighlight ? kAccentOrange : Colors.grey.shade700,
+            fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: isHighlight ? kAccentOrange.withOpacity(0.1) : Colors.white,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            hours,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: isHighlight ? kAccentOrange : kDarkBlue,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactForm() {
+    return Container(
+      padding: const EdgeInsets.all(36),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: kPrimaryBlue.withOpacity(0.08),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: kPrimaryBlue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.description, color: kPrimaryBlue, size: 24),
+                ),
+                const SizedBox(width: 14),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Demande de devis',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: kDarkBlue,
+                      ),
+                    ),
+                    Text(
+                      'Gratuit et sans engagement',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            
+            // Nom et Téléphone
+            Row(
+              children: [
+                Expanded(child: _buildModernTextField(_nameController, 'Nom complet', Icons.person_outline)),
+                const SizedBox(width: 16),
+                Expanded(child: _buildModernTextField(_phoneController, 'Téléphone', Icons.phone_outlined)),
+              ],
+            ),
+            const SizedBox(height: 20),
+            
+            // Email et Ville
+            Row(
+              children: [
+                Expanded(child: _buildModernTextField(_emailController, 'Email', Icons.email_outlined)),
+                const SizedBox(width: 16),
+                Expanded(child: _buildModernTextField(_cityController, 'Ville / Code postal', Icons.location_on_outlined, required: false)),
+              ],
+            ),
+            const SizedBox(height: 20),
+            
+            // Type de demande
+            DropdownButtonFormField<String>(
+              value: _selectedService,
+              decoration: InputDecoration(
+                labelText: 'Type de prestation',
+                prefixIcon: const Icon(Icons.build_outlined, color: kPrimaryBlue),
+                filled: true,
+                fillColor: kBackgroundColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade200),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: kPrimaryBlue, width: 2),
+                ),
+              ),
+              items: [
+                'Climatisation',
+                'Frigoriste / Froid commercial',
+                'Pompe à chaleur',
+                'Chauffage',
+                'Plomberie',
+                'Entretien / Maintenance',
+                'Dépannage urgent',
+                'Autre',
+              ].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+              onChanged: (v) => setState(() => _selectedService = v),
+              validator: (v) => v == null ? 'Veuillez sélectionner un type' : null,
+            ),
+            const SizedBox(height: 20),
+            
+            // Message
+            TextFormField(
+              controller: _messageController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                labelText: 'Décrivez votre projet ou besoin',
+                alignLabelWithHint: true,
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.only(bottom: 80),
+                  child: Icon(Icons.message_outlined, color: kPrimaryBlue),
+                ),
+                filled: true,
+                fillColor: kBackgroundColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade200),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: kPrimaryBlue, width: 2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 28),
+            
+            // Bouton envoyer
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton(
+                onPressed: _submitForm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPrimaryBlue,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  elevation: 0,
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.send, color: Colors.white, size: 22),
+                    SizedBox(width: 12),
+                    Text(
+                      'Envoyer ma demande',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            // Note
+            Row(
+              children: [
+                Icon(Icons.lock_outline, size: 16, color: Colors.grey.shade500),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Vos données sont protégées et ne seront jamais partagées.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildModernTextField(TextEditingController controller, String label, IconData icon, {bool required = true}) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: kPrimaryBlue),
+        filled: true,
+        fillColor: kBackgroundColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade200),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: kPrimaryBlue, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+      ),
+      validator: required ? (v) => v == null || v.isEmpty ? 'Champ requis' : null : null,
+    );
+  }
+
+  Widget _buildInterventionZone(bool isMobile) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: 50,
+      ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [kDarkBlue, kPrimaryBlue],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: Column(
+            children: [
+              const Icon(Icons.location_on, color: kAccentYellow, size: 36),
+              const SizedBox(height: 16),
+              const Text(
+                'Zone d\'intervention',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Nous intervenons sur toute la Côte d\'Azur',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white.withOpacity(0.85),
+                ),
+              ),
+              const SizedBox(height: 28),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                children: [
+                  _buildZoneChip('Nice'),
+                  _buildZoneChip('Cannes'),
+                  _buildZoneChip('Antibes'),
+                  _buildZoneChip('Grasse'),
+                  _buildZoneChip('Fréjus'),
+                  _buildZoneChip('Saint-Raphaël'),
+                  _buildZoneChip('Menton'),
+                  _buildZoneChip('Monaco'),
+                  _buildZoneChip('Cagnes-sur-Mer'),
+                  _buildZoneChip('+ tout le 06 & 83'),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildZoneChip(String city) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.white.withOpacity(0.3)),
+      ),
+      child: Text(
+        city,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// CUSTOM PAINTERS POUR LES CARTES GÉOGRAPHIQUES (FORMES RÉELLES)
+// ============================================================================
+
+/// Peintre pour la carte des Alpes-Maritimes (06) - FORME RÉELLE
+/// Basé sur les coordonnées géographiques réelles du département
+class _AlpesMaritimesMapPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = kPrimaryBlue.withOpacity(0.12)
+      ..style = PaintingStyle.fill;
+    
+    final borderPaint = Paint()
+      ..color = kPrimaryBlue.withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+
+    // Forme RÉELLE des Alpes-Maritimes basée sur les coordonnées géographiques
+    // Le département a une forme caractéristique : étroit à l'ouest (Cannes),
+    // s'élargissant vers le nord (montagnes du Mercantour), 
+    // avec la frontière italienne à l'est
+    final path = Path();
+    
+    // Coordonnées normalisées basées sur la vraie géographie
+    // Départ de Théoule-sur-Mer (sud-ouest)
+    path.moveTo(size.width * 0.02, size.height * 0.82);
+    // Côte vers Cannes
+    path.lineTo(size.width * 0.08, size.height * 0.78);
+    // Grasse direction (intérieur)
+    path.lineTo(size.width * 0.05, size.height * 0.65);
+    // Limite ouest vers St-Vallier
+    path.lineTo(size.width * 0.03, size.height * 0.52);
+    // Nord-ouest (Andon, Séranon)
+    path.lineTo(size.width * 0.08, size.height * 0.38);
+    // Entrevaux direction
+    path.lineTo(size.width * 0.15, size.height * 0.22);
+    // Guillaumes
+    path.lineTo(size.width * 0.28, size.height * 0.12);
+    // Vallée de la Tinée nord
+    path.lineTo(size.width * 0.42, size.height * 0.05);
+    // Saint-Étienne-de-Tinée (Mercantour)
+    path.lineTo(size.width * 0.52, size.height * 0.02);
+    // Col de la Bonette direction
+    path.lineTo(size.width * 0.62, size.height * 0.03);
+    // Isola 2000
+    path.lineTo(size.width * 0.70, size.height * 0.06);
+    // Saint-Martin-Vésubie
+    path.lineTo(size.width * 0.75, size.height * 0.12);
+    // Frontière italienne nord (Tende)
+    path.lineTo(size.width * 0.85, size.height * 0.08);
+    // La Brigue
+    path.lineTo(size.width * 0.92, size.height * 0.15);
+    // Sospel direction
+    path.lineTo(size.width * 0.95, size.height * 0.28);
+    // Menton (frontière italienne côte)
+    path.lineTo(size.width * 0.98, size.height * 0.45);
+    // Cap Martin
+    path.lineTo(size.width * 0.96, size.height * 0.52);
+    // Monaco
+    path.lineTo(size.width * 0.92, size.height * 0.56);
+    // Villefranche-sur-Mer
+    path.lineTo(size.width * 0.85, size.height * 0.60);
+    // Nice (Baie des Anges)
+    path.lineTo(size.width * 0.72, size.height * 0.65);
+    // Aéroport Nice
+    path.lineTo(size.width * 0.62, size.height * 0.68);
+    // Cagnes-sur-Mer
+    path.lineTo(size.width * 0.52, size.height * 0.72);
+    // Antibes / Cap d'Antibes
+    path.lineTo(size.width * 0.38, size.height * 0.78);
+    path.lineTo(size.width * 0.32, size.height * 0.82);
+    // Golfe Juan
+    path.lineTo(size.width * 0.25, size.height * 0.80);
+    // Cannes / La Napoule
+    path.lineTo(size.width * 0.15, size.height * 0.82);
+    // Retour Théoule
+    path.lineTo(size.width * 0.08, size.height * 0.84);
+    path.close();
+
+    canvas.drawPath(path, paint);
+    canvas.drawPath(path, borderPaint);
+
+    // Ligne de côte (mer Méditerranée)
+    final seaPaint = Paint()
+      ..color = const Color(0xFF42A5F5).withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+
+    final seaPath = Path();
+    seaPath.moveTo(size.width * 0.02, size.height * 0.86);
+    seaPath.quadraticBezierTo(
+      size.width * 0.25, size.height * 0.88,
+      size.width * 0.45, size.height * 0.82,
+    );
+    seaPath.quadraticBezierTo(
+      size.width * 0.65, size.height * 0.75,
+      size.width * 0.80, size.height * 0.68,
+    );
+    seaPath.quadraticBezierTo(
+      size.width * 0.92, size.height * 0.60,
+      size.width * 1.0, size.height * 0.52,
+    );
+    canvas.drawPath(seaPath, seaPaint);
+
+    // Indicateur Italie
+    final italiePaint = TextPainter(
+      text: TextSpan(
+        text: 'ITALIE →',
+        style: TextStyle(
+          color: Colors.grey.withOpacity(0.4),
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    italiePaint.layout();
+    italiePaint.paint(canvas, Offset(size.width * 0.85, size.height * 0.35));
+
+    // Label Mer
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: 'Méditerranée',
+        style: TextStyle(
+          color: const Color(0xFF1976D2).withOpacity(0.4),
+          fontSize: 11,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(size.width * 0.35, size.height * 0.92));
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Peintre pour la carte du Var (83) - FORME RÉELLE
+/// Basé sur les coordonnées géographiques réelles du département
+class _VarMapPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF7C4DFF).withOpacity(0.12)
+      ..style = PaintingStyle.fill;
+    
+    final borderPaint = Paint()
+      ..color = const Color(0xFF7C4DFF).withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+
+    // Forme RÉELLE du Var basée sur les coordonnées géographiques
+    // Le département a une forme plus large, avec la rade de Toulon,
+    // la presqu'île de Giens, le golfe de Saint-Tropez
+    final path = Path();
+    
+    // Départ de Bandol (sud-ouest côte)
+    path.moveTo(size.width * 0.08, size.height * 0.78);
+    // Vers Six-Fours
+    path.lineTo(size.width * 0.12, size.height * 0.82);
+    // La Seyne-sur-Mer
+    path.lineTo(size.width * 0.18, size.height * 0.80);
+    // Rade de Toulon (entrée)
+    path.lineTo(size.width * 0.22, size.height * 0.85);
+    // Toulon
+    path.lineTo(size.width * 0.28, size.height * 0.82);
+    // La Garde
+    path.lineTo(size.width * 0.35, size.height * 0.85);
+    // Presqu'île de Giens
+    path.lineTo(size.width * 0.42, size.height * 0.92);
+    path.lineTo(size.width * 0.45, size.height * 0.95);
+    path.lineTo(size.width * 0.48, size.height * 0.92);
+    // Hyères
+    path.lineTo(size.width * 0.52, size.height * 0.88);
+    // Bormes-les-Mimosas
+    path.lineTo(size.width * 0.58, size.height * 0.85);
+    // Le Lavandou
+    path.lineTo(size.width * 0.62, size.height * 0.82);
+    // Cavalaire
+    path.lineTo(size.width * 0.68, size.height * 0.80);
+    // Saint-Tropez (presqu'île)
+    path.lineTo(size.width * 0.72, size.height * 0.75);
+    path.lineTo(size.width * 0.75, size.height * 0.70);
+    path.lineTo(size.width * 0.78, size.height * 0.72);
+    // Sainte-Maxime
+    path.lineTo(size.width * 0.82, size.height * 0.65);
+    // Fréjus
+    path.lineTo(size.width * 0.88, size.height * 0.58);
+    // Saint-Raphaël
+    path.lineTo(size.width * 0.92, size.height * 0.55);
+    // Limite avec 06 (côte)
+    path.lineTo(size.width * 0.98, size.height * 0.48);
+    // Frontière nord-est avec 06 (intérieur)
+    path.lineTo(size.width * 0.95, size.height * 0.35);
+    path.lineTo(size.width * 0.90, size.height * 0.25);
+    // Fayence direction
+    path.lineTo(size.width * 0.82, size.height * 0.18);
+    // Draguignan
+    path.lineTo(size.width * 0.70, size.height * 0.22);
+    // Lorgues
+    path.lineTo(size.width * 0.58, size.height * 0.28);
+    // Brignoles
+    path.lineTo(size.width * 0.45, size.height * 0.32);
+    // Saint-Maximin
+    path.lineTo(size.width * 0.32, size.height * 0.28);
+    // Limite nord (Bouches-du-Rhône)
+    path.lineTo(size.width * 0.18, size.height * 0.22);
+    path.lineTo(size.width * 0.08, size.height * 0.25);
+    // Limite ouest
+    path.lineTo(size.width * 0.03, size.height * 0.35);
+    path.lineTo(size.width * 0.02, size.height * 0.50);
+    // Retour côte ouest (Sanary)
+    path.lineTo(size.width * 0.05, size.height * 0.65);
+    path.lineTo(size.width * 0.06, size.height * 0.72);
+    path.close();
+
+    canvas.drawPath(path, paint);
+    canvas.drawPath(path, borderPaint);
+
+    // Ligne de côte
+    final seaPaint = Paint()
+      ..color = const Color(0xFF9575CD).withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+
+    final seaPath = Path();
+    seaPath.moveTo(size.width * 0.02, size.height * 0.82);
+    seaPath.quadraticBezierTo(
+      size.width * 0.25, size.height * 0.90,
+      size.width * 0.45, size.height * 0.98,
+    );
+    seaPath.quadraticBezierTo(
+      size.width * 0.60, size.height * 0.92,
+      size.width * 0.75, size.height * 0.80,
+    );
+    seaPath.quadraticBezierTo(
+      size.width * 0.88, size.height * 0.65,
+      size.width * 1.0, size.height * 0.52,
+    );
+    canvas.drawPath(seaPath, seaPaint);
+
+    // Îles d'Hyères (indication)
+    final islandPaint = Paint()
+      ..color = const Color(0xFF7C4DFF).withOpacity(0.3)
+      ..style = PaintingStyle.fill;
+    
+    // Porquerolles
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.48, size.height * 0.98),
+        width: 25,
+        height: 8,
+      ),
+      islandPaint,
+    );
+    
+    // Port-Cros
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.55, size.height * 0.96),
+        width: 12,
+        height: 6,
+      ),
+      islandPaint,
+    );
+
+    // Label Mer
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: 'Méditerranée',
+        style: TextStyle(
+          color: const Color(0xFF7C4DFF).withOpacity(0.35),
+          fontSize: 11,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(size.width * 0.25, size.height * 0.96));
+
+    // Indicateur îles
+    final ilesPainter = TextPainter(
+      text: TextSpan(
+        text: 'Îles d\'Hyères',
+        style: TextStyle(
+          color: const Color(0xFF7C4DFF).withOpacity(0.4),
+          fontSize: 8,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    ilesPainter.layout();
+    ilesPainter.paint(canvas, Offset(size.width * 0.52, size.height * 0.99));
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ============================================================================
+// CHATBOT AZUR CONFORT - ASSISTANT VIRTUEL
+// ============================================================================
+
+/// Widget principal du chatbot flottant
+class AzurChatbot extends StatefulWidget {
+  const AzurChatbot({Key? key}) : super(key: key);
+
+  @override
+  State<AzurChatbot> createState() => _AzurChatbotState();
+}
+
+class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStateMixin {
+  bool _isOpen = false;
+  bool _showWelcome = true;
+  bool _isBotTyping = false; // Indicateur "bot en train d'écrire"
+  final List<_ChatMessage> _messages = [];
+  final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  late AnimationController _bounceController;
+  late Animation<double> _bounceAnimation;
+
+  // Options rapides du chatbot
+  final List<_QuickOption> _quickOptions = [
+    _QuickOption(
+      id: 'devis',
+      label: '📋 Demander un devis',
+      icon: Icons.description,
+    ),
+    _QuickOption(
+      id: 'urgence',
+      label: '🚨 Urgence / Dépannage',
+      icon: Icons.warning,
+    ),
+    _QuickOption(
+      id: 'disponibilite',
+      label: '📅 Disponibilités',
+      icon: Icons.calendar_today,
+    ),
+    _QuickOption(
+      id: 'services',
+      label: '🔧 Nos services',
+      icon: Icons.build,
+    ),
+    _QuickOption(
+      id: 'contact',
+      label: '📞 Nous contacter',
+      icon: Icons.phone,
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _bounceController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+    _bounceAnimation = Tween<double>(begin: 0, end: 8).animate(
+      CurvedAnimation(parent: _bounceController, curve: Curves.easeInOut),
+    );
+    
+    // Message de bienvenue après 2 secondes
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted && _showWelcome) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _bounceController.dispose();
+    _textController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _toggleChat() {
+    setState(() {
+      _isOpen = !_isOpen;
+      _showWelcome = false;
+      if (_isOpen && _messages.isEmpty) {
+        // Message d'accueil du bot
+        _messages.add(_ChatMessage(
+          text: 'Bonjour ! 👋 Je suis Clim\', votre assistant Azur Confort.\n\nComment puis-je vous aider aujourd\'hui ?',
+          isBot: true,
+        ));
+      }
+    });
+  }
+
+  /// Gère les messages tapés par l'utilisateur avec recherche FAQ intelligente
+  void _handleUserMessage(String text) {
+    if (text.isEmpty) return;
+    
+    setState(() {
+      _messages.add(_ChatMessage(text: text, isBot: false));
+      _textController.clear();
+      _isBotTyping = true; // Afficher l'indicateur de frappe
+    });
+    
+    // Scroll vers le bas pour voir l'indicateur
+    _scrollToBottom();
+    
+    // Recherche dans la FAQ avec délai pour l'effet "réflexion"
+    Future.delayed(const Duration(milliseconds: 1200), () {
+      final faqAnswer = findFaqAnswer(text);
+      
+      setState(() {
+        _isBotTyping = false; // Masquer l'indicateur
+        
+        if (faqAnswer != null) {
+          // Réponse trouvée dans la FAQ
+          _messages.add(_ChatMessage(
+            text: faqAnswer,
+            isBot: true,
+            options: [
+              _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
+              _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+              _QuickOption(id: 'retour', label: '↩️ Menu principal', icon: Icons.arrow_back),
+            ],
+          ));
+        } else {
+          // Pas de réponse trouvée - message par défaut
+          _messages.add(_ChatMessage(
+            text: 'Je n\'ai pas trouvé de réponse précise à votre question.\n\n'
+                '💡 **Suggestions :**\n'
+                '• Essayez avec des mots-clés simples (clim, fuite, panne...)\n'
+                '• Utilisez les boutons ci-dessous\n'
+                '• Ou appelez-nous directement !\n\n'
+                '📞 $kPhoneNumberFormatted',
+            isBot: true,
+            options: _quickOptions,
+          ));
+        }
+      });
+      
+      _scrollToBottom();
+    });
+  }
+  
+  /// Scroll vers le bas de la liste de messages
+  void _scrollToBottom() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  void _handleQuickOption(_QuickOption option) {
+    setState(() {
+      _messages.add(_ChatMessage(text: option.label, isBot: false));
+    });
+    
+    Future.delayed(const Duration(milliseconds: 500), () {
+      String response = '';
+      List<_QuickOption>? subOptions;
+      
+      switch (option.id) {
+        case 'devis':
+          response = '📋 **Demande de devis**\n\nPour établir un devis gratuit et personnalisé, j\'ai besoin de quelques informations :\n\n• Type de prestation souhaitée\n• Votre localisation (ville)\n• Vos coordonnées\n\nVoulez-vous remplir le formulaire de contact ou préférez-vous nous appeler directement ?';
+          subOptions = [
+            _QuickOption(id: 'formulaire', label: '📝 Formulaire de contact', icon: Icons.edit),
+            _QuickOption(id: 'appeler', label: '📞 Appeler maintenant', icon: Icons.phone),
+          ];
+          break;
+          
+        case 'urgence':
+          response = '🚨 **Urgence / Dépannage**\n\nNous intervenons rapidement pour :\n\n• Panne de climatisation\n• Fuite d\'eau urgente\n• Panne de chauffage\n• Problème de chambre froide\n\n⚡ **Intervention rapide 7j/7**\n\nAppelez-nous immédiatement au **$kPhoneNumberFormatted**';
+          subOptions = [
+            _QuickOption(id: 'appeler', label: '📞 Appeler maintenant', icon: Icons.phone),
+            _QuickOption(id: 'whatsapp', label: '💬 WhatsApp', icon: Icons.message),
+          ];
+          break;
+          
+        case 'disponibilite':
+          response = '📅 **Nos disponibilités**\n\n🕐 **Horaires d\'intervention :**\n• Lundi - Vendredi : 8h - 19h\n• Samedi : 9h - 17h\n• Urgences : 7j/7\n\n📍 **Zone d\'intervention :**\nAlpes-Maritimes (06) & Var (83)\n\n💡 Nous pouvons généralement intervenir sous 24-48h pour les demandes standards.';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Prendre RDV', icon: Icons.calendar_today),
+            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'services':
+          response = '🔧 **Nos services**\n\nNous sommes spécialisés dans :\n\n❄️ **Climatisation** - Installation, entretien, dépannage\n🧊 **Frigoriste** - Chambres froides, vitrines réfrigérées\n🌡️ **Pompes à chaleur** - PAC air/air, air/eau\n🔥 **Chauffage** - Chaudières, radiateurs\n💧 **Plomberie** - Dépannage, installation\n\nQuel service vous intéresse ?';
+          subOptions = [
+            _QuickOption(id: 'clim', label: '❄️ Climatisation', icon: Icons.ac_unit),
+            _QuickOption(id: 'frigo', label: '🧊 Frigoriste', icon: Icons.severe_cold),
+            _QuickOption(id: 'pac', label: '🌡️ Pompes à chaleur', icon: Icons.thermostat),
+            _QuickOption(id: 'chauffage', label: '🔥 Chauffage', icon: Icons.local_fire_department),
+            _QuickOption(id: 'plomberie', label: '💧 Plomberie', icon: Icons.water_drop),
+          ];
+          break;
+          
+        case 'contact':
+          response = '📞 **Nous contacter**\n\n📱 **Téléphone :** $kPhoneNumberFormatted\n💬 **WhatsApp :** Disponible\n📧 **Email :** contact@azur-confort.fr\n\n📍 **Zone d\'intervention :**\nCôte d\'Azur (06 & 83)';
+          subOptions = [
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+            _QuickOption(id: 'whatsapp', label: '💬 WhatsApp', icon: Icons.message),
+            _QuickOption(id: 'email', label: '📧 Email', icon: Icons.email),
+          ];
+          break;
+          
+        case 'appeler':
+          launchPhone();
+          response = '📞 **Appel en cours...**\n\nNuméro : **$kPhoneNumberFormatted**\n\nSi l\'appel ne s\'ouvre pas, composez directement ce numéro.';
+          subOptions = [
+            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'whatsapp':
+          launchWhatsApp();
+          response = '💬 **WhatsApp**\n\nEnvoyez-nous un message avec :\n• Votre besoin\n• Votre ville\n• Des photos si nécessaire\n\nNous répondons rapidement !';
+          subOptions = [
+            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'email':
+          launchEmail();
+          response = '📧 **Email**\n\nAdresse : **contact@azur-confort.fr**\n\nDécrivez votre projet, nous vous répondons sous 24h.';
+          subOptions = [
+            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'formulaire':
+          _AzurConfortHomeState.navigateToPage(2);
+          response = '📝 Je vous redirige vers notre formulaire de contact...\n\nRemplissez vos informations et nous vous recontacterons rapidement !';
+          Future.delayed(const Duration(milliseconds: 500), () {
+            setState(() => _isOpen = false);
+          });
+          break;
+          
+        case 'clim':
+          response = '❄️ **Climatisation**\n\n**Nos prestations :**\n• Installation clim monosplit\n• Installation clim multisplit\n• Entretien annuel\n• Dépannage et réparation\n• Remplacement de climatiseur\n\n💰 **Devis gratuit** - Intervention rapide sur le 06 et 83';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis climatisation', icon: Icons.description),
+            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'frigo':
+          response = '🧊 **Frigoriste**\n\n**Nos prestations :**\n• Chambres froides positives/négatives\n• Vitrines réfrigérées\n• Meubles frigorifiques\n• Groupes froids\n• Maintenance préventive\n\n🏪 Idéal pour commerces, restaurants, grandes surfaces';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis frigoriste', icon: Icons.description),
+            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'pac':
+          response = '🌡️ **Pompes à chaleur**\n\n**Nos prestations :**\n• PAC Air/Air réversible\n• PAC Air/Eau\n• Ballon thermodynamique\n• Entretien annuel PAC\n• Dépannage et SAV\n\n🌿 Solution écologique et économique !';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis PAC', icon: Icons.description),
+            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'chauffage':
+          response = '🔥 **Chauffage**\n\n**Nos prestations :**\n• Chaudières gaz/fioul\n• Radiateurs électriques\n• Plancher chauffant\n• Entretien chaudière\n• Dépannage chauffage\n\n🏠 Pour un confort optimal toute l\'année';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis chauffage', icon: Icons.description),
+            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'plomberie':
+          response = '💧 **Plomberie**\n\n**Nos prestations :**\n• Dépannage fuite d\'eau\n• Installation sanitaires\n• Rénovation salle de bain\n• Débouchage canalisations\n• Chauffe-eau / cumulus\n\n🔧 Intervention rapide en cas d\'urgence';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis plomberie', icon: Icons.description),
+            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        case 'retour':
+          response = 'Comment puis-je vous aider ?';
+          subOptions = _quickOptions;
+          break;
+          
+        default:
+          response = 'Je n\'ai pas compris votre demande. Voici ce que je peux faire pour vous :';
+          subOptions = _quickOptions;
+      }
+      
+      setState(() {
+        _messages.add(_ChatMessage(
+          text: response,
+          isBot: true,
+          options: subOptions,
+        ));
+      });
+      
+      // Scroll vers le bas
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Bulle de bienvenue (avant ouverture)
+        if (_showWelcome && !_isOpen)
+          Positioned(
+            bottom: 100,
+            right: 20,
+            child: AnimatedBuilder(
+              animation: _bounceAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, -_bounceAnimation.value),
+                  child: child,
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      '👋 Besoin d\'aide ?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () => setState(() => _showWelcome = false),
+                      child: const Icon(Icons.close, size: 16, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        
+        // Fenêtre du chatbot
+        if (_isOpen)
+          Positioned(
+            bottom: 100,
+            right: 20,
+            child: _buildChatWindow(),
+          ),
+        
+        // Bouton flottant avec mascotte
+        Positioned(
+          bottom: 20,
+          right: 20,
+          child: GestureDetector(
+            onTap: _toggleChat,
+            child: AnimatedBuilder(
+              animation: _bounceAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _isOpen ? 0 : -_bounceAnimation.value / 2),
+                  child: child,
+                );
+              },
+              child: Container(
+                width: 75,
+                height: 75,
+                decoration: BoxDecoration(
+                  // Fond blanc pour mieux voir la mascotte
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  // Bordure bleue
+                  border: Border.all(
+                    color: kPrimaryBlue,
+                    width: 3,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: kPrimaryBlue.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Mascotte - plus grande et visible
+                    ClipOval(
+                      child: Image.asset(
+                        'assets/images/chatbot_mascot.png',
+                        width: 65,
+                        height: 65,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            _isOpen ? Icons.close : Icons.chat,
+                            color: kPrimaryBlue,
+                            size: 36,
+                          );
+                        },
+                      ),
+                    ),
+                    // Indicateur de fermeture
+                    if (_isOpen)
+                      Positioned(
+                        top: -2,
+                        right: -2,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChatWindow() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 500;
+    
+    return Container(
+      width: isMobile ? screenWidth - 40 : 380,
+      height: 500,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // En-tête
+          _buildChatHeader(),
+          // Messages
+          Expanded(
+            child: _buildMessageList(),
+          ),
+          // Options rapides (si dernier message a des options)
+          if (_messages.isNotEmpty && _messages.last.options != null)
+            _buildQuickOptionsBar(_messages.last.options!),
+          // Zone de saisie
+          _buildInputArea(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatHeader() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [kPrimaryBlue, kDarkBlue],
+        ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      child: Row(
+        children: [
+          // Avatar mascotte
+          Container(
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                'assets/images/chatbot_mascot.png',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.ac_unit, color: kPrimaryBlue);
+                },
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Infos
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Clim\' - Assistant Azur',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: Colors.greenAccent,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'En ligne',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // Bouton fermer
+          IconButton(
+            onPressed: _toggleChat,
+            icon: const Icon(Icons.close, color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageList() {
+    if (_messages.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.chat_bubble_outline, size: 48, color: Colors.grey.shade300),
+            const SizedBox(height: 16),
+            Text(
+              'Démarrez la conversation !',
+              style: TextStyle(color: Colors.grey.shade500),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    return ListView.builder(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(16),
+      itemCount: _messages.length + (_isBotTyping ? 1 : 0),
+      itemBuilder: (context, index) {
+        // Afficher l'indicateur de frappe en dernier
+        if (_isBotTyping && index == _messages.length) {
+          return _buildTypingIndicator();
+        }
+        final message = _messages[index];
+        return _buildMessageBubble(message);
+      },
+    );
+  }
+
+  /// Indicateur animé "bot en train d'écrire..."
+  Widget _buildTypingIndicator() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: kLightBlue,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(18),
+            topRight: Radius.circular(18),
+            bottomLeft: Radius.circular(4),
+            bottomRight: Radius.circular(18),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildAnimatedDot(0),
+            const SizedBox(width: 4),
+            _buildAnimatedDot(1),
+            const SizedBox(width: 4),
+            _buildAnimatedDot(2),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Point animé pour l'indicateur de frappe
+  Widget _buildAnimatedDot(int index) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 600 + (index * 200)),
+      builder: (context, value, child) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: kPrimaryBlue.withOpacity(0.4 + (0.6 * ((value * 2 - 1).abs()))),
+            shape: BoxShape.circle,
+          ),
+        );
+      },
+      onEnd: () {
+        // Redémarrer l'animation si toujours en train de taper
+        if (_isBotTyping && mounted) {
+          setState(() {});
+        }
+      },
+    );
+  }
+
+  Widget _buildMessageBubble(_ChatMessage message) {
+    return Align(
+      alignment: message.isBot ? Alignment.centerLeft : Alignment.centerRight,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(14),
+        constraints: const BoxConstraints(maxWidth: 280),
+        decoration: BoxDecoration(
+          color: message.isBot ? kLightBlue : kPrimaryBlue,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(18),
+            topRight: const Radius.circular(18),
+            bottomLeft: Radius.circular(message.isBot ? 4 : 18),
+            bottomRight: Radius.circular(message.isBot ? 18 : 4),
+          ),
+        ),
+        child: Text(
+          message.text,
+          style: TextStyle(
+            color: message.isBot ? Colors.black87 : Colors.white,
+            fontSize: 14,
+            height: 1.4,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickOptionsBar(List<_QuickOption> options) {
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: options.length,
+        itemBuilder: (context, index) {
+          final option = options[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            child: ElevatedButton(
+              onPressed: () => _handleQuickOption(option),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kLightBlue,
+                foregroundColor: kDarkBlue,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                option.label,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildInputArea() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(24),
+          bottomRight: Radius.circular(24),
+        ),
+      ),
+      child: Row(
+        children: [
+          // Bouton poubelle pour effacer le texte
+          AnimatedOpacity(
+            opacity: _textController.text.isNotEmpty ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _textController.clear();
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.delete_outline,
+                  color: Colors.red.shade400,
+                  size: 20,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              onChanged: (value) => setState(() {}), // Pour mettre à jour le bouton poubelle
+              decoration: InputDecoration(
+                hintText: 'Tapez votre message...',
+                hintStyle: TextStyle(color: Colors.grey.shade400),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              ),
+              onSubmitted: (text) => _handleUserMessage(text),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            decoration: const BoxDecoration(
+              color: kPrimaryBlue,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () => _handleUserMessage(_textController.text),
+              icon: const Icon(Icons.send, color: Colors.white, size: 20),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Message du chatbot
+class _ChatMessage {
+  final String text;
+  final bool isBot;
+  final List<_QuickOption>? options;
+
+  _ChatMessage({
+    required this.text,
+    required this.isBot,
+    this.options,
+  });
+}
+
+/// Option rapide du chatbot
+class _QuickOption {
+  final String id;
+  final String label;
+  final IconData icon;
+
+  _QuickOption({
+    required this.id,
+    required this.label,
+    required this.icon,
+  });
+}
+
+// ============================================================================
+// FAQ CHATBOT - BASE DE DONNÉES QUESTIONS/RÉPONSES
+// ============================================================================
+
+/// Structure d'une entrée FAQ
+class _FaqEntry {
+  final String category;
+  final List<String> keywords;
+  final String question;
+  final String answer;
+
+  const _FaqEntry({
+    required this.category,
+    required this.keywords,
+    required this.question,
+    required this.answer,
+  });
+}
+
+/// Base de données FAQ complète
+const List<_FaqEntry> kFaqDatabase = [
+  // ==================== CLIMATISATION ====================
+  _FaqEntry(
+    category: 'Climatisation',
+    keywords: ['installation', 'clim', 'réversible', 'installer', 'pose', 'monosplit', 'multisplit', 'nouvelle'],
+    question: 'Installation de climatisation réversible',
+    answer: '❄️ **Installation clim réversible**\n\n'
+        'Nous installons tous types de climatisations :\n'
+        '• Monosplit (1 unité intérieure)\n'
+        '• Multisplit (plusieurs unités)\n'
+        '• Gainable / Cassette\n\n'
+        '✅ **Inclus dans nos prestations :**\n'
+        '• Étude thermique gratuite\n'
+        '• Conseil sur le dimensionnement\n'
+        '• Installation aux normes\n'
+        '• Mise en service et essais\n\n'
+        '💰 Devis gratuit sous 24-48h',
+  ),
+  _FaqEntry(
+    category: 'Climatisation',
+    keywords: ['recharge', 'gaz', 'fluide', 'frigorigène', 'r410a', 'r32', 'manque', 'charge'],
+    question: 'Recharge gaz / fluide frigorigène',
+    answer: '🧊 **Recharge gaz climatisation**\n\n'
+        'Votre clim ne refroidit plus assez ? Il peut s\'agir d\'un manque de gaz.\n\n'
+        '**Notre intervention :**\n'
+        '• Diagnostic complet du circuit\n'
+        '• Recherche de fuite si nécessaire\n'
+        '• Recharge en fluide frigorigène (R32, R410A...)\n'
+        '• Contrôle des pressions\n\n'
+        '⚠️ Une recharge fréquente indique une fuite à réparer.\n\n'
+        '📞 Appelez-nous pour un diagnostic',
+  ),
+  _FaqEntry(
+    category: 'Climatisation',
+    keywords: ['coule', 'eau', 'goutte', 'fuite', 'condensat', 'bac', 'évacuation'],
+    question: 'Climatisation qui coule / fuite d\'eau',
+    answer: '💧 **Clim qui coule**\n\n'
+        'Causes possibles :\n'
+        '• Bac à condensats plein ou bouché\n'
+        '• Évacuation obstruée\n'
+        '• Pompe de relevage en panne\n'
+        '• Givre sur l\'évaporateur\n\n'
+        '**Notre intervention :**\n'
+        '• Nettoyage du bac et de l\'évacuation\n'
+        '• Vérification de la pompe de relevage\n'
+        '• Contrôle du bon fonctionnement\n\n'
+        '🔧 Intervention rapide pour éviter les dégâts des eaux',
+  ),
+  _FaqEntry(
+    category: 'Climatisation',
+    keywords: ['refroidit', 'plus', 'chaud', 'souffle', 'tiède', 'marche', 'fonctionne'],
+    question: 'Climatisation qui ne refroidit plus',
+    answer: '🌡️ **Clim qui ne refroidit plus**\n\n'
+        'Plusieurs causes possibles :\n'
+        '• Manque de gaz frigorigène\n'
+        '• Filtres encrassés\n'
+        '• Compresseur défaillant\n'
+        '• Problème électronique\n\n'
+        '**Diagnostic complet :**\n'
+        '• Test des pressions\n'
+        '• Vérification du compresseur\n'
+        '• Contrôle électronique\n'
+        '• Nettoyage si nécessaire\n\n'
+        '⚡ Intervention rapide 7j/7',
+  ),
+  _FaqEntry(
+    category: 'Climatisation',
+    keywords: ['bruit', 'bruyant', 'vibration', 'claquement', 'sifflement', 'ronronne'],
+    question: 'Climatisation bruyante',
+    answer: '🔊 **Clim qui fait du bruit**\n\n'
+        'Types de bruits et causes :\n'
+        '• **Vibrations** : fixations desserrées\n'
+        '• **Sifflement** : problème de gaz\n'
+        '• **Claquement** : volet ou ventilateur\n'
+        '• **Ronronnement fort** : compresseur fatigué\n\n'
+        '**Solutions :**\n'
+        '• Resserrage des fixations\n'
+        '• Remplacement des silentblocs\n'
+        '• Nettoyage du ventilateur\n'
+        '• Diagnostic compresseur\n\n'
+        '🔇 Retrouvez le silence !',
+  ),
+  
+  // ==================== FRIGORISTE ====================
+  _FaqEntry(
+    category: 'Frigoriste',
+    keywords: ['fuite', 'diagnostic', 'détection', 'recherche', 'gaz', 'frigorigène'],
+    question: 'Diagnostic et recherche de fuite',
+    answer: '🔍 **Diagnostic fuite frigorifique**\n\n'
+        'Nous utilisons des équipements professionnels :\n'
+        '• Détecteur électronique de fuite\n'
+        '• Traceur UV\n'
+        '• Test d\'azote sous pression\n\n'
+        '**Intervention :**\n'
+        '• Localisation précise de la fuite\n'
+        '• Réparation (brasure, remplacement)\n'
+        '• Recharge et mise en service\n'
+        '• Contrôle d\'étanchéité\n\n'
+        '🏪 Pour particuliers et professionnels',
+  ),
+  _FaqEntry(
+    category: 'Frigoriste',
+    keywords: ['chambre', 'froide', 'frigo', 'professionnel', 'commerce', 'restaurant', 'positive', 'négative'],
+    question: 'Chambre froide',
+    answer: '🧊 **Chambre froide**\n\n'
+        'Installation et dépannage :\n'
+        '• Chambres froides **positives** (0 à +8°C)\n'
+        '• Chambres froides **négatives** (-18 à -25°C)\n\n'
+        '**Nos services :**\n'
+        '• Installation complète\n'
+        '• Dépannage urgent\n'
+        '• Contrat de maintenance\n'
+        '• Remplacement groupe froid\n\n'
+        '🏪 Restaurants, commerces, grandes surfaces\n\n'
+        '⚡ **Urgence 7j/7** pour éviter la perte de marchandise',
+  ),
+  _FaqEntry(
+    category: 'Frigoriste',
+    keywords: ['pression', 'contrôle', 'entretien', 'maintenance', 'préventif', 'vérification'],
+    question: 'Contrôle pression et entretien frigorifique',
+    answer: '🔧 **Entretien frigorifique**\n\n'
+        '**Contrôle annuel recommandé :**\n'
+        '• Vérification des pressions HP/BP\n'
+        '• Contrôle des températures\n'
+        '• Nettoyage condenseur/évaporateur\n'
+        '• Test d\'étanchéité circuit\n'
+        '• Vérification électrique\n\n'
+        '**Avantages maintenance :**\n'
+        '• Évite les pannes coûteuses\n'
+        '• Optimise les performances\n'
+        '• Prolonge la durée de vie\n'
+        '• Réduit la consommation\n\n'
+        '📋 Contrats de maintenance disponibles',
+  ),
+  
+  // ==================== PLOMBERIE ====================
+  _FaqEntry(
+    category: 'Plomberie',
+    keywords: ['fuite', 'eau', 'tuyau', 'canalisation', 'goutte', 'inondation', 'dégât'],
+    question: 'Fuite d\'eau',
+    answer: '💧 **Fuite d\'eau**\n\n'
+        '**En cas de fuite :**\n'
+        '1. Coupez l\'arrivée d\'eau\n'
+        '2. Appelez-nous immédiatement\n\n'
+        '**Nos interventions :**\n'
+        '• Recherche de fuite\n'
+        '• Réparation canalisation\n'
+        '• Remplacement tuyauterie\n'
+        '• Colmatage d\'urgence\n\n'
+        '🚨 **Intervention urgente possible**\n'
+        '📞 Appelez le $kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Plomberie',
+    keywords: ['urgence', 'urgent', 'dépannage', 'rapide', 'immédiat', 'vite', 'sos'],
+    question: 'Urgence plomberie',
+    answer: '🚨 **Urgence plomberie**\n\n'
+        'Nous intervenons rapidement pour :\n'
+        '• Fuite importante\n'
+        '• Canalisation bouchée\n'
+        '• WC hors service\n'
+        '• Chauffe-eau en panne\n'
+        '• Dégât des eaux\n\n'
+        '⚡ **Disponible 7j/7**\n'
+        '📍 Intervention sur Nice, Cannes, Antibes et environs\n\n'
+        '📞 **Appelez maintenant : $kPhoneNumberFormatted**',
+  ),
+  _FaqEntry(
+    category: 'Plomberie',
+    keywords: ['débouchage', 'bouché', 'bouchon', 'wc', 'toilette', 'évier', 'lavabo', 'canalisation'],
+    question: 'Débouchage canalisation',
+    answer: '🚿 **Débouchage**\n\n'
+        '**Nous débouchons :**\n'
+        '• WC / Toilettes\n'
+        '• Éviers et lavabos\n'
+        '• Douches et baignoires\n'
+        '• Canalisations principales\n\n'
+        '**Méthodes utilisées :**\n'
+        '• Furet électrique\n'
+        '• Débouchage haute pression\n'
+        '• Inspection caméra si nécessaire\n\n'
+        '✅ Résultat garanti',
+  ),
+  _FaqEntry(
+    category: 'Plomberie',
+    keywords: ['robinet', 'robinetterie', 'mitigeur', 'remplacement', 'changement', 'installation'],
+    question: 'Remplacement robinetterie',
+    answer: '🚰 **Robinetterie**\n\n'
+        '**Nos prestations :**\n'
+        '• Remplacement robinet/mitigeur\n'
+        '• Installation colonne de douche\n'
+        '• Changement mécanisme WC\n'
+        '• Réparation fuite robinet\n\n'
+        '**Marques installées :**\n'
+        'Grohe, Hansgrohe, Jacob Delafon, Ideal Standard...\n\n'
+        '💰 Devis gratuit avec fourniture ou pose seule',
+  ),
+  
+  // ==================== CHAUFFAGE / PAC ====================
+  _FaqEntry(
+    category: 'Chauffage',
+    keywords: ['entretien', 'pac', 'pompe', 'chaleur', 'maintenance', 'révision', 'annuel'],
+    question: 'Entretien pompe à chaleur',
+    answer: '🌡️ **Entretien PAC**\n\n'
+        '**Entretien annuel obligatoire :**\n'
+        '• Nettoyage filtres et échangeurs\n'
+        '• Contrôle du fluide frigorigène\n'
+        '• Vérification des performances\n'
+        '• Test des sécurités\n'
+        '• Rapport d\'intervention\n\n'
+        '**Avantages :**\n'
+        '• Garantie constructeur maintenue\n'
+        '• Performances optimales\n'
+        '• Durée de vie prolongée\n\n'
+        '📋 Contrat d\'entretien disponible',
+  ),
+  _FaqEntry(
+    category: 'Chauffage',
+    keywords: ['panne', 'chauffage', 'chauffe', 'plus', 'froid', 'marche', 'fonctionne'],
+    question: 'Panne de chauffage',
+    answer: '🔥 **Panne chauffage**\n\n'
+        '**Dépannage rapide :**\n'
+        '• Pompes à chaleur\n'
+        '• Chaudières gaz/fioul\n'
+        '• Radiateurs électriques\n'
+        '• Plancher chauffant\n\n'
+        '**Diagnostic complet :**\n'
+        '• Vérification électrique\n'
+        '• Contrôle brûleur/compresseur\n'
+        '• Test des sondes et régulations\n\n'
+        '❄️ Intervention rapide en période de froid\n'
+        '📞 $kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Chauffage',
+    keywords: ['radiateur', 'purge', 'chauffe', 'tiède', 'froid', 'bruit', 'purger'],
+    question: 'Problème radiateurs',
+    answer: '🔥 **Radiateurs**\n\n'
+        '**Problèmes courants :**\n'
+        '• Radiateur froid en haut → purge nécessaire\n'
+        '• Radiateur tiède → désembouage circuit\n'
+        '• Bruit dans les tuyaux → air dans le circuit\n'
+        '• Fuite au niveau de la vanne\n\n'
+        '**Nos interventions :**\n'
+        '• Purge du circuit\n'
+        '• Désembouage\n'
+        '• Remplacement vannes/robinets\n'
+        '• Équilibrage du réseau\n\n'
+        '🏠 Pour un chauffage homogène',
+  ),
+  
+  // ==================== ÉLECTRICITÉ ====================
+  _FaqEntry(
+    category: 'Électricité',
+    keywords: ['coupure', 'courant', 'électricité', 'panne', 'plus', 'rien'],
+    question: 'Coupure de courant',
+    answer: '⚡ **Coupure électrique**\n\n'
+        '**Vérifications à faire :**\n'
+        '1. Le disjoncteur général est-il en position ON ?\n'
+        '2. Un disjoncteur divisionnaire a-t-il sauté ?\n'
+        '3. Vos voisins ont-ils du courant ?\n\n'
+        '**Si le problème persiste :**\n'
+        '• Recherche de court-circuit\n'
+        '• Vérification du tableau électrique\n'
+        '• Contrôle des prises et circuits\n\n'
+        '🔌 Intervention pour dépannage électrique basique',
+  ),
+  _FaqEntry(
+    category: 'Électricité',
+    keywords: ['disjoncteur', 'saute', 'déclenche', 'tableau', 'différentiel'],
+    question: 'Disjoncteur qui saute',
+    answer: '⚡ **Disjoncteur qui saute**\n\n'
+        '**Causes possibles :**\n'
+        '• Surcharge électrique\n'
+        '• Court-circuit\n'
+        '• Appareil défectueux\n'
+        '• Défaut d\'isolement\n\n'
+        '**Notre intervention :**\n'
+        '• Identification de la cause\n'
+        '• Test des circuits\n'
+        '• Remplacement disjoncteur si nécessaire\n'
+        '• Mise en conformité\n\n'
+        '🔧 Dépannage électrique basique inclus',
+  ),
+  _FaqEntry(
+    category: 'Électricité',
+    keywords: ['thermostat', 'installation', 'programmateur', 'régulation', 'connecté', 'wifi'],
+    question: 'Installation thermostat',
+    answer: '🌡️ **Thermostat / Régulation**\n\n'
+        '**Nous installons :**\n'
+        '• Thermostat d\'ambiance\n'
+        '• Thermostat programmable\n'
+        '• Thermostat connecté (WiFi)\n'
+        '• Régulation par zone\n\n'
+        '**Avantages :**\n'
+        '• Confort optimal\n'
+        '• Économies d\'énergie (15-25%)\n'
+        '• Pilotage à distance\n\n'
+        '💡 Compatible PAC, chaudière, radiateurs',
+  ),
+  
+  // ==================== ZONES D'INTERVENTION ====================
+  _FaqEntry(
+    category: 'Zone',
+    keywords: ['nice', 'cannes', 'antibes', 'grasse', 'menton', 'cagnes', '06', 'alpes', 'maritimes'],
+    question: 'Intervention Alpes-Maritimes (06)',
+    answer: '📍 **Alpes-Maritimes (06)**\n\n'
+        '**Villes desservies :**\n'
+        '• Nice et agglomération\n'
+        '• Cannes, Antibes, Juan-les-Pins\n'
+        '• Grasse, Mougins, Valbonne\n'
+        '• Menton, Monaco\n'
+        '• Cagnes-sur-Mer, Saint-Laurent-du-Var\n'
+        '• Villeneuve-Loubet, Biot\n'
+        '• Carros, Vence, Saint-Paul\n\n'
+        '✅ **Déplacement gratuit** selon intervention\n'
+        '📞 $kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Zone',
+    keywords: ['fréjus', 'saint', 'raphaël', 'draguignan', '83', 'var', 'toulon'],
+    question: 'Intervention Var (83)',
+    answer: '📍 **Var (83)**\n\n'
+        '**Villes desservies :**\n'
+        '• Fréjus, Saint-Raphaël\n'
+        '• Draguignan\n'
+        '• Sainte-Maxime\n'
+        '• Roquebrune-sur-Argens\n'
+        '• Le Muy, Puget-sur-Argens\n'
+        '• Trans-en-Provence\n\n'
+        '✅ **Déplacement gratuit** selon intervention\n'
+        '📞 $kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Zone',
+    keywords: ['déplacement', 'frais', 'gratuit', 'zone', 'secteur', 'intervention'],
+    question: 'Frais de déplacement',
+    answer: '🚗 **Frais de déplacement**\n\n'
+        '**Notre politique :**\n'
+        '• Déplacement **GRATUIT** pour toute intervention\n'
+        '• Devis sur place offert\n'
+        '• Pas de frais cachés\n\n'
+        '📍 **Zone couverte :**\n'
+        '• Alpes-Maritimes (06)\n'
+        '• Var Est (83)\n\n'
+        '💡 Le déplacement est inclus dans le prix de l\'intervention',
+  ),
+  
+  // ==================== HORAIRES ====================
+  _FaqEntry(
+    category: 'Horaires',
+    keywords: ['horaire', 'heure', 'ouvert', 'disponible', 'quand', 'jour', 'semaine'],
+    question: 'Horaires d\'ouverture',
+    answer: '🕐 **Nos horaires**\n\n'
+        '**Interventions standards :**\n'
+        '• Lundi - Samedi : **8h - 20h**\n'
+        '• Dimanche : sur rendez-vous\n\n'
+        '**Urgences :**\n'
+        '• Disponible **7j/7**\n'
+        '• Intervention rapide selon disponibilité\n\n'
+        '📞 Appelez-nous : $kPhoneNumberFormatted\n'
+        '💬 Ou envoyez un WhatsApp',
+  ),
+  _FaqEntry(
+    category: 'Horaires',
+    keywords: ['urgence', 'urgent', 'nuit', 'weekend', 'dimanche', 'férié', '24h'],
+    question: 'Urgences et disponibilités',
+    answer: '🚨 **Urgences**\n\n'
+        '**Service d\'urgence disponible :**\n'
+        '• Fuite d\'eau importante\n'
+        '• Panne de chambre froide (pro)\n'
+        '• Panne chauffage en hiver\n'
+        '• Climatisation HS en canicule\n\n'
+        '⚡ **Intervention rapide 7j/7**\n'
+        '📞 Appelez le $kPhoneNumberFormatted\n\n'
+        '💡 Décrivez votre urgence, nous ferons notre maximum',
+  ),
+  
+  // ==================== DEVIS ====================
+  _FaqEntry(
+    category: 'Devis',
+    keywords: ['devis', 'gratuit', 'prix', 'tarif', 'coût', 'combien', 'estimation'],
+    question: 'Devis gratuit',
+    answer: '📋 **Devis gratuit**\n\n'
+        '**Notre engagement :**\n'
+        '• Devis **100% gratuit**\n'
+        '• Sans engagement\n'
+        '• Réponse sous 24-48h\n\n'
+        '**Pour un devis précis :**\n'
+        '• Décrivez votre besoin\n'
+        '• Envoyez des photos si possible\n'
+        '• Indiquez votre ville\n\n'
+        '📝 Formulaire de contact disponible\n'
+        '📞 Ou appelez le $kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Devis',
+    keywords: ['photo', 'whatsapp', 'envoyer', 'image', 'formulaire', 'demande'],
+    question: 'Envoyer photos pour devis',
+    answer: '📸 **Envoi de photos**\n\n'
+        '**Via WhatsApp (recommandé) :**\n'
+        '• Rapide et pratique\n'
+        '• Réponse immédiate\n'
+        '• Discussion directe\n\n'
+        '**Via formulaire de contact :**\n'
+        '• Décrivez votre besoin en détail\n'
+        '• Nous vous recontactons\n\n'
+        '📱 WhatsApp : $kPhoneNumberFormatted\n\n'
+        '💡 Les photos nous aident à établir un devis précis',
+  ),
+  
+  // ==================== POLITESSE / CONVERSATION ====================
+  _FaqEntry(
+    category: 'Politesse',
+    keywords: ['merci', 'remercie', 'remercier', 'thanks', 'thank'],
+    question: 'Remerciements',
+    answer: '😊 **Avec plaisir !**\n\n'
+        'Je suis là pour vous aider.\n\n'
+        'N\'hésitez pas si vous avez d\'autres questions !',
+  ),
+  _FaqEntry(
+    category: 'Politesse',
+    keywords: ['parfait', 'super', 'genial', 'excellent', 'top', 'cool', 'nickel', 'impeccable'],
+    question: 'Satisfaction',
+    answer: '👍 **Super !**\n\n'
+        'Ravi de pouvoir vous aider !\n\n'
+        'Si vous avez besoin d\'autre chose, je suis là.',
+  ),
+  _FaqEntry(
+    category: 'Politesse',
+    keywords: ['ok', 'okay', 'daccord', 'd accord', 'compris', 'entendu', 'bien'],
+    question: 'Confirmation',
+    answer: '✅ **Parfait !**\n\n'
+        'Y a-t-il autre chose que je puisse faire pour vous ?',
+  ),
+  _FaqEntry(
+    category: 'Politesse',
+    keywords: ['bonjour', 'bonsoir', 'salut', 'hello', 'coucou', 'hey'],
+    question: 'Salutations',
+    answer: '👋 **Bonjour !**\n\n'
+        'Bienvenue chez Azur Confort !\n\n'
+        'Comment puis-je vous aider aujourd\'hui ?\n'
+        '• Demande de devis\n'
+        '• Question sur nos services\n'
+        '• Urgence / dépannage',
+  ),
+  _FaqEntry(
+    category: 'Politesse',
+    keywords: ['aurevoir', 'au revoir', 'bye', 'a bientot', 'bonne journee', 'bonne soiree'],
+    question: 'Au revoir',
+    answer: '👋 **À bientôt !**\n\n'
+        'Merci de votre visite sur Azur Confort.\n\n'
+        'N\'hésitez pas à revenir si vous avez des questions.\n'
+        '📞 $kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Politesse',
+    keywords: ['aide', 'aider', 'besoin', 'question', 'renseignement', 'info', 'information'],
+    question: 'Demande d\'aide',
+    answer: '🤝 **Je suis là pour vous aider !**\n\n'
+        'Voici ce que je peux faire :\n\n'
+        '📋 **Devis** - Estimation gratuite\n'
+        '🔧 **Services** - Clim, plomberie, chauffage...\n'
+        '🚨 **Urgences** - Intervention rapide\n'
+        '📍 **Zones** - 06 et 83\n'
+        '📞 **Contact** - Appel, WhatsApp, email\n\n'
+        'Que souhaitez-vous savoir ?',
+  ),
+];
+
+/// Fonction pour rechercher une réponse FAQ basée sur le message utilisateur
+String? findFaqAnswer(String userMessage) {
+  final message = userMessage.toLowerCase()
+      .replaceAll(RegExp(r'[éèêë]'), 'e')
+      .replaceAll(RegExp(r'[àâä]'), 'a')
+      .replaceAll(RegExp(r'[ùûü]'), 'u')
+      .replaceAll(RegExp(r'[îï]'), 'i')
+      .replaceAll(RegExp(r'[ôö]'), 'o')
+      .replaceAll("'", ' ')
+      .replaceAll(RegExp(r'[^\w\s]'), '');
+  
+  int bestScore = 0;
+  _FaqEntry? bestMatch;
+  
+  for (final entry in kFaqDatabase) {
+    int score = 0;
+    
+    // Vérifier chaque mot-clé
+    for (final keyword in entry.keywords) {
+      final normalizedKeyword = keyword.toLowerCase()
+          .replaceAll(RegExp(r'[éèêë]'), 'e')
+          .replaceAll(RegExp(r'[àâä]'), 'a')
+          .replaceAll(RegExp(r'[ùûü]'), 'u')
+          .replaceAll(RegExp(r'[îï]'), 'i')
+          .replaceAll(RegExp(r'[ôö]'), 'o')
+          .replaceAll("'", ' ');
+      
+      if (message.contains(normalizedKeyword)) {
+        score += 3; // 3 points par mot-clé trouvé
+      }
+      
+      // Correspondance partielle (début du mot)
+      final words = message.split(' ');
+      for (final word in words) {
+        if (word.length >= 3 && normalizedKeyword.startsWith(word)) {
+          score += 1;
+        }
+        if (word.length >= 3 && normalizedKeyword.contains(word)) {
+          score += 2;
+        }
+      }
+    }
+    
+    // Bonus si la catégorie est mentionnée
+    final normalizedCategory = entry.category.toLowerCase()
+        .replaceAll(RegExp(r'[éèêë]'), 'e');
+    if (message.contains(normalizedCategory)) {
+      score += 4;
+    }
+    
+    // Garder la meilleure correspondance
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = entry;
+    }
+  }
+  
+  // Seuil abaissé à 2 pour être plus réactif
+  if (bestScore >= 2 && bestMatch != null) {
+    return bestMatch.answer;
+  }
+  
+  return null;
+}
