@@ -5044,57 +5044,45 @@ class _ContactPageState extends State<_ContactPage> {
               _GoogleMapSection(isDark: isDark, isMobile: isMobile),
               const SizedBox(height: 40),
               
-              // Grille des villes
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final crossAxisCount = constraints.maxWidth > 800 ? 4 : (constraints.maxWidth > 500 ? 3 : 2);
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      childAspectRatio: 2.5,
-                    ),
-                    itemCount: cities.length,
-                    itemBuilder: (context, index) {
-                      final city = cities[index];
-                      return _buildCityCard(city['name']!, city['dept']!, isDark, colorScheme);
-                    },
-                  );
-                },
+              // Villes en Wrap compact (pas de grille)
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
+                children: cities.map((city) {
+                  return _buildCityChip(city['name']!, city['dept']!, isDark, colorScheme);
+                }).toList(),
               ),
               
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
               
-              // Badge "Et plus encore"
+              // Badge "Et plus encore" - compact
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [kDarkBlue, kPrimaryBlue],
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: kPrimaryBlue.withOpacity(0.3),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
+                      color: kPrimaryBlue.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                children: [
-                    const Icon(Icons.add_location_alt, color: Colors.white, size: 22),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Et toutes les communes des Alpes-Maritimes et du Var',
+                  children: [
+                    Icon(Icons.add_location_alt, color: Colors.white, size: 16),
+                    SizedBox(width: 8),
+                    Text(
+                      'Et toutes les communes du 06 et 83',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -5107,52 +5095,43 @@ class _ContactPageState extends State<_ContactPage> {
     );
   }
 
-  Widget _buildCityCard(String city, String dept, bool isDark, ColorScheme colorScheme) {
+  // Chip compact pour les villes (page Contact)
+  Widget _buildCityChip(String city, String dept, bool isDark, ColorScheme colorScheme) {
     final is06 = dept == '06';
     final accentColor = is06 ? kPrimaryBlue : kAccentOrange;
     
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isDark ? colorScheme.surfaceVariant : Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: isDark ? colorScheme.surfaceVariant.withOpacity(0.5) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: accentColor.withOpacity(0.2),
+          color: accentColor.withOpacity(0.3),
           width: 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.location_on_outlined,
+            Icons.location_on,
             color: accentColor,
-            size: 18,
+            size: 14,
           ),
-          const SizedBox(width: 8),
-          Flexible(
-      child: Text(
-        city,
-              style: TextStyle(
-                color: isDark ? colorScheme.onSurface : kDarkBlue,
-                fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-              overflow: TextOverflow.ellipsis,
+          const SizedBox(width: 4),
+          Text(
+            city,
+            style: TextStyle(
+              color: isDark ? colorScheme.onSurface : kDarkBlue,
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
             decoration: BoxDecoration(
-              color: accentColor.withOpacity(0.1),
+              color: accentColor.withOpacity(0.15),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
@@ -5160,7 +5139,7 @@ class _ContactPageState extends State<_ContactPage> {
               style: TextStyle(
                 color: accentColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 11,
+                fontSize: 9,
               ),
             ),
           ),
