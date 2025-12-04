@@ -420,13 +420,16 @@ void main() {
 
 /// Enregistre l'iframe Google Maps pour l'adresse Azur Confort (page Contact)
 void _registerGoogleMapIframe() {
-  // URL de l'iframe Google Maps centrée sur l'adresse Azur Confort
-  // 60 bis avenue de la Bornala, Résidence Le Vallon Monari, 06200 Nice
+  // URL de l'iframe Google Maps avec recherche de l'adresse
+  // Adresse : 60 bis avenue de la Bornala, Résidence Le Vallon Monari, 06200 Nice
+  // Note: Pour afficher "Azur Confort" sur le marqueur, l'entreprise doit être
+  // enregistrée sur Google My Business. En attendant, on affiche l'adresse.
   ui_web.platformViewRegistry.registerViewFactory(
     'google-map-iframe',
     (int viewId) {
       final iframe = html.IFrameElement()
-        ..src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2884.5!2d7.2558!3d43.7034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd0106a852d31%3A0x1234567890abcdef!2s60%20bis%20Avenue%20de%20la%20Bornala%2C%2006200%20Nice%2C%20France!5e0!3m2!1sfr!2sfr!4v1701700000000!5m2!1sfr!2sfr'
+        // Recherche avec le nom de l'entreprise + adresse
+        ..src = 'https://www.google.com/maps?q=Azur+Confort+60+bis+Avenue+de+la+Bornala+06200+Nice+France&output=embed'
         ..style.border = 'none'
         ..style.width = '100%'
         ..style.height = '100%'
@@ -6893,33 +6896,22 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
   late AnimationController _bounceController;
   late Animation<double> _bounceAnimation;
 
-  // Options rapides du chatbot
+  // ==================== MENU PRINCIPAL AMÉLIORÉ ====================
   final List<_QuickOption> _quickOptions = [
-    _QuickOption(
-      id: 'devis',
-      label: '📋 Demander un devis',
-      icon: Icons.description,
-    ),
-    _QuickOption(
-      id: 'urgence',
-      label: '🚨 Urgence / Dépannage',
-      icon: Icons.warning,
-    ),
-    _QuickOption(
-      id: 'disponibilite',
-      label: '📅 Disponibilités',
-      icon: Icons.calendar_today,
-    ),
-    _QuickOption(
-      id: 'services',
-      label: '🔧 Nos services',
-      icon: Icons.build,
-    ),
-    _QuickOption(
-      id: 'contact',
-      label: '📞 Nous contacter',
-      icon: Icons.phone,
-    ),
+    _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
+    _QuickOption(id: 'urgence', label: '🚨 Urgence', icon: Icons.warning),
+    _QuickOption(id: 'services', label: '🔧 Nos services', icon: Icons.build),
+    _QuickOption(id: 'tarifs', label: '💰 Tarifs indicatifs', icon: Icons.euro),
+    _QuickOption(id: 'zones', label: '📍 Zones d\'intervention', icon: Icons.location_on),
+    _QuickOption(id: 'certifications', label: '🏆 Certifications', icon: Icons.verified),
+    _QuickOption(id: 'faq', label: '❓ FAQ', icon: Icons.help_outline),
+    _QuickOption(id: 'contact', label: '📞 Contact', icon: Icons.phone),
+  ];
+  
+  // Options d'action toujours proposées
+  final List<_QuickOption> _actionOptions = [
+    _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+    _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
   ];
 
   @override
@@ -7036,129 +7028,368 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
       List<_QuickOption>? subOptions;
       
       switch (option.id) {
+        // ==================== DEVIS ====================
         case 'devis':
-          response = '📋 **Demande de devis**\n\nPour établir un devis gratuit et personnalisé, j\'ai besoin de quelques informations :\n\n• Type de prestation souhaitée\n• Votre localisation (ville)\n• Vos coordonnées\n\nVoulez-vous remplir le formulaire de contact ou préférez-vous nous appeler directement ?';
+          response = '📋 **Demande de devis gratuit**\n\n'
+              'Chez Azur Confort, tous nos devis sont **gratuits et personnalisés**.\n\n'
+              'Pour vous établir une proposition adaptée, j\'ai besoin de :\n'
+              '• Type de prestation souhaitée\n'
+              '• Votre ville (06 ou 83)\n'
+              '• Vos coordonnées\n\n'
+              '📞 Réponse sous 24h garantie !';
           subOptions = [
             _QuickOption(id: 'formulaire', label: '📝 Formulaire de contact', icon: Icons.edit),
             _QuickOption(id: 'appeler', label: '📞 Appeler maintenant', icon: Icons.phone),
           ];
           break;
           
+        // ==================== URGENCE ====================
         case 'urgence':
-          response = '🚨 **Urgence / Dépannage**\n\nNous intervenons rapidement pour :\n\n• Panne de climatisation\n• Fuite d\'eau urgente\n• Panne de chauffage\n• Problème de chambre froide\n\n⚡ **Intervention rapide 7j/7**\n\nAppelez-nous immédiatement au **$kPhoneNumberFormatted**';
+          response = '🚨 **Urgence / Dépannage rapide**\n\n'
+              'Nous intervenons en urgence pour :\n\n'
+              '• ❄️ Panne de climatisation\n'
+              '• 💧 Fuite d\'eau urgente\n'
+              '• 🔥 Panne de chauffage\n'
+              '• 🧊 Problème de chambre froide\n'
+              '• ⚡ Panne électrique\n\n'
+              '⚡ **Intervention rapide 7j/7**\n'
+              '📞 Appelez-nous maintenant : **$kPhoneNumberFormatted**';
           subOptions = [
             _QuickOption(id: 'appeler', label: '📞 Appeler maintenant', icon: Icons.phone),
             _QuickOption(id: 'whatsapp', label: '💬 WhatsApp', icon: Icons.message),
           ];
           break;
           
-        case 'disponibilite':
-          response = '📅 **Nos disponibilités**\n\n🕐 **Horaires d\'intervention :**\n• Lundi - Vendredi : 8h - 19h\n• Samedi : 9h - 17h\n• Urgences : 7j/7\n\n📍 **Zone d\'intervention :**\nAlpes-Maritimes (06) & Var (83)\n\n💡 Nous pouvons généralement intervenir sous 24-48h pour les demandes standards.';
-          subOptions = [
-            _QuickOption(id: 'devis', label: '📋 Prendre RDV', icon: Icons.calendar_today),
-            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
-          ];
-          break;
-          
+        // ==================== SERVICES ====================
         case 'services':
-          response = '🔧 **Nos services**\n\nNous sommes spécialisés dans :\n\n❄️ **Climatisation** - Installation, entretien, dépannage\n🧊 **Frigoriste** - Chambres froides, vitrines réfrigérées\n🌡️ **Pompes à chaleur** - PAC air/air, air/eau\n🔥 **Chauffage** - Chaudières, radiateurs\n💧 **Plomberie** - Dépannage, installation\n\nQuel service vous intéresse ?';
+          response = '🔧 **Nos services professionnels**\n\n'
+              'Azur Confort, artisan qualifié depuis plus de 10 ans :\n\n'
+              '❄️ **Climatisation** - Mono/multi-split, gainable\n'
+              '🧊 **Frigoriste** - Chambres froides, vitrines\n'
+              '🌡️ **Pompes à chaleur** - PAC air/air, air/eau\n'
+              '🔥 **Chauffage** - Chaudières, radiateurs\n'
+              '💧 **Plomberie** - Sanitaires, fuites\n'
+              '⚡ **Électricité** - Dépannage, mise aux normes\n\n'
+              'Quel service vous intéresse ?';
           subOptions = [
             _QuickOption(id: 'clim', label: '❄️ Climatisation', icon: Icons.ac_unit),
             _QuickOption(id: 'frigo', label: '🧊 Frigoriste', icon: Icons.severe_cold),
             _QuickOption(id: 'pac', label: '🌡️ Pompes à chaleur', icon: Icons.thermostat),
             _QuickOption(id: 'chauffage', label: '🔥 Chauffage', icon: Icons.local_fire_department),
             _QuickOption(id: 'plomberie', label: '💧 Plomberie', icon: Icons.water_drop),
+            _QuickOption(id: 'electricite', label: '⚡ Électricité', icon: Icons.electrical_services),
           ];
           break;
           
+        // ==================== TARIFS ====================
+        case 'tarifs':
+          response = '💰 **Tarifs indicatifs** _(non contractuels)_\n\n'
+              '**Dépannage urgence :** à partir de 89€\n'
+              '**Entretien climatisation :** à partir de 90€\n'
+              '**Installation clim monosplit :** à partir de 1 200€\n'
+              '**Installation clim multisplit :** à partir de 2 500€\n'
+              '**Installation PAC air/air :** à partir de 3 500€\n'
+              '**Installation PAC air/eau :** à partir de 8 000€\n'
+              '**Déplacement :** inclus ou selon zone\n\n'
+              '✅ **Tous nos devis sont gratuits et personnalisés.**\n'
+              'Le tarif final dépend de votre projet et de vos besoins.';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis personnalisé', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+            _QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        // ==================== ZONES D'INTERVENTION ====================
+        case 'zones':
+          response = '📍 **Zones d\'intervention**\n\n'
+              '**Alpes-Maritimes (06) :**\n'
+              'Nice, Cannes, Antibes, Grasse, Menton, Cagnes-sur-Mer, Mandelieu, Mougins, Valbonne, Vence, Saint-Laurent-du-Var, Villeneuve-Loubet...\n\n'
+              '**Var (83) :**\n'
+              'Fréjus, Saint-Raphaël, Toulon, Hyères, Draguignan, Sainte-Maxime, Saint-Tropez...\n\n'
+              '🚗 **Déplacement gratuit** dans la plupart des communes.\n'
+              '⏱️ **Délai moyen :** 24-48h (urgences : le jour même)';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+            _QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        // ==================== CERTIFICATIONS ====================
+        case 'certifications':
+          response = '🏆 **Nos certifications & garanties**\n\n'
+              '✅ **Garantie décennale** - Vos travaux couverts 10 ans\n'
+              '✅ **Assurance RC Professionnelle** - Protection complète\n'
+              '✅ **Installateur qualifié** - Formation continue\n'
+              '✅ **Attestation de capacité fluides frigorigènes**\n\n'
+              '🔧 **Marques installées :**\n'
+              'Daikin, Mitsubishi Electric, Atlantic, Toshiba, Panasonic\n\n'
+              '💯 **+500 clients satisfaits** sur la Côte d\'Azur';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+            _QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        // ==================== FAQ ====================
+        case 'faq':
+          response = '❓ **Questions fréquentes**\n\n'
+              'Choisissez une question :\n\n'
+              '1️⃣ Quel est votre délai d\'intervention ?\n'
+              '2️⃣ Intervenez-vous dans le Var ?\n'
+              '3️⃣ Le devis est-il gratuit ?\n'
+              '4️⃣ Quelles marques installez-vous ?\n'
+              '5️⃣ Ma clim ne refroidit plus, que faire ?\n'
+              '6️⃣ Faites-vous des contrats d\'entretien ?';
+          subOptions = [
+            _QuickOption(id: 'faq_delai', label: '1️⃣ Délai', icon: Icons.schedule),
+            _QuickOption(id: 'faq_var', label: '2️⃣ Var ?', icon: Icons.location_on),
+            _QuickOption(id: 'faq_devis', label: '3️⃣ Devis gratuit ?', icon: Icons.euro),
+            _QuickOption(id: 'faq_marques', label: '4️⃣ Marques', icon: Icons.verified),
+            _QuickOption(id: 'faq_panne', label: '5️⃣ Panne clim', icon: Icons.ac_unit),
+            _QuickOption(id: 'faq_entretien', label: '6️⃣ Entretien', icon: Icons.build),
+          ];
+          break;
+          
+        // ==================== FAQ RÉPONSES ====================
+        case 'faq_delai':
+          response = '⏱️ **Délai d\'intervention**\n\n'
+              '• **Urgences :** intervention le jour même si possible\n'
+              '• **Dépannage standard :** sous 24 à 48h\n'
+              '• **Installation :** selon planning, généralement sous 1 semaine\n\n'
+              'Nous faisons notre maximum pour vous dépanner rapidement !';
+          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
+          break;
+          
+        case 'faq_var':
+          response = '📍 **Intervention dans le Var (83)**\n\n'
+              'Oui, nous intervenons dans tout le Var !\n\n'
+              'Fréjus, Saint-Raphaël, Toulon, Hyères, Draguignan, Sainte-Maxime, Les Arcs...\n\n'
+              'Le déplacement est inclus ou facturé selon la distance.';
+          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
+          break;
+          
+        case 'faq_devis':
+          response = '✅ **Devis 100% gratuit**\n\n'
+              'Oui, tous nos devis sont **gratuits et sans engagement**.\n\n'
+              'Nous nous déplaçons gratuitement pour évaluer votre projet et vous remettre un devis détaillé.\n\n'
+              'Aucune surprise : tout est indiqué noir sur blanc !';
+          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
+          break;
+          
+        case 'faq_marques':
+          response = '🔧 **Marques installées**\n\n'
+              'Nous travaillons avec les meilleures marques :\n\n'
+              '• **Daikin** - Leader mondial\n'
+              '• **Mitsubishi Electric** - Fiabilité japonaise\n'
+              '• **Atlantic** - Fabrication française\n'
+              '• **Toshiba** - Innovation technologique\n'
+              '• **Panasonic** - Qualité premium\n\n'
+              'Nous vous conseillons la marque adaptée à votre budget et vos besoins.';
+          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
+          break;
+          
+        case 'faq_panne':
+          response = '❄️ **Ma clim ne refroidit plus**\n\n'
+              'Causes possibles :\n'
+              '• Filtres encrassés → Nettoyage nécessaire\n'
+              '• Manque de gaz frigorigène → Recharge\n'
+              '• Problème électronique → Diagnostic\n'
+              '• Compresseur HS → Réparation/remplacement\n\n'
+              '💡 **Conseil :** N\'attendez pas ! Une panne peut s\'aggraver.\n\n'
+              'Appelez-nous pour un diagnostic rapide.';
+          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
+          break;
+          
+        case 'faq_entretien':
+          response = '🔧 **Contrats d\'entretien**\n\n'
+              'Oui, nous proposons des **contrats de maintenance** :\n\n'
+              '• Entretien annuel climatisation\n'
+              '• Entretien PAC (obligatoire pour certaines aides)\n'
+              '• Maintenance chambres froides (pro)\n\n'
+              '**Avantages :**\n'
+              '✅ Prolonge la durée de vie\n'
+              '✅ Réduit les pannes\n'
+              '✅ Maintient les performances\n'
+              '✅ Intervention prioritaire';
+          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
+          break;
+          
+        // ==================== CONTACT ====================
         case 'contact':
-          response = '📞 **Nous contacter**\n\n📱 **Téléphone :** $kPhoneNumberFormatted\n💬 **WhatsApp :** Disponible\n📧 **Email :** contact@azur-confort.fr\n\n📍 **Zone d\'intervention :**\nCôte d\'Azur (06 & 83)';
+          response = '📞 **Contactez Azur Confort**\n\n'
+              '📱 **Téléphone :** $kPhoneNumberFormatted\n'
+              '💬 **WhatsApp :** Disponible\n'
+              '📧 **Email :** contact@azur-confort.fr\n\n'
+              '🕐 **Horaires :**\n'
+              '• Lun-Ven : 8h - 19h\n'
+              '• Samedi : 9h - 17h\n'
+              '• Urgences : 7j/7\n\n'
+              '📍 Nice et toute la Côte d\'Azur (06 & 83)';
           subOptions = [
             _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'whatsapp', label: '💬 WhatsApp', icon: Icons.message),
             _QuickOption(id: 'email', label: '📧 Email', icon: Icons.email),
+            _QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back),
           ];
           break;
           
+        // ==================== ACTIONS ====================
         case 'appeler':
           launchPhone();
-          response = '📞 **Appel en cours...**\n\nNuméro : **$kPhoneNumberFormatted**\n\nSi l\'appel ne s\'ouvre pas, composez directement ce numéro.';
-          subOptions = [
-            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
-          ];
+          response = '📞 **Appel en cours...**\n\n'
+              'Numéro : **$kPhoneNumberFormatted**\n\n'
+              'Si l\'appel ne s\'ouvre pas, composez directement ce numéro.\n\n'
+              'Nous sommes disponibles du lundi au samedi !';
+          subOptions = [_QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back)];
           break;
           
         case 'whatsapp':
           launchWhatsApp();
-          response = '💬 **WhatsApp**\n\nEnvoyez-nous un message avec :\n• Votre besoin\n• Votre ville\n• Des photos si nécessaire\n\nNous répondons rapidement !';
-          subOptions = [
-            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
-          ];
+          response = '💬 **WhatsApp**\n\n'
+              'Envoyez-nous un message avec :\n'
+              '• Votre besoin\n'
+              '• Votre ville\n'
+              '• Des photos si nécessaire\n\n'
+              'Nous répondons rapidement, même le week-end !';
+          subOptions = [_QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back)];
           break;
           
         case 'email':
           launchEmail();
-          response = '📧 **Email**\n\nAdresse : **contact@azur-confort.fr**\n\nDécrivez votre projet, nous vous répondons sous 24h.';
-          subOptions = [
-            _QuickOption(id: 'retour', label: '↩️ Retour au menu', icon: Icons.arrow_back),
-          ];
+          response = '📧 **Email envoyé**\n\n'
+              'Adresse : **contact@azur-confort.fr**\n\n'
+              'Décrivez votre projet en détail, nous vous répondons sous 24h ouvrées.';
+          subOptions = [_QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back)];
           break;
           
         case 'formulaire':
           _AzurConfortHomeState.navigateToPage(2);
-          response = '📝 Je vous redirige vers notre formulaire de contact...\n\nRemplissez vos informations et nous vous recontacterons rapidement !';
+          response = '📝 **Redirection vers le formulaire...**\n\n'
+              'Remplissez vos informations et nous vous recontacterons très rapidement !';
           Future.delayed(const Duration(milliseconds: 500), () {
             setState(() => _isOpen = false);
           });
           break;
           
+        // ==================== SERVICES DÉTAILLÉS ====================
         case 'clim':
-          response = '❄️ **Climatisation**\n\n**Nos prestations :**\n• Installation clim monosplit\n• Installation clim multisplit\n• Entretien annuel\n• Dépannage et réparation\n• Remplacement de climatiseur\n\n💰 **Devis gratuit** - Intervention rapide sur le 06 et 83';
+          response = '❄️ **Climatisation**\n\n'
+              '**Nos prestations :**\n'
+              '• Installation clim monosplit\n'
+              '• Installation clim multisplit\n'
+              '• Climatisation gainable\n'
+              '• Entretien annuel\n'
+              '• Dépannage et réparation\n'
+              '• Remplacement de climatiseur\n\n'
+              '**Marques :** Daikin, Mitsubishi, Atlantic, Toshiba\n\n'
+              '💰 **Devis gratuit** - Intervention rapide 06 & 83';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Devis climatisation', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
           ];
           break;
           
         case 'frigo':
-          response = '🧊 **Frigoriste**\n\n**Nos prestations :**\n• Chambres froides positives/négatives\n• Vitrines réfrigérées\n• Meubles frigorifiques\n• Groupes froids\n• Maintenance préventive\n\n🏪 Idéal pour commerces, restaurants, grandes surfaces';
+          response = '🧊 **Frigoriste professionnel**\n\n'
+              '**Nos prestations :**\n'
+              '• Chambres froides positives/négatives\n'
+              '• Vitrines réfrigérées\n'
+              '• Meubles frigorifiques\n'
+              '• Groupes froids\n'
+              '• Maintenance préventive\n'
+              '• Dépannage urgent\n\n'
+              '🏪 **Pour :** commerces, restaurants, grandes surfaces, laboratoires';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Devis frigoriste', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
           ];
           break;
           
         case 'pac':
-          response = '🌡️ **Pompes à chaleur**\n\n**Nos prestations :**\n• PAC Air/Air réversible\n• PAC Air/Eau\n• Ballon thermodynamique\n• Entretien annuel PAC\n• Dépannage et SAV\n\n🌿 Solution écologique et économique !';
+          response = '🌡️ **Pompes à chaleur**\n\n'
+              '**Nos prestations :**\n'
+              '• PAC Air/Air réversible\n'
+              '• PAC Air/Eau\n'
+              '• Ballon thermodynamique\n'
+              '• Entretien annuel PAC\n'
+              '• Dépannage et SAV\n\n'
+              '🌿 **Avantages :**\n'
+              '• Économies d\'énergie jusqu\'à 70%\n'
+              '• Éligible aux aides (MaPrimeRénov\')\n'
+              '• Solution écologique';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Devis PAC', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
           ];
           break;
           
         case 'chauffage':
-          response = '🔥 **Chauffage**\n\n**Nos prestations :**\n• Chaudières gaz/fioul\n• Radiateurs électriques\n• Plancher chauffant\n• Entretien chaudière\n• Dépannage chauffage\n\n🏠 Pour un confort optimal toute l\'année';
+          response = '🔥 **Chauffage**\n\n'
+              '**Nos prestations :**\n'
+              '• Chaudières gaz/fioul\n'
+              '• Radiateurs électriques\n'
+              '• Plancher chauffant\n'
+              '• Entretien chaudière annuel\n'
+              '• Dépannage chauffage\n'
+              '• Désembouage radiateurs\n\n'
+              '🏠 Pour un confort optimal toute l\'année';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Devis chauffage', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
           ];
           break;
           
         case 'plomberie':
-          response = '💧 **Plomberie**\n\n**Nos prestations :**\n• Dépannage fuite d\'eau\n• Installation sanitaires\n• Rénovation salle de bain\n• Débouchage canalisations\n• Chauffe-eau / cumulus\n\n🔧 Intervention rapide en cas d\'urgence';
+          response = '💧 **Plomberie**\n\n'
+              '**Nos prestations :**\n'
+              '• Dépannage fuite d\'eau\n'
+              '• Installation sanitaires\n'
+              '• Rénovation salle de bain\n'
+              '• Débouchage canalisations\n'
+              '• Chauffe-eau / cumulus\n'
+              '• Robinetterie\n\n'
+              '🔧 **Intervention rapide** en cas d\'urgence';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Devis plomberie', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
           ];
           break;
           
+        // ==================== ÉLECTRICITÉ (NOUVEAU) ====================
+        case 'electricite':
+          response = '⚡ **Électricité**\n\n'
+              '**Nos prestations :**\n'
+              '• Dépannage électrique urgent\n'
+              '• Mise aux normes NF C 15-100\n'
+              '• Tableaux électriques\n'
+              '• Installation éclairage LED\n'
+              '• Recherche de défaut\n'
+              '• Prises et interrupteurs\n'
+              '• Raccordement équipements\n\n'
+              '⚠️ **Sécurité garantie** - Travail soigné';
+          subOptions = [
+            _QuickOption(id: 'devis', label: '📋 Devis électricité', icon: Icons.description),
+            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
+            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
+          ];
+          break;
+          
+        // ==================== RETOUR MENU ====================
         case 'retour':
           response = 'Comment puis-je vous aider ?';
           subOptions = _quickOptions;
           break;
           
         default:
-          response = 'Je n\'ai pas compris votre demande. Voici ce que je peux faire pour vous :';
+          response = 'Je n\'ai pas compris votre demande. Comment puis-je vous aider ?';
           subOptions = _quickOptions;
       }
       
@@ -7170,16 +7401,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         ));
       });
       
-      // Scroll vers le bas
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (_scrollController.hasClients) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }
-      });
+      _scrollToBottom();
     });
   }
 
@@ -8156,6 +8378,119 @@ const List<_FaqEntry> kFaqDatabase = [
         '• Nous vous recontactons\n\n'
         '📱 WhatsApp : $kPhoneNumberFormatted\n\n'
         '💡 Les photos nous aident à établir un devis précis',
+  ),
+  
+  // ==================== ÉLECTRICITÉ (NOUVEAU) ====================
+  _FaqEntry(
+    category: 'Électricité',
+    keywords: ['panne', 'électrique', 'électricité', 'courant', 'prise', 'lumière'],
+    question: 'Panne électrique',
+    answer: '⚡ **Panne électrique**\n\n'
+        '**Intervention rapide pour :**\n'
+        '• Coupure de courant\n'
+        '• Disjoncteur qui saute\n'
+        '• Prise ou interrupteur défaillant\n'
+        '• Court-circuit\n\n'
+        '🔧 **Nos services :**\n'
+        '• Dépannage électrique\n'
+        '• Mise aux normes NF C 15-100\n'
+        '• Tableaux électriques\n'
+        '• Installation éclairage LED\n\n'
+        '📞 Appelez-nous : \$kPhoneNumberFormatted',
+  ),
+  _FaqEntry(
+    category: 'Électricité',
+    keywords: ['norme', 'mise', 'aux', 'normes', 'conformité', 'sécurité', 'tableau'],
+    question: 'Mise aux normes électrique',
+    answer: '⚡ **Mise aux normes électrique**\n\n'
+        '**Nous réalisons :**\n'
+        '• Diagnostic de votre installation\n'
+        '• Mise en conformité NF C 15-100\n'
+        '• Remplacement tableau électrique\n'
+        '• Installation différentiel 30mA\n'
+        '• Mise à la terre\n\n'
+        '✅ **Obligatoire pour :**\n'
+        '• Vente immobilière\n'
+        '• Location\n'
+        '• Assurance\n\n'
+        '💰 Devis gratuit',
+  ),
+  _FaqEntry(
+    category: 'Électricité',
+    keywords: ['led', 'éclairage', 'lampe', 'spot', 'luminaire', 'ampoule'],
+    question: 'Installation éclairage LED',
+    answer: '💡 **Éclairage LED**\n\n'
+        '**Nos installations :**\n'
+        '• Spots LED encastrés\n'
+        '• Bandeaux LED\n'
+        '• Éclairage extérieur\n'
+        '• Remplacement ampoules\n\n'
+        '**Avantages LED :**\n'
+        '• Économie d\'énergie 80%\n'
+        '• Durée de vie 25 000h\n'
+        '• Pas de chaleur\n\n'
+        '📋 Devis gratuit',
+  ),
+  
+  // ==================== TARIFS ====================
+  _FaqEntry(
+    category: 'Tarifs',
+    keywords: ['tarif', 'prix', 'coût', 'combien', 'cher', 'budget', 'estimation'],
+    question: 'Tarifs indicatifs',
+    answer: '💰 **Tarifs indicatifs** _(non contractuels)_\n\n'
+        '**Dépannage urgence :** à partir de 89€\n'
+        '**Entretien climatisation :** à partir de 90€\n'
+        '**Installation clim monosplit :** à partir de 1 200€\n'
+        '**Installation PAC air/air :** à partir de 3 500€\n'
+        '**Déplacement :** inclus selon zone\n\n'
+        '✅ **Tous nos devis sont gratuits et personnalisés.**\n'
+        'Le tarif final dépend de votre projet.',
+  ),
+  
+  // ==================== CERTIFICATIONS ====================
+  _FaqEntry(
+    category: 'Certifications',
+    keywords: ['garantie', 'décennale', 'assurance', 'certification', 'qualifié', 'diplôme'],
+    question: 'Certifications et garanties',
+    answer: '🏆 **Nos certifications**\n\n'
+        '✅ **Garantie décennale** - Travaux couverts 10 ans\n'
+        '✅ **RC Professionnelle** - Protection complète\n'
+        '✅ **Attestation fluides frigorigènes**\n'
+        '✅ **Installateur qualifié**\n\n'
+        '🔧 **Marques partenaires :**\n'
+        'Daikin, Mitsubishi, Atlantic, Toshiba\n\n'
+        '💯 +500 clients satisfaits',
+  ),
+  _FaqEntry(
+    category: 'Certifications',
+    keywords: ['marque', 'daikin', 'mitsubishi', 'atlantic', 'toshiba', 'panasonic'],
+    question: 'Marques installées',
+    answer: '🔧 **Marques installées**\n\n'
+        'Nous travaillons avec les meilleures marques :\n\n'
+        '• **Daikin** - Leader mondial, fiabilité\n'
+        '• **Mitsubishi Electric** - Qualité japonaise\n'
+        '• **Atlantic** - Fabrication française\n'
+        '• **Toshiba** - Innovation\n'
+        '• **Panasonic** - Premium\n\n'
+        '💡 Nous vous conseillons la marque adaptée à vos besoins et budget.',
+  ),
+  
+  // ==================== CONTRAT ENTRETIEN ====================
+  _FaqEntry(
+    category: 'Entretien',
+    keywords: ['contrat', 'maintenance', 'entretien', 'annuel', 'abonnement'],
+    question: 'Contrat de maintenance',
+    answer: '🔧 **Contrats d\'entretien**\n\n'
+        '**Nos formules :**\n'
+        '• Entretien annuel climatisation\n'
+        '• Entretien PAC (obligatoire aides)\n'
+        '• Maintenance pro (chambres froides)\n\n'
+        '**Avantages :**\n'
+        '✅ Intervention prioritaire\n'
+        '✅ Tarif préférentiel dépannage\n'
+        '✅ Performances optimales\n'
+        '✅ Durée de vie prolongée\n\n'
+        '📋 Demandez un devis contrat',
   ),
   
   // ==================== POLITESSE / CONVERSATION ====================
