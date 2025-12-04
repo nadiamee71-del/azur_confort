@@ -477,6 +477,7 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               _AccueilPage(),
               _AProposPage(),
               _ContactPage(),
+              _MentionsLegalesPage(),
             ],
           ),
           // Chatbot flottant (toujours visible)
@@ -1758,6 +1759,25 @@ class _AccueilPage extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.5),
                   fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Lien vers les mentions légales
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    _AzurConfortHomeState.navigateToPage(3); // Index 3 = Mentions légales
+                  },
+                  child: Text(
+                    'Mentions légales',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.6),
+                      fontSize: 12,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.white.withOpacity(0.6),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -4300,6 +4320,405 @@ class _VarMapPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ============================================================================
+// PAGE MENTIONS LÉGALES
+// ============================================================================
+
+class _MentionsLegalesPage extends StatelessWidget {
+  const _MentionsLegalesPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 800;
+    
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Header de la page
+          _buildHeader(context, isMobile),
+          // Contenu des mentions légales
+          Container(
+            color: colorScheme.background,
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 24 : 80,
+              vertical: 60,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 900),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // SECTION 1 - Éditeur du site
+                    _buildSection(
+                      context,
+                      '1. Éditeur du site',
+                      '''Le présent site est édité par :
+
+Nom / Raison sociale : [À compléter : Nom du propriétaire ou nom commercial]
+Forme juridique : [À compléter : Micro-entreprise / EI / EURL…]
+Adresse du siège social : [À compléter : adresse complète]
+Téléphone : [À compléter]
+Adresse e-mail : [À compléter : exemple contact@azurconfort.fr]
+Numéro SIRET : [À compléter]
+Responsable de la publication : [À compléter : nom de la personne physique]
+
+Azur Confort est une entreprise spécialisée en :
+• Installation et entretien de climatisations (mono-split et multi-split)
+• Installation de pompes à chaleur (air-air / air-eau)
+• Dépannage chauffage
+• Plomberie (fuites, rénovations, sanitaires)
+• Dépannage d'urgence
+
+Zone d'intervention : Alpes-Maritimes (06) et Var (83).''',
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // SECTION 2 - Hébergeur du site
+                    _buildSection(
+                      context,
+                      '2. Hébergeur du site',
+                      '''Hébergeur du site :
+
+Vercel Inc.
+340 S Lemon Ave #4133
+Walnut, CA 91789, États-Unis
+Site : https://vercel.com''',
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // SECTION 3 - Propriété intellectuelle
+                    _buildSection(
+                      context,
+                      '3. Propriété intellectuelle',
+                      '''L'ensemble du contenu du site (textes, images, photos, logos, vidéos, éléments graphiques, structure…) est protégé par le Code de la Propriété Intellectuelle.
+
+Toute reproduction, distribution, modification ou adaptation, totale ou partielle, sans autorisation écrite préalable d'Azur Confort, est strictement interdite.
+
+Les images utilisées peuvent être :
+• Des créations originales
+• Des visuels appartenant à Azur Confort
+• Ou des images sous licence''',
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // SECTION 4 - Données personnelles
+                    _buildSection(
+                      context,
+                      '4. Données personnelles',
+                      '''Lorsque vous contactez Azur Confort (formulaire, e-mail, téléphone), les données suivantes peuvent être collectées :
+
+• Nom, prénom
+• Numéro de téléphone
+• Adresse e-mail
+• Adresse pour l'intervention
+• Description du besoin
+
+Ces données sont utilisées uniquement pour :
+• Répondre à votre demande
+• Établir un devis
+• Organiser une intervention
+
+Elles ne sont jamais revendues ni transmises à des tiers.
+
+Pour toute demande de modification ou suppression de vos données personnelles, vous pouvez écrire à : [À compléter : e-mail de contact].''',
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // SECTION 5 - Cookies
+                    _buildSection(
+                      context,
+                      '5. Cookies',
+                      '''Le site peut utiliser des cookies techniques nécessaires à son bon fonctionnement.
+
+Aucune donnée personnelle n'est exploitée à des fins publicitaires.
+Aucune solution de mesure d'audience invasive n'est installée par défaut.''',
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // SECTION 6 - Responsabilité
+                    _buildSection(
+                      context,
+                      '6. Responsabilité',
+                      '''Azur Confort met tout en œuvre pour assurer l'exactitude et la mise à jour des informations présentes sur le site.
+
+Cependant, des erreurs ou omissions peuvent se produire. L'utilisateur reconnaît utiliser le site sous sa seule responsabilité.
+
+Azur Confort ne peut être tenue responsable en cas de :
+• Indisponibilité du site
+• Erreurs dans les informations fournies
+• Dommages directs ou indirects liés à l'utilisation du site''',
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // SECTION 7 - Droit applicable
+                    _buildSection(
+                      context,
+                      '7. Droit applicable',
+                      '''Le site et les présentes mentions légales sont soumis au droit français.
+
+En cas de litige, une solution amiable sera recherchée avant toute procédure judiciaire.''',
+                    ),
+                    
+                    const SizedBox(height: 60),
+                    
+                    // SECTION 8 - Anti-copie (en italique)
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceVariant.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: colorScheme.outline.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Text(
+                        'Toute reproduction, même partielle, du contenu du site Azur Confort est strictement interdite sans autorisation écrite.',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // Bouton retour à l'accueil
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          _AzurConfortHomeState.navigateToPage(0);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kPrimaryBlue,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(Icons.home),
+                        label: const Text(
+                          'Retour à l\'accueil',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Footer
+          _buildFooter(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, bool isMobile) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: isMobile ? 50 : 70,
+      ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [kDarkBlue, kPrimaryBlue],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.gavel, color: Colors.white, size: 40),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Mentions légales',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 28 : 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Azur Confort',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 16 : 18,
+                  color: Colors.white.withOpacity(0.85),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSection(BuildContext context, String title, String content) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Titre de section
+        Container(
+          padding: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: kPrimaryBlue.withOpacity(0.3),
+                width: 2,
+              ),
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: kPrimaryBlue.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  _getIconForSection(title),
+                  color: kPrimaryBlue,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  title,
+                  style: textTheme.titleLarge?.copyWith(
+                    color: colorScheme.onBackground,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        // Contenu
+        Text(
+          content,
+          style: textTheme.bodyLarge?.copyWith(
+            color: colorScheme.onBackground,
+            height: 1.8,
+          ),
+        ),
+      ],
+    );
+  }
+
+  IconData _getIconForSection(String title) {
+    if (title.contains('Éditeur')) return Icons.business;
+    if (title.contains('Hébergeur')) return Icons.cloud;
+    if (title.contains('Propriété')) return Icons.copyright;
+    if (title.contains('Données')) return Icons.security;
+    if (title.contains('Cookies')) return Icons.cookie;
+    if (title.contains('Responsabilité')) return Icons.warning_amber;
+    if (title.contains('Droit')) return Icons.balance;
+    return Icons.article;
+  }
+
+  Widget _buildFooter(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(40),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [kDarkBlue, Color(0xFF1565C0)],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.ac_unit, color: Colors.white, size: 32),
+                  SizedBox(width: 12),
+                  Text(
+                    'AZUR CONFORT',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Artisan frigoriste sur la Côte d\'Azur (06 & 83)',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Text(
+                '© 2025 Azur Confort - Tous droits réservés',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.5),
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Bouton retour accueil
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    _AzurConfortHomeState.navigateToPage(0);
+                  },
+                  child: Text(
+                    'Retour à l\'accueil',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.6),
+                      fontSize: 12,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.white.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 // ============================================================================
