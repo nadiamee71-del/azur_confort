@@ -2019,73 +2019,194 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  // ======================== SECTION SEO ========================
-  // Section texte optimisée pour le référencement naturel Google
+  // ======================== SECTION "NOTRE EXPERTISE" (SEO INTÉGRÉ) ========================
+  // Section professionnelle avec contenu SEO intégré de manière naturelle
   Widget _buildSeoSection(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 800;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
-      color: colorScheme.surface,
+      decoration: BoxDecoration(
+        // Fond avec dégradé subtil
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: isDark
+              ? [colorScheme.surface, colorScheme.background]
+              : [kLightBlue.withOpacity(0.3), colorScheme.surface],
+        ),
+      ),
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: isMobile ? 48 : 64,
+        horizontal: isMobile ? 20 : 60,
+        vertical: isMobile ? 50 : 70,
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
+          constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Titre SEO H2
-              Text(
-                'Artisan climatisation, pompe à chaleur, plomberie et électricité – Alpes-Maritimes (06) & Var (83)',
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface,
-                  height: 1.3,
-                ),
-              ),
-              const SizedBox(height: 24),
-              
-              // Paragraphe 1 - Zone d'intervention et services
-              Text(
-                'Azur Confort intervient dans toutes les Alpes-Maritimes (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton…) et dans le Var (Fréjus, Saint-Raphaël, Toulon, Hyères…). L\'entreprise est spécialisée dans l\'installation, l\'entretien et le dépannage de climatisations mono-split et multi-split, pompes à chaleur air-air et air-eau, systèmes de chauffage domestique, travaux de plomberie (rénovation de salle de bain, recherche de fuites, remplacement de robinetterie) et travaux d\'électricité (installation de tableaux électriques, mise aux normes, dépannage électrique d\'urgence).',
-                style: textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  height: 1.7,
-                ),
-              ),
-              const SizedBox(height: 20),
-              
-              // Paragraphe 2 - Avantages et accompagnement
-              Text(
-                'Azur Confort vous accompagne pour vos projets de climatisation, pompes à chaleur, chauffage, plomberie et électricité, avec une intervention rapide dans le 06 et le 83. Un seul interlocuteur pour l\'ensemble de vos installations thermiques et électriques. L\'objectif : garantir votre confort toute l\'année, avec des interventions rapides, des conseils personnalisés et un travail soigné par un électricien pour particuliers et professionnels.',
-                style: textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  height: 1.7,
-                ),
-              ),
-              const SizedBox(height: 32),
-              
-              // Mots-clés sous forme de tags visuels
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
+              // Titre de section avec icône
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildSeoTag(context, 'Climatisation Alpes-Maritimes'),
-                  _buildSeoTag(context, 'Climatisation Var'),
-                  _buildSeoTag(context, 'Pompe à chaleur air-air'),
-                  _buildSeoTag(context, 'Pompe à chaleur air-eau'),
-                  _buildSeoTag(context, 'Artisan frigoriste'),
-                  _buildSeoTag(context, 'Plombier chauffagiste'),
-                  _buildSeoTag(context, 'Électricien 06 83'),
-                  _buildSeoTag(context, 'Dépannage électrique'),
-                  _buildSeoTag(context, 'Mise aux normes électrique'),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [kPrimaryBlue, kDarkBlue],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.workspace_premium, color: Colors.white, size: 24),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    'Notre expertise à votre service',
+                    style: textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
                 ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Un seul interlocuteur pour tous vos besoins thermiques et électriques',
+                textAlign: TextAlign.center,
+                style: textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 40),
+              
+              // Grille de domaines d'expertise
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth > 700;
+                  return isWide
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(child: _buildExpertiseCard(
+                              context,
+                              icon: Icons.location_on,
+                              title: 'Zone d\'intervention',
+                              content: 'Nous intervenons dans toutes les **Alpes-Maritimes** (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton) et dans le **Var** (Fréjus, Saint-Raphaël, Toulon, Hyères).',
+                              color: kPrimaryBlue,
+                            )),
+                            const SizedBox(width: 20),
+                            Expanded(child: _buildExpertiseCard(
+                              context,
+                              icon: Icons.build_circle,
+                              title: 'Nos spécialités',
+                              content: 'Climatisation mono/multi-split, pompes à chaleur air-air et air-eau, chauffage, plomberie, et travaux d\'électricité (tableaux, mise aux normes, dépannage).',
+                              color: kAccentOrange,
+                            )),
+                            const SizedBox(width: 20),
+                            Expanded(child: _buildExpertiseCard(
+                              context,
+                              icon: Icons.verified,
+                              title: 'Notre engagement',
+                              content: 'Interventions rapides, conseils personnalisés et travail soigné. Artisan qualifié pour particuliers et professionnels.',
+                              color: kAccentYellow,
+                            )),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            _buildExpertiseCard(
+                              context,
+                              icon: Icons.location_on,
+                              title: 'Zone d\'intervention',
+                              content: 'Nous intervenons dans toutes les **Alpes-Maritimes** (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton) et dans le **Var** (Fréjus, Saint-Raphaël, Toulon, Hyères).',
+                              color: kPrimaryBlue,
+                            ),
+                            const SizedBox(height: 16),
+                            _buildExpertiseCard(
+                              context,
+                              icon: Icons.build_circle,
+                              title: 'Nos spécialités',
+                              content: 'Climatisation mono/multi-split, pompes à chaleur air-air et air-eau, chauffage, plomberie, et travaux d\'électricité (tableaux, mise aux normes, dépannage).',
+                              color: kAccentOrange,
+                            ),
+                            const SizedBox(height: 16),
+                            _buildExpertiseCard(
+                              context,
+                              icon: Icons.verified,
+                              title: 'Notre engagement',
+                              content: 'Interventions rapides, conseils personnalisés et travail soigné. Artisan qualifié pour particuliers et professionnels.',
+                              color: kAccentYellow,
+                            ),
+                          ],
+                        );
+                },
+              ),
+              
+              const SizedBox(height: 40),
+              
+              // Bandeau CTA
+              Container(
+                padding: EdgeInsets.all(isMobile ? 20 : 32),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [kDarkBlue, kPrimaryBlue],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: kPrimaryBlue.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Besoin d\'un artisan de confiance ?',
+                            style: textTheme.titleLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Devis gratuit et intervention rapide dans le 06 et le 83',
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (!isMobile) ...[
+                      const SizedBox(width: 24),
+                      ElevatedButton.icon(
+                        onPressed: launchPhone,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kAccentYellow,
+                          foregroundColor: Colors.black87,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        icon: const Icon(Icons.phone),
+                        label: const Text('Appeler', style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -2094,25 +2215,64 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  // Tag SEO stylisé
-  Widget _buildSeoTag(BuildContext context, String text) {
+  // Carte d'expertise professionnelle
+  Widget _buildExpertiseCard(BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String content,
+    required Color color,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(20),
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.3),
+          color: color.withOpacity(0.2),
+          width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 13,
-          color: colorScheme.onSurfaceVariant,
-          fontWeight: FontWeight.w500,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Icône avec fond coloré
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(height: 16),
+          // Titre
+          Text(
+            title,
+            style: textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Contenu
+          Text(
+            content.replaceAll('**', ''),
+            style: textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
