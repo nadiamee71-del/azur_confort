@@ -5217,7 +5217,7 @@ class _GoogleMapSection extends StatelessWidget {
             ),
             child: SizedBox(
               width: double.infinity,
-              height: isMobile ? 280 : 400,
+              height: isMobile ? 200 : 280, // RÉDUIT
               child: HtmlElementView(
                 viewType: 'google-map-iframe',
                 onPlatformViewCreated: (int viewId) {
