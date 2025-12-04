@@ -5458,7 +5458,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
     final colorScheme = Theme.of(context).colorScheme;
     return Stack(
       children: [
-        // Bulle de bienvenue (avant ouverture)
+        // Bulle de bienvenue (avant ouverture) - AMÉLIORÉE POUR MODE NUIT
         if (_showWelcome && !_isOpen)
           Positioned(
             bottom: 100,
@@ -5474,31 +5474,52 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: colorScheme.surface,
+                  // Fond avec dégradé bleu pour meilleure visibilité
+                  gradient: const LinearGradient(
+                    colors: [kPrimaryBlue, kDarkBlue],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: kAccentYellow.withOpacity(0.5),
+                    width: 2,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: colorScheme.shadow.withOpacity(0.15),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
+                      color: kPrimaryBlue.withOpacity(0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                    BoxShadow(
+                      color: colorScheme.shadow.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       '👋 Besoin d\'aide ?',
                       style: TextStyle(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         fontSize: 14,
-                        color: colorScheme.onSurface,
+                        color: Colors.white, // Blanc sur fond bleu = toujours lisible
                       ),
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () => setState(() => _showWelcome = false),
-                      child: Icon(Icons.close, size: 16, color: colorScheme.onSurfaceVariant),
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.close, size: 14, color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
@@ -5514,7 +5535,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
             child: _buildChatWindow(),
           ),
         
-        // Bouton flottant avec mascotte
+        // Bouton flottant avec mascotte - AMÉLIORÉ POUR MODE NUIT
         Positioned(
           bottom: 20,
           right: 20,
@@ -5532,23 +5553,30 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 width: 75,
                 height: 75,
                 decoration: BoxDecoration(
-                  // Fond adaptatif au thème
-                  color: colorScheme.surface,
+                  // Fond avec dégradé pour meilleure visibilité jour/nuit
+                  gradient: LinearGradient(
+                    colors: [
+                      colorScheme.surface,
+                      colorScheme.surfaceVariant,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   shape: BoxShape.circle,
-                  // Bordure bleue
+                  // Bordure bleue plus visible
                   border: Border.all(
                     color: kPrimaryBlue,
                     width: 3,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: kPrimaryBlue.withOpacity(0.3),
-                      blurRadius: 20,
+                      color: kPrimaryBlue.withOpacity(0.5),
+                      blurRadius: 25,
                       offset: const Offset(0, 8),
                     ),
                     BoxShadow(
-                      color: colorScheme.shadow.withOpacity(0.1),
-                      blurRadius: 10,
+                      color: kAccentYellow.withOpacity(0.2),
+                      blurRadius: 15,
                       offset: const Offset(0, 4),
                     ),
                   ],
