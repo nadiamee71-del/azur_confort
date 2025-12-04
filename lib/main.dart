@@ -3,6 +3,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:html' as html;
 import 'dart:convert';
 
+// Imports pour la localisation
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
+
 // ============================================================================
 // CONSTANTES DE COULEURS - PALETTE BLEU / BLANC / JAUNE-ORANGÉ
 // ============================================================================
@@ -175,6 +179,55 @@ bool loadThemePreference() {
 }
 
 // ============================================================================
+// PERSISTANCE DE LA LANGUE (localStorage pour Web)
+// ============================================================================
+
+/// Liste des langues supportées
+const List<Locale> kSupportedLocales = [
+  Locale('fr'), // Français (par défaut)
+  Locale('en'), // Anglais
+  Locale('es'), // Espagnol
+  Locale('de'), // Allemand
+  Locale('it'), // Italien
+];
+
+/// Noms des langues pour l'affichage
+const Map<String, String> kLanguageNames = {
+  'fr': 'Français',
+  'en': 'English',
+  'es': 'Español',
+  'de': 'Deutsch',
+  'it': 'Italiano',
+};
+
+/// Codes courts des langues
+const Map<String, String> kLanguageCodes = {
+  'fr': 'FR',
+  'en': 'EN',
+  'es': 'ES',
+  'de': 'DE',
+  'it': 'IT',
+};
+
+/// Sauvegarde le choix de la langue dans localStorage
+void saveLocalePreference(String languageCode) {
+  if (kIsWeb) {
+    html.window.localStorage['azur_confort_locale'] = languageCode;
+  }
+}
+
+/// Charge le choix de la langue depuis localStorage
+Locale loadLocalePreference() {
+  if (kIsWeb) {
+    final saved = html.window.localStorage['azur_confort_locale'];
+    if (saved != null && kSupportedLocales.any((l) => l.languageCode == saved)) {
+      return Locale(saved);
+    }
+  }
+  return const Locale('fr'); // Français par défaut
+}
+
+// ============================================================================
 // NUMÉRO DE TÉLÉPHONE
 // ============================================================================
 const String kPhoneNumber = '0746559768';
@@ -223,12 +276,14 @@ class AzurConfortApp extends StatefulWidget {
 
 class _AzurConfortAppState extends State<AzurConfortApp> {
   bool _isDarkMode = false;
+  Locale _currentLocale = const Locale('fr');
 
   @override
   void initState() {
     super.initState();
-    // Charger la préférence de thème sauvegardée
+    // Charger les préférences sauvegardées
     _isDarkMode = loadThemePreference();
+    _currentLocale = loadLocalePreference();
   }
 
   void toggleTheme() {
@@ -239,11 +294,49 @@ class _AzurConfortAppState extends State<AzurConfortApp> {
     });
   }
 
+  void changeLocale(Locale newLocale) {
+    setState(() {
+      _currentLocale = newLocale;
+      // Sauvegarder la préférence
+      saveLocalePreference(newLocale.languageCode);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Azur Confort - Artisan Frigoriste',
+      
+      // ============================================================
+      // CONFIGURATION DE LA LOCALISATION
+      // ============================================================
+      locale: _currentLocale,
+      supportedLocales: kSupportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      // Fallback sur le français si la langue du navigateur n'est pas supportée
+      localeResolutionCallback: (locale, supportedLocales) {
+        // Si on a une locale définie, l'utiliser
+        if (supportedLocales.contains(_currentLocale)) {
+          return _currentLocale;
+        }
+        // Sinon, essayer de matcher avec la langue du navigateur
+        if (locale != null) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale.languageCode) {
+              return supportedLocale;
+            }
+          }
+        }
+        // Par défaut, français
+        return const Locale('fr');
+      },
+      
       // Thème clair
       theme: buildLightTheme(),
       // Thème sombre
@@ -253,6 +346,8 @@ class _AzurConfortAppState extends State<AzurConfortApp> {
       home: AzurConfortHome(
         isDarkMode: _isDarkMode,
         onToggleTheme: toggleTheme,
+        currentLocale: _currentLocale,
+        onChangeLocale: changeLocale,
       ),
     );
   }
@@ -265,11 +360,15 @@ class _AzurConfortAppState extends State<AzurConfortApp> {
 class AzurConfortHome extends StatefulWidget {
   final bool isDarkMode;
   final VoidCallback onToggleTheme;
+  final Locale currentLocale;
+  final Function(Locale) onChangeLocale;
 
   const AzurConfortHome({
     super.key,
     required this.isDarkMode,
     required this.onToggleTheme,
+    required this.currentLocale,
+    required this.onChangeLocale,
   });
 
   @override
@@ -439,11 +538,17 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
         actions: [
           // Navigation - version adaptative
           if (!isMobile) ...[
-            _buildNavButton('Accueil', 0, Icons.home_outlined),
-            _buildNavButton('À propos', 1, Icons.info_outline),
-            _buildNavButton('Contact', 2, Icons.mail_outline),
+            _buildNavButton(AppLocalizations.of(context)?.navHome ?? 'Accueil', 0, Icons.home_outlined),
+            _buildNavButton(AppLocalizations.of(context)?.navAbout ?? 'À propos', 1, Icons.info_outline),
+            _buildNavButton(AppLocalizations.of(context)?.navContact ?? 'Contact', 2, Icons.mail_outline),
+            const SizedBox(width: 8),
+            // Sélecteur de langue
+            _buildLanguageSelector(context),
             const SizedBox(width: 16),
           ] else ...[
+            // Sélecteur de langue compact pour mobile
+            _buildLanguageSelectorMobile(context),
+            const SizedBox(width: 8),
             // Menu hamburger pour mobile
             PopupMenuButton<int>(
               icon: Container(
@@ -459,9 +564,9 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               onSelected: (index) => setState(() => _selectedPageIndex = index),
               itemBuilder: (context) => [
-                _buildPopupMenuItem(0, 'Accueil', Icons.home_outlined),
-                _buildPopupMenuItem(1, 'À propos', Icons.info_outline),
-                _buildPopupMenuItem(2, 'Contact', Icons.mail_outline),
+                _buildPopupMenuItem(0, AppLocalizations.of(context)?.navHome ?? 'Accueil', Icons.home_outlined),
+                _buildPopupMenuItem(1, AppLocalizations.of(context)?.navAbout ?? 'À propos', Icons.info_outline),
+                _buildPopupMenuItem(2, AppLocalizations.of(context)?.navContact ?? 'Contact', Icons.mail_outline),
               ],
             ),
             const SizedBox(width: 12),
@@ -603,6 +708,174 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
           ),
         ),
       ),
+    );
+  }
+
+  // ============================================================
+  // SÉLECTEUR DE LANGUE - VERSION DESKTOP
+  // ============================================================
+  Widget _buildLanguageSelector(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final currentLangCode = widget.currentLocale.languageCode.toUpperCase();
+    
+    return PopupMenuButton<Locale>(
+      tooltip: AppLocalizations.of(context)?.languageSelector ?? 'Langue',
+      offset: const Offset(0, 50),
+      color: colorScheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      onSelected: (locale) => widget.onChangeLocale(locale),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceVariant.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: colorScheme.outline.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.language,
+              size: 18,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              currentLangCode,
+              style: TextStyle(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 18,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+      itemBuilder: (context) => kSupportedLocales.map((locale) {
+        final isSelected = locale.languageCode == widget.currentLocale.languageCode;
+        return PopupMenuItem<Locale>(
+          value: locale,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: isSelected 
+                        ? colorScheme.primary.withOpacity(0.1)
+                        : colorScheme.surfaceVariant.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      kLanguageCodes[locale.languageCode] ?? locale.languageCode.toUpperCase(),
+                      style: TextStyle(
+                        color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  kLanguageNames[locale.languageCode] ?? locale.languageCode,
+                  style: TextStyle(
+                    color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                if (isSelected) ...[
+                  const Spacer(),
+                  Icon(Icons.check, color: colorScheme.primary, size: 18),
+                ],
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  // ============================================================
+  // SÉLECTEUR DE LANGUE - VERSION MOBILE (compact)
+  // ============================================================
+  Widget _buildLanguageSelectorMobile(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final currentLangCode = widget.currentLocale.languageCode.toUpperCase();
+    
+    return PopupMenuButton<Locale>(
+      tooltip: AppLocalizations.of(context)?.languageSelector ?? 'Langue',
+      offset: const Offset(0, 50),
+      color: colorScheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      onSelected: (locale) => widget.onChangeLocale(locale),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceVariant.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.language,
+              size: 18,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              currentLangCode,
+              style: TextStyle(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+      itemBuilder: (context) => kSupportedLocales.map((locale) {
+        final isSelected = locale.languageCode == widget.currentLocale.languageCode;
+        return PopupMenuItem<Locale>(
+          value: locale,
+          child: Row(
+            children: [
+              Text(
+                kLanguageCodes[locale.languageCode] ?? locale.languageCode.toUpperCase(),
+                style: TextStyle(
+                  color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                kLanguageNames[locale.languageCode] ?? locale.languageCode,
+                style: TextStyle(
+                  color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                  fontSize: 13,
+                ),
+              ),
+              if (isSelected) ...[
+                const Spacer(),
+                Icon(Icons.check, color: colorScheme.primary, size: 16),
+              ],
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }

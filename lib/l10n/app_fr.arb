@@ -1,0 +1,280 @@
+{
+  "@@locale": "fr",
+  "@@author": "Azur Confort",
+  
+  "appName": "Azur Confort",
+  "@appName": {
+    "description": "Nom de l'application"
+  },
+  
+  "heroTitle1": "Votre confort,",
+  "@heroTitle1": {
+    "description": "Première ligne du titre hero"
+  },
+  
+  "heroTitle2": "notre priorité.",
+  "@heroTitle2": {
+    "description": "Deuxième ligne du titre hero"
+  },
+  
+  "heroSubtitle": "Climatisation • Pompes à chaleur • Plomberie • Chauffage",
+  "@heroSubtitle": {
+    "description": "Sous-titre du hero"
+  },
+  
+  "heroBadge": "Intervention rapide 06 & 83",
+  "@heroBadge": {
+    "description": "Badge du hero"
+  },
+  
+  "heroArtisan": "Artisan frigoriste qualifié sur toute la Côte d'Azur",
+  "@heroArtisan": {
+    "description": "Description artisan"
+  },
+  
+  "buttonCall": "Appeler maintenant",
+  "@buttonCall": {
+    "description": "Bouton appeler"
+  },
+  
+  "buttonQuote": "Demander un devis",
+  "@buttonQuote": {
+    "description": "Bouton devis"
+  },
+  
+  "statExperience": "Ans d'expérience",
+  "@statExperience": {
+    "description": "Statistique expérience"
+  },
+  
+  "statClients": "Clients satisfaits",
+  "@statClients": {
+    "description": "Statistique clients"
+  },
+  
+  "statIntervention": "Intervention rapide",
+  "@statIntervention": {
+    "description": "Statistique intervention"
+  },
+  
+  "servicesTitle": "Nos services",
+  "@servicesTitle": {
+    "description": "Titre section services"
+  },
+  
+  "servicesSubtitle": "Froid, chaud, eau : des solutions complètes pour votre confort",
+  "@servicesSubtitle": {
+    "description": "Sous-titre section services"
+  },
+  
+  "serviceClimatisation": "Climatisation",
+  "@serviceClimatisation": {
+    "description": "Service climatisation"
+  },
+  
+  "serviceFrigoriste": "Frigoriste",
+  "@serviceFrigoriste": {
+    "description": "Service frigoriste"
+  },
+  
+  "servicePac": "Pompes à chaleur",
+  "@servicePac": {
+    "description": "Service pompes à chaleur"
+  },
+  
+  "serviceChauffage": "Chauffage",
+  "@serviceChauffage": {
+    "description": "Service chauffage"
+  },
+  
+  "servicePlomberie": "Plomberie",
+  "@servicePlomberie": {
+    "description": "Service plomberie"
+  },
+  
+  "climatisationDesc": "Installation, entretien et dépannage de systèmes de climatisation pour particuliers et professionnels.",
+  "@climatisationDesc": {
+    "description": "Description climatisation"
+  },
+  
+  "frigoristeDesc": "Expert en froid commercial et industriel : chambres froides, vitrines réfrigérées, équipements frigorifiques.",
+  "@frigoristeDesc": {
+    "description": "Description frigoriste"
+  },
+  
+  "pacDesc": "Solutions écologiques et économiques pour chauffer et rafraîchir votre habitat toute l'année.",
+  "@pacDesc": {
+    "description": "Description PAC"
+  },
+  
+  "chauffageDesc": "Installation et maintenance de systèmes de chauffage performants pour votre confort thermique.",
+  "@chauffageDesc": {
+    "description": "Description chauffage"
+  },
+  
+  "plomberieDesc": "Plomberie générale, rénovation de salle de bain, dépannage et installation sanitaire.",
+  "@plomberieDesc": {
+    "description": "Description plomberie"
+  },
+  
+  "zonesTitle": "Zones d'intervention",
+  "@zonesTitle": {
+    "description": "Titre section zones"
+  },
+  
+  "zonesSubtitle": "Climatisation et plomberie dans les Alpes-Maritimes (06) et le Var (83)",
+  "@zonesSubtitle": {
+    "description": "Sous-titre section zones"
+  },
+  
+  "alpesMaritimes": "Alpes-Maritimes",
+  "@alpesMaritimes": {
+    "description": "Département 06"
+  },
+  
+  "varDepartment": "Var",
+  "@varDepartment": {
+    "description": "Département 83"
+  },
+  
+  "interventionZone": "Intervention dans tout le département",
+  "@interventionZone": {
+    "description": "Légende carte"
+  },
+  
+  "whyUsTitle": "Pourquoi nous choisir ?",
+  "@whyUsTitle": {
+    "description": "Titre section pourquoi nous"
+  },
+  
+  "whyUsSubtitle": "Artisan frigoriste et plombier chauffagiste de confiance – Intervention rapide 06 & 83",
+  "@whyUsSubtitle": {
+    "description": "Sous-titre section pourquoi nous"
+  },
+  
+  "whyQualified": "Artisan qualifié",
+  "@whyQualified": {
+    "description": "Avantage qualifié"
+  },
+  
+  "whyQualifiedDesc": "Frigoriste certifié",
+  "@whyQualifiedDesc": {
+    "description": "Description qualifié"
+  },
+  
+  "whyReactive": "Réactivité",
+  "@whyReactive": {
+    "description": "Avantage réactivité"
+  },
+  
+  "whyReactiveDesc": "Intervention sous 24h",
+  "@whyReactiveDesc": {
+    "description": "Description réactivité"
+  },
+  
+  "whyTransparent": "Transparence",
+  "@whyTransparent": {
+    "description": "Avantage transparence"
+  },
+  
+  "whyTransparentDesc": "Devis gratuit détaillé",
+  "@whyTransparentDesc": {
+    "description": "Description transparence"
+  },
+  
+  "whyGuarantee": "Garantie",
+  "@whyGuarantee": {
+    "description": "Avantage garantie"
+  },
+  
+  "whyGuaranteeDesc": "Satisfaction assurée",
+  "@whyGuaranteeDesc": {
+    "description": "Description garantie"
+  },
+  
+  "seoTitle": "Artisan climatisation, pompe à chaleur et plomberie – Alpes-Maritimes (06) & Var (83)",
+  "@seoTitle": {
+    "description": "Titre SEO"
+  },
+  
+  "seoParagraph1": "Azur Confort intervient dans toutes les Alpes-Maritimes (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton…) et dans le Var (Fréjus, Saint-Raphaël, Toulon, Hyères…). L'entreprise est spécialisée dans l'installation, l'entretien et le dépannage de climatisations mono-split et multi-split, pompes à chaleur air-air et air-eau, systèmes de chauffage domestique et travaux de plomberie (rénovation de salle de bain, recherche de fuites, remplacement de robinetterie, dépannage d'urgence).",
+  "@seoParagraph1": {
+    "description": "Premier paragraphe SEO"
+  },
+  
+  "seoParagraph2": "En choisissant Azur Confort, vous bénéficiez d'un artisan frigoriste et plombier chauffagiste de proximité, à l'écoute de vos besoins. Nous vous accompagnons dans le choix du matériel, l'installation de clim réversible dans le 06 et le 83, la mise en service, l'entretien annuel de climatisation et de pompe à chaleur, et le dépannage climatisation et plomberie. L'objectif : garantir votre confort thermique toute l'année, avec des interventions rapides, des conseils personnalisés et un travail soigné.",
+  "@seoParagraph2": {
+    "description": "Deuxième paragraphe SEO"
+  },
+  
+  "footerArtisan": "Artisan frigoriste sur la Côte d'Azur (06 & 83)",
+  "@footerArtisan": {
+    "description": "Footer artisan"
+  },
+  
+  "footerRights": "© 2025 Azur Confort - Tous droits réservés",
+  "@footerRights": {
+    "description": "Footer droits"
+  },
+  
+  "legalMentions": "Mentions légales",
+  "@legalMentions": {
+    "description": "Lien mentions légales"
+  },
+  
+  "chatbotHelp": "Besoin d'aide ?",
+  "@chatbotHelp": {
+    "description": "Texte chatbot"
+  },
+  
+  "chatbotWelcome": "Bonjour ! Je suis l'assistant virtuel d'Azur Confort. Comment puis-je vous aider ?",
+  "@chatbotWelcome": {
+    "description": "Message bienvenue chatbot"
+  },
+  
+  "navHome": "Accueil",
+  "@navHome": {
+    "description": "Navigation accueil"
+  },
+  
+  "navServices": "Services",
+  "@navServices": {
+    "description": "Navigation services"
+  },
+  
+  "navAbout": "À propos",
+  "@navAbout": {
+    "description": "Navigation à propos"
+  },
+  
+  "navContact": "Contact",
+  "@navContact": {
+    "description": "Navigation contact"
+  },
+  
+  "languageSelector": "Langue",
+  "@languageSelector": {
+    "description": "Sélecteur de langue"
+  },
+  
+  "contactTitle": "Contactez-nous",
+  "@contactTitle": {
+    "description": "Titre page contact"
+  },
+  
+  "contactSubtitle": "Une question ? Un projet ? Contactez Azur Confort",
+  "@contactSubtitle": {
+    "description": "Sous-titre page contact"
+  },
+  
+  "aboutTitle": "À propos d'Azur Confort",
+  "@aboutTitle": {
+    "description": "Titre page à propos"
+  },
+  
+  "aboutSubtitle": "Votre partenaire confort depuis plus de 10 ans",
+  "@aboutSubtitle": {
+    "description": "Sous-titre page à propos"
+  }
+}
+
