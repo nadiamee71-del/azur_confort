@@ -627,6 +627,8 @@ class _AccueilPage extends StatelessWidget {
           _buildZonesSection(context),
           // POURQUOI NOUS
           _buildWhyUsSection(context),
+          // SECTION SEO - Texte optimisé pour le référencement
+          _buildSeoSection(context),
           // FOOTER
           _buildFooter(context),
         ],
@@ -1239,7 +1241,7 @@ class _AccueilPage extends StatelessWidget {
               children: [
                 _buildSectionTitle(context,
                   'Zones d\'intervention',
-                  'Nous intervenons sur toute la Côte d\'Azur',
+                  'Climatisation et plomberie dans les Alpes-Maritimes (06) et le Var (83)',
                 ),
                 const SizedBox(height: 48),
                 // Cartes géographiques
@@ -1627,7 +1629,7 @@ class _AccueilPage extends StatelessWidget {
             children: [
               _buildSectionTitle(context,
                 'Pourquoi nous choisir ?',
-                'Artisan frigoriste de confiance sur la Côte d\'Azur',
+                'Artisan frigoriste et plombier chauffagiste de confiance – Intervention rapide 06 & 83',
               ),
               const SizedBox(height: 48),
               LayoutBuilder(
@@ -1712,6 +1714,103 @@ class _AccueilPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // ======================== SECTION SEO ========================
+  // Section texte optimisée pour le référencement naturel Google
+  Widget _buildSeoSection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 800;
+
+    return Container(
+      width: double.infinity,
+      color: colorScheme.surface,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: isMobile ? 48 : 64,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Titre SEO H2
+              Text(
+                'Artisan climatisation, pompe à chaleur et plomberie – Alpes-Maritimes (06) & Var (83)',
+                style: textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              // Paragraphe 1 - Zone d'intervention et services
+              Text(
+                'Azur Confort intervient dans toutes les Alpes-Maritimes (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton…) et dans le Var (Fréjus, Saint-Raphaël, Toulon, Hyères…). L\'entreprise est spécialisée dans l\'installation, l\'entretien et le dépannage de climatisations mono-split et multi-split, pompes à chaleur air-air et air-eau, systèmes de chauffage domestique et travaux de plomberie (rénovation de salle de bain, recherche de fuites, remplacement de robinetterie, dépannage d\'urgence).',
+                style: textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.7,
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // Paragraphe 2 - Avantages et accompagnement
+              Text(
+                'En choisissant Azur Confort, vous bénéficiez d\'un artisan frigoriste et plombier chauffagiste de proximité, à l\'écoute de vos besoins. Nous vous accompagnons dans le choix du matériel, l\'installation de clim réversible dans le 06 et le 83, la mise en service, l\'entretien annuel de climatisation et de pompe à chaleur, et le dépannage climatisation et plomberie. L\'objectif : garantir votre confort thermique toute l\'année, avec des interventions rapides, des conseils personnalisés et un travail soigné.',
+                style: textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.7,
+                ),
+              ),
+              const SizedBox(height: 32),
+              
+              // Mots-clés sous forme de tags visuels
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  _buildSeoTag(context, 'Climatisation Alpes-Maritimes'),
+                  _buildSeoTag(context, 'Climatisation Var'),
+                  _buildSeoTag(context, 'Pompe à chaleur air-air'),
+                  _buildSeoTag(context, 'Pompe à chaleur air-eau'),
+                  _buildSeoTag(context, 'Artisan frigoriste'),
+                  _buildSeoTag(context, 'Plombier chauffagiste'),
+                  _buildSeoTag(context, 'Dépannage clim 06'),
+                  _buildSeoTag(context, 'Entretien PAC 83'),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Tag SEO stylisé
+  Widget _buildSeoTag(BuildContext context, String text) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.3),
+        ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 13,
+          color: colorScheme.onSurfaceVariant,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
