@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:html' as html;
+import 'dart:convert';
 
 // ============================================================================
 // CONSTANTES DE COULEURS - PALETTE BLEU / BLANC / JAUNE-ORANGÉ
@@ -17,9 +18,161 @@ const Color kAccentOrange = Color(0xFFFF9800);
 const Color kAccentYellow = Color(0xFFFFB300);
 const Color kWarmOrange = Color(0xFFE65100);
 
-// Fond blanc/gris très clair
+// ============================================================================
+// THÈME CLAIR - Couleurs
+// ============================================================================
+const Color kLightBackground = Color(0xFFFFFFFF);
+const Color kLightSurface = Color(0xFFF8F9FA);
+const Color kLightCard = Color(0xFFFFFFFF);
+const Color kLightTextPrimary = Color(0xFF111111);
+const Color kLightTextSecondary = Color(0xFF5F6368);
+
+// Fond blanc/gris très clair (legacy - à remplacer progressivement)
 const Color kBackgroundColor = Color(0xFFFAFAFA);
 const Color kWhite = Color(0xFFFFFFFF);
+
+// ============================================================================
+// THÈME SOMBRE - Couleurs (Bleu nuit profond)
+// ============================================================================
+const Color kDarkBackground = Color(0xFF020817);
+const Color kDarkSurface = Color(0xFF111827);
+const Color kDarkCard = Color(0xFF1E293B);
+const Color kDarkTextPrimary = Color(0xFFFFFFFF);
+const Color kDarkTextSecondary = Color(0xFFE5E7EB);
+
+// ============================================================================
+// THÈMES COMPLETS
+// ============================================================================
+
+/// Thème clair complet
+ThemeData buildLightTheme() {
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorScheme: const ColorScheme.light(
+      primary: kPrimaryBlue,
+      onPrimary: Colors.white,
+      secondary: kAccentYellow,
+      onSecondary: Colors.black,
+      surface: kLightCard,
+      onSurface: kLightTextPrimary,
+      background: kLightBackground,
+      onBackground: kLightTextPrimary,
+      surfaceVariant: kLightSurface,
+      onSurfaceVariant: kLightTextSecondary,
+      outline: Color(0xFFE0E0E0),
+      error: Colors.red,
+      onError: Colors.white,
+    ),
+    scaffoldBackgroundColor: kLightBackground,
+    fontFamily: 'Segoe UI',
+    appBarTheme: const AppBarTheme(
+      backgroundColor: kLightCard,
+      foregroundColor: kDarkBlue,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+    ),
+    cardTheme: const CardThemeData(
+      color: kLightCard,
+      elevation: 0,
+    ),
+    dividerColor: const Color(0xFFE0E0E0),
+    iconTheme: const IconThemeData(color: kLightTextSecondary),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(color: kLightTextPrimary),
+      displayMedium: TextStyle(color: kLightTextPrimary),
+      displaySmall: TextStyle(color: kLightTextPrimary),
+      headlineLarge: TextStyle(color: kLightTextPrimary),
+      headlineMedium: TextStyle(color: kLightTextPrimary),
+      headlineSmall: TextStyle(color: kLightTextPrimary),
+      titleLarge: TextStyle(color: kLightTextPrimary),
+      titleMedium: TextStyle(color: kLightTextPrimary),
+      titleSmall: TextStyle(color: kLightTextPrimary),
+      bodyLarge: TextStyle(color: kLightTextPrimary),
+      bodyMedium: TextStyle(color: kLightTextPrimary),
+      bodySmall: TextStyle(color: kLightTextSecondary),
+      labelLarge: TextStyle(color: kLightTextPrimary),
+      labelMedium: TextStyle(color: kLightTextSecondary),
+      labelSmall: TextStyle(color: kLightTextSecondary),
+    ),
+  );
+}
+
+/// Thème sombre complet
+ThemeData buildDarkTheme() {
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorScheme: const ColorScheme.dark(
+      primary: kPrimaryBlue,
+      onPrimary: Colors.white,
+      secondary: kAccentYellow,
+      onSecondary: Colors.black,
+      surface: kDarkSurface,
+      onSurface: kDarkTextPrimary,
+      background: kDarkBackground,
+      onBackground: kDarkTextPrimary,
+      surfaceVariant: kDarkCard,
+      onSurfaceVariant: kDarkTextSecondary,
+      outline: Color(0xFF374151),
+      error: Color(0xFFEF4444),
+      onError: Colors.white,
+    ),
+    scaffoldBackgroundColor: kDarkBackground,
+    fontFamily: 'Segoe UI',
+    appBarTheme: const AppBarTheme(
+      backgroundColor: kDarkSurface,
+      foregroundColor: kDarkTextPrimary,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+    ),
+    cardTheme: const CardThemeData(
+      color: kDarkCard,
+      elevation: 0,
+    ),
+    dividerColor: const Color(0xFF374151),
+    iconTheme: const IconThemeData(color: kDarkTextSecondary),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(color: kDarkTextPrimary),
+      displayMedium: TextStyle(color: kDarkTextPrimary),
+      displaySmall: TextStyle(color: kDarkTextPrimary),
+      headlineLarge: TextStyle(color: kDarkTextPrimary),
+      headlineMedium: TextStyle(color: kDarkTextPrimary),
+      headlineSmall: TextStyle(color: kDarkTextPrimary),
+      titleLarge: TextStyle(color: kDarkTextPrimary),
+      titleMedium: TextStyle(color: kDarkTextPrimary),
+      titleSmall: TextStyle(color: kDarkTextPrimary),
+      bodyLarge: TextStyle(color: kDarkTextPrimary),
+      bodyMedium: TextStyle(color: kDarkTextPrimary),
+      bodySmall: TextStyle(color: kDarkTextSecondary),
+      labelLarge: TextStyle(color: kDarkTextPrimary),
+      labelMedium: TextStyle(color: kDarkTextSecondary),
+      labelSmall: TextStyle(color: kDarkTextSecondary),
+    ),
+  );
+}
+
+// ============================================================================
+// PERSISTANCE DU THÈME (localStorage pour Web)
+// ============================================================================
+
+/// Sauvegarde le choix du thème dans localStorage
+void saveThemePreference(bool isDarkMode) {
+  if (kIsWeb) {
+    html.window.localStorage['azur_confort_dark_mode'] = isDarkMode.toString();
+  }
+}
+
+/// Charge le choix du thème depuis localStorage
+bool loadThemePreference() {
+  if (kIsWeb) {
+    final saved = html.window.localStorage['azur_confort_dark_mode'];
+    if (saved != null) {
+      return saved == 'true';
+    }
+  }
+  return false; // Mode clair par défaut
+}
 
 // ============================================================================
 // NUMÉRO DE TÉLÉPHONE
@@ -58,26 +211,49 @@ void main() {
 }
 
 // ============================================================================
-// APPLICATION PRINCIPALE
+// APPLICATION PRINCIPALE - STATEFUL POUR GESTION DU THÈME
 // ============================================================================
 
-class AzurConfortApp extends StatelessWidget {
+class AzurConfortApp extends StatefulWidget {
   const AzurConfortApp({Key? key}) : super(key: key);
+
+  @override
+  State<AzurConfortApp> createState() => _AzurConfortAppState();
+}
+
+class _AzurConfortAppState extends State<AzurConfortApp> {
+  bool _isDarkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Charger la préférence de thème sauvegardée
+    _isDarkMode = loadThemePreference();
+  }
+
+  void toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+      // Sauvegarder la préférence
+      saveThemePreference(_isDarkMode);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Azur Confort - Artisan Frigoriste',
-      theme: ThemeData(
-        colorScheme: const ColorScheme.light(
-          primary: kPrimaryBlue,
-          secondary: kAccentYellow,
-        ),
-        scaffoldBackgroundColor: kBackgroundColor,
-        fontFamily: 'Segoe UI',
+      // Thème clair
+      theme: buildLightTheme(),
+      // Thème sombre
+      darkTheme: buildDarkTheme(),
+      // Sélection du thème
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      home: AzurConfortHome(
+        isDarkMode: _isDarkMode,
+        onToggleTheme: toggleTheme,
       ),
-      home: const AzurConfortHome(),
     );
   }
 }
@@ -87,7 +263,14 @@ class AzurConfortApp extends StatelessWidget {
 // ============================================================================
 
 class AzurConfortHome extends StatefulWidget {
-  const AzurConfortHome({super.key});
+  final bool isDarkMode;
+  final VoidCallback onToggleTheme;
+
+  const AzurConfortHome({
+    super.key,
+    required this.isDarkMode,
+    required this.onToggleTheme,
+  });
 
   @override
   State<AzurConfortHome> createState() => _AzurConfortHomeState();
@@ -120,56 +303,99 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 700;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = widget.isDarkMode;
     
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
-        shadowColor: Colors.black.withOpacity(0.05),
+        shadowColor: colorScheme.shadow.withOpacity(0.05),
         surfaceTintColor: Colors.transparent,
         toolbarHeight: 70,
         title: Row(
           children: [
             // ============================================================
-            // LOGO DESIGN - En attendant le vrai logo
+            // LOGO DESIGN - INTERRUPTEUR JOUR/NUIT (DARK MODE)
             // ============================================================
-            Container(
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [kPrimaryBlue, kDarkBlue],
-                ),
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                    color: kPrimaryBlue.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Icône flocon (froid)
-                    const Icon(Icons.ac_unit, color: kPrimaryBlue, size: 20),
-                    Container(
-                      width: 1,
-                      height: 16,
-                      margin: const EdgeInsets.symmetric(horizontal: 6),
-                      color: Colors.grey.shade300,
+            Tooltip(
+              message: widget.isDarkMode ? 'Passer en mode jour ☀️' : 'Passer en mode nuit 🌙',
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: widget.onToggleTheme,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: widget.isDarkMode 
+                            ? [const Color(0xFF1A237E), const Color(0xFF3949AB)] // Bleu nuit
+                            : [kPrimaryBlue, kDarkBlue],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: widget.isDarkMode 
+                              ? const Color(0xFF3949AB).withOpacity(0.4)
+                              : kPrimaryBlue.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                    // Icône flamme (chaud)
-                    const Icon(Icons.local_fire_department, color: kAccentOrange, size: 20),
-                  ],
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Icône flocon (froid) ou lune (nuit)
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) => ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            ),
+                            child: Icon(
+                              widget.isDarkMode ? Icons.nightlight_round : Icons.ac_unit,
+                              key: ValueKey(widget.isDarkMode ? 'moon' : 'snow'),
+                              color: widget.isDarkMode ? const Color(0xFFFFD54F) : kPrimaryBlue,
+                              size: 20,
+                            ),
+                          ),
+                          Container(
+                            width: 1,
+                            height: 16,
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
+                            color: colorScheme.outline.withOpacity(0.5),
+                          ),
+                          // Icône flamme (chaud) ou soleil (jour)
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) => ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            ),
+                            child: Icon(
+                              widget.isDarkMode ? Icons.wb_sunny : Icons.local_fire_department,
+                              key: ValueKey(widget.isDarkMode ? 'sun' : 'fire'),
+                              color: kAccentOrange,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -180,8 +406,10 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [kDarkBlue, kPrimaryBlue],
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: widget.isDarkMode 
+                        ? [kDarkTextPrimary, kPrimaryBlue]
+                        : [kDarkBlue, kPrimaryBlue],
                   ).createShader(bounds),
                   child: Text(
                     'AZUR',
@@ -221,12 +449,13 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               icon: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: kLightBlue,
+                  color: isDark ? colorScheme.surfaceVariant : kLightBlue,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.menu, color: kDarkBlue),
+                child: Icon(Icons.menu, color: colorScheme.onSurface),
               ),
               offset: const Offset(0, 50),
+              color: colorScheme.surface,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               onSelected: (index) => setState(() => _selectedPageIndex = index),
               itemBuilder: (context) => [
@@ -259,6 +488,8 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
 
   PopupMenuItem<int> _buildPopupMenuItem(int index, String text, IconData icon) {
     final isSelected = _selectedPageIndex == index;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return PopupMenuItem<int>(
       value: index,
       child: Container(
@@ -268,12 +499,16 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isSelected ? kPrimaryBlue.withOpacity(0.1) : Colors.grey.shade100,
+                color: isSelected 
+                    ? colorScheme.primary.withOpacity(0.1) 
+                    : colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 icon,
-                color: isSelected ? kPrimaryBlue : Colors.grey.shade600,
+                color: isSelected 
+                    ? colorScheme.primary 
+                    : colorScheme.onSurfaceVariant,
                 size: 20,
               ),
             ),
@@ -281,7 +516,9 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
             Text(
               text,
               style: TextStyle(
-                color: isSelected ? kPrimaryBlue : Colors.black87,
+                color: isSelected 
+                    ? colorScheme.primary 
+                    : colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                 fontSize: 15,
               ),
@@ -291,8 +528,8 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               Container(
                 width: 8,
                 height: 8,
-                decoration: const BoxDecoration(
-                  color: kPrimaryBlue,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -305,6 +542,8 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
 
   Widget _buildNavButton(String text, int index, IconData icon) {
     final isSelected = _selectedPageIndex == index;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Material(
@@ -323,11 +562,14 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               borderRadius: BorderRadius.circular(12),
               border: isSelected
                   ? null
-                  : Border.all(color: Colors.grey.shade200, width: 1.5),
+                  : Border.all(
+                      color: colorScheme.outline, 
+                      width: 1.5,
+                    ),
               boxShadow: isSelected
                   ? [
                       BoxShadow(
-                        color: kPrimaryBlue.withOpacity(0.3),
+                        color: colorScheme.primary.withOpacity(0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 3),
                       ),
@@ -340,13 +582,17 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
                 Icon(
                   icon,
                   size: 18,
-                  color: isSelected ? Colors.white : Colors.grey.shade600,
+                  color: isSelected 
+                      ? Colors.white 
+                      : colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   text,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : kDarkBlue,
+                    color: isSelected 
+                        ? Colors.white 
+                        : colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -884,6 +1130,7 @@ class _AccueilPage extends StatelessWidget {
 
   // ======================== SERVICES RAPIDES ========================
   Widget _buildQuickServices(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     // Services avec couleurs bleu (froid) et orange (chaud)
     final services = [
       {'icon': Icons.ac_unit, 'title': 'Climatisation', 'color': kPrimaryBlue},
@@ -903,11 +1150,11 @@ class _AccueilPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: colorScheme.shadow.withOpacity(0.08),
                     blurRadius: 40,
                     offset: const Offset(0, 20),
                   ),
@@ -916,6 +1163,7 @@ class _AccueilPage extends StatelessWidget {
               child: Row(
                 children: services.map((s) => Expanded(
                   child: _buildQuickServiceItem(
+                    context,
                     s['icon'] as IconData,
                     s['title'] as String,
                     s['color'] as Color,
@@ -929,7 +1177,8 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickServiceItem(IconData icon, String title, Color color) {
+  Widget _buildQuickServiceItem(BuildContext context, IconData icon, String title, Color color) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
       child: Column(
@@ -946,10 +1195,10 @@ class _AccueilPage extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 14,
-              color: Colors.black87,
+              color: colorScheme.onSurface,
             ),
           ),
         ],
@@ -987,7 +1236,7 @@ class _AccueilPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               children: [
-                _buildSectionTitle(
+                _buildSectionTitle(context,
                   'Zones d\'intervention',
                   'Nous intervenons sur toute la Côte d\'Azur',
                 ),
@@ -996,18 +1245,18 @@ class _AccueilPage extends StatelessWidget {
                 if (isMobile)
                   Column(
                     children: [
-                      _buildMapCard06(),
+                      _buildMapCard06(context),
                       const SizedBox(height: 24),
-                      _buildMapCard83(),
+                      _buildMapCard83(context),
                     ],
                   )
                 else
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: _buildMapCard06()),
+                      Expanded(child: _buildMapCard06(context)),
                       const SizedBox(width: 24),
-                      Expanded(child: _buildMapCard83()),
+                      Expanded(child: _buildMapCard83(context)),
                     ],
                   ),
               ],
@@ -1019,10 +1268,11 @@ class _AccueilPage extends StatelessWidget {
   }
 
   /// Carte des Alpes-Maritimes (06) avec villes positionnées
-  Widget _buildMapCard06() {
+  Widget _buildMapCard06(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: kPrimaryBlue.withOpacity(0.2), width: 2),
         boxShadow: [
@@ -1139,12 +1389,12 @@ class _AccueilPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.location_on, color: kPrimaryBlue, size: 18),
+                const Icon(Icons.location_on, color: kPrimaryBlue, size: 18),
                 const SizedBox(width: 6),
                 Text(
                   'Intervention dans tout le département',
                   style: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: colorScheme.onSurfaceVariant,
                     fontSize: 13,
                   ),
                 ),
@@ -1157,10 +1407,11 @@ class _AccueilPage extends StatelessWidget {
   }
 
   /// Carte du Var (83) avec villes positionnées
-  Widget _buildMapCard83() {
+  Widget _buildMapCard83(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: kAccentOrange.withOpacity(0.3), width: 2),
         boxShadow: [
@@ -1282,7 +1533,7 @@ class _AccueilPage extends StatelessWidget {
                 Text(
                   'Intervention dans tout le département',
                   style: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: colorScheme.onSurfaceVariant,
                     fontSize: 13,
                   ),
                 ),
@@ -1364,15 +1615,16 @@ class _AccueilPage extends StatelessWidget {
 
   // ======================== POURQUOI NOUS ========================
   Widget _buildWhyUsSection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      color: kWhite,
+      color: colorScheme.surface,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
             children: [
-              _buildSectionTitle(
+              _buildSectionTitle(context,
                 'Pourquoi nous choisir ?',
                 'Artisan frigoriste de confiance sur la Côte d\'Azur',
               ),
@@ -1383,30 +1635,30 @@ class _AccueilPage extends StatelessWidget {
                   return isWide
                       ? Row(
                           children: [
-                            Expanded(child: _buildWhyUsItem(Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
+                            Expanded(child: _buildWhyUsItem(context, Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
                             const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(Icons.flash_on, 'Réactivité', 'Intervention sous 24h', kAccentOrange)),
+                            Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention sous 24h', kAccentOrange)),
                             const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(Icons.description, 'Transparence', 'Devis gratuit détaillé', kPrimaryBlue)),
+                            Expanded(child: _buildWhyUsItem(context, Icons.description, 'Transparence', 'Devis gratuit détaillé', kPrimaryBlue)),
                             const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(Icons.thumb_up, 'Garantie', 'Satisfaction assurée', kAccentYellow)),
+                            Expanded(child: _buildWhyUsItem(context, Icons.thumb_up, 'Garantie', 'Satisfaction assurée', kAccentYellow)),
                           ],
                         )
                       : Column(
                           children: [
                             Row(
                               children: [
-                                Expanded(child: _buildWhyUsItem(Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
+                                Expanded(child: _buildWhyUsItem(context, Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
                                 const SizedBox(width: 16),
-                                Expanded(child: _buildWhyUsItem(Icons.flash_on, 'Réactivité', 'Intervention 24h', kAccentOrange)),
+                                Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention 24h', kAccentOrange)),
                               ],
                             ),
                             const SizedBox(height: 16),
                             Row(
                               children: [
-                                Expanded(child: _buildWhyUsItem(Icons.description, 'Transparence', 'Devis gratuit', kPrimaryBlue)),
+                                Expanded(child: _buildWhyUsItem(context, Icons.description, 'Transparence', 'Devis gratuit', kPrimaryBlue)),
                                 const SizedBox(width: 16),
-                                Expanded(child: _buildWhyUsItem(Icons.thumb_up, 'Garantie', 'Satisfaction', kAccentYellow)),
+                                Expanded(child: _buildWhyUsItem(context, Icons.thumb_up, 'Garantie', 'Satisfaction', kAccentYellow)),
                               ],
                             ),
                           ],
@@ -1420,11 +1672,12 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWhyUsItem(IconData icon, String title, String subtitle, Color color) {
+  Widget _buildWhyUsItem(BuildContext context, IconData icon, String title, String subtitle, Color color) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: kBackgroundColor,
+        color: colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withOpacity(0.2)),
       ),
@@ -1442,10 +1695,10 @@ class _AccueilPage extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Colors.black87,
+              color: colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 4),
@@ -1454,7 +1707,7 @@ class _AccueilPage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13,
-              color: Colors.grey.shade600,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],
@@ -1515,16 +1768,17 @@ class _AccueilPage extends StatelessWidget {
   }
 
   // ======================== HELPERS ========================
-  Widget _buildSectionTitle(String title, String subtitle) {
+  Widget _buildSectionTitle(BuildContext context, String title, String subtitle) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Text(
           title,
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: colorScheme.onBackground,
           ),
         ),
         const SizedBox(height: 12),
@@ -1533,7 +1787,7 @@ class _AccueilPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade600,
+            color: colorScheme.onSurfaceVariant,
           ),
         ),
       ],
@@ -1651,9 +1905,11 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      color: kWhite,
+      color: colorScheme.surface,
       // Padding réduit en haut pour remonter la section
       padding: const EdgeInsets.only(top: 30, bottom: 50),
       child: Column(
@@ -1663,13 +1919,13 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               children: [
-                const Text(
+                Text(
                   'Nos Services',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -1678,7 +1934,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey.shade600,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -1693,7 +1949,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: kLightBlue,
+                  color: isDark ? colorScheme.surfaceVariant : kLightBlue,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: TabBar(
@@ -1702,7 +1958,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
                   padding: const EdgeInsets.all(6),
                   labelPadding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 20),
                   indicator: BoxDecoration(
-                    color: kWhite,
+                    color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -1760,6 +2016,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
 
   /// Contenu d'un onglet de service
   Widget _buildServiceContent(_ServiceData service, bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Center(
@@ -1768,7 +2025,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
           child: Container(
             padding: EdgeInsets.all(isMobile ? 20 : 32),
             decoration: BoxDecoration(
-              color: kBackgroundColor,
+              color: colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: service.color.withOpacity(0.2)),
             ),
@@ -1916,7 +2173,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
                 service.description,
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.grey.shade700,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   height: 1.7,
                 ),
               ),
@@ -1954,7 +2211,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: kWhite,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: service.color.withOpacity(0.2)),
             ),
@@ -1991,9 +2248,9 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
                         Expanded(
                           child: Text(
                             prestation,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: Colors.black87,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -2103,7 +2360,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
           service.description,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey.shade700,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             height: 1.5,
           ),
         ),
@@ -2113,7 +2370,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: kWhite,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: service.color.withOpacity(0.2)),
           ),
@@ -2218,15 +2475,15 @@ class _AProposPage extends StatelessWidget {
           // Hero immersif
           _buildHeroSection(isMobile),
           // Section "Qui sommes-nous"
-          _buildWhoWeAre(isMobile),
+          _buildWhoWeAre(context, isMobile),
           // Chiffres clés
           _buildKeyNumbers(isMobile),
           // Nos domaines d'expertise
-          _buildExpertiseDomains(isMobile),
+          _buildExpertiseDomains(context, isMobile),
           // Engagement qualité
-          _buildQualityCommitment(isMobile),
+          _buildQualityCommitment(context, isMobile),
           // Nos valeurs
-          _buildCoreValues(isMobile),
+          _buildCoreValues(context, isMobile),
           // Call to action
           _buildCallToAction(isMobile),
         ],
@@ -2338,9 +2595,10 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWhoWeAre(bool isMobile) {
+  Widget _buildWhoWeAre(BuildContext context, bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      color: Colors.white,
+      color: colorScheme.surface,
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 80,
         vertical: 60,
@@ -2353,7 +2611,7 @@ class _AProposPage extends StatelessWidget {
                   children: [
                     _buildWhoWeAreImage(),
                     const SizedBox(height: 40),
-                    _buildWhoWeAreText(),
+                    _buildWhoWeAreText(context),
                   ],
                 )
               : Row(
@@ -2361,7 +2619,7 @@ class _AProposPage extends StatelessWidget {
                   children: [
                     Expanded(flex: 5, child: _buildWhoWeAreImage()),
                     const SizedBox(width: 60),
-                    Expanded(flex: 6, child: _buildWhoWeAreText()),
+                    Expanded(flex: 6, child: _buildWhoWeAreText(context)),
                   ],
                 ),
         ),
@@ -2433,14 +2691,16 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWhoWeAreText() {
+  Widget _buildWhoWeAreText(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: kLightBlue,
+            color: isDark ? kPrimaryBlue.withOpacity(0.2) : kLightBlue,
             borderRadius: BorderRadius.circular(6),
           ),
           child: const Text(
@@ -2454,12 +2714,12 @@ class _AProposPage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
+        Text(
           'L\'expertise au service\nde votre confort',
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,
-            color: kDarkBlue,
+            color: isDark ? colorScheme.onSurface : kDarkBlue,
             height: 1.2,
           ),
         ),
@@ -2468,7 +2728,7 @@ class _AProposPage extends StatelessWidget {
           'Azur Confort est une entreprise artisanale spécialisée dans les métiers du froid et du chaud. Basés sur la Côte d\'Azur, nous intervenons dans les Alpes-Maritimes (06) et le Var (83) pour tous vos besoins en climatisation, chauffage, pompes à chaleur et plomberie.',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade700,
+            color: colorScheme.onSurfaceVariant,
             height: 1.7,
           ),
         ),
@@ -2477,7 +2737,7 @@ class _AProposPage extends StatelessWidget {
           'Notre force : une équipe réactive, des conseils personnalisés et un travail soigné pour garantir votre satisfaction.',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade700,
+            color: colorScheme.onSurfaceVariant,
             height: 1.7,
           ),
         ),
@@ -2487,16 +2747,17 @@ class _AProposPage extends StatelessWidget {
           spacing: 24,
           runSpacing: 16,
           children: [
-            _buildMiniFeature(Icons.schedule, 'Intervention 24h'),
-            _buildMiniFeature(Icons.thumb_up, 'Devis gratuit'),
-            _buildMiniFeature(Icons.eco, 'Solutions éco'),
+            _buildMiniFeature(context, Icons.schedule, 'Intervention 24h'),
+            _buildMiniFeature(context, Icons.thumb_up, 'Devis gratuit'),
+            _buildMiniFeature(context, Icons.eco, 'Solutions éco'),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildMiniFeature(IconData icon, String text) {
+  Widget _buildMiniFeature(BuildContext context, IconData icon, String text) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -2511,9 +2772,9 @@ class _AProposPage extends StatelessWidget {
         const SizedBox(width: 10),
         Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Colors.black87,
+            color: colorScheme.onSurface,
           ),
         ),
       ],
@@ -2593,9 +2854,11 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildExpertiseDomains(bool isMobile) {
+  Widget _buildExpertiseDomains(BuildContext context, bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: kBackgroundColor,
+      color: colorScheme.background,
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 80,
         vertical: 70,
@@ -2605,13 +2868,13 @@ class _AProposPage extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
             children: [
-              const Text(
+              Text(
                 'Nos domaines d\'expertise',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: kDarkBlue,
+                  color: isDark ? colorScheme.onBackground : kDarkBlue,
                 ),
               ),
               const SizedBox(height: 12),
@@ -2620,7 +2883,7 @@ class _AProposPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey.shade600,
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 50),
@@ -2630,21 +2893,21 @@ class _AProposPage extends StatelessWidget {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(child: _buildDomainCard(Icons.ac_unit, 'Froid', 'Climatisation, chambres froides, vitrines réfrigérées, maintenance frigorifique', kPrimaryBlue, ['Clim monosplit/multisplit', 'Chambres froides', 'Vitrines réfrigérées'])),
+                        Expanded(child: _buildDomainCard(context, Icons.ac_unit, 'Froid', 'Climatisation, chambres froides, vitrines réfrigérées, maintenance frigorifique', kPrimaryBlue, ['Clim monosplit/multisplit', 'Chambres froides', 'Vitrines réfrigérées'])),
                         const SizedBox(width: 24),
-                        Expanded(child: _buildDomainCard(Icons.local_fire_department, 'Chaud', 'Chauffage, pompes à chaleur air/air et air/eau, chaudières, radiateurs', kAccentOrange, ['Pompes à chaleur', 'Chaudières gaz/fioul', 'Plancher chauffant'])),
+                        Expanded(child: _buildDomainCard(context, Icons.local_fire_department, 'Chaud', 'Chauffage, pompes à chaleur air/air et air/eau, chaudières, radiateurs', kAccentOrange, ['Pompes à chaleur', 'Chaudières gaz/fioul', 'Plancher chauffant'])),
                         const SizedBox(width: 24),
-                        Expanded(child: _buildDomainCard(Icons.water_drop, 'Eau', 'Plomberie, sanitaires, dépannage fuites, installation et rénovation', kPrimaryBlue, ['Dépannage fuites', 'Installation sanitaires', 'Chauffe-eau'])),
+                        Expanded(child: _buildDomainCard(context, Icons.water_drop, 'Eau', 'Plomberie, sanitaires, dépannage fuites, installation et rénovation', kPrimaryBlue, ['Dépannage fuites', 'Installation sanitaires', 'Chauffe-eau'])),
                       ],
                     );
                   }
                   return Column(
                     children: [
-                      _buildDomainCard(Icons.ac_unit, 'Froid', 'Climatisation, chambres froides, vitrines réfrigérées', kPrimaryBlue, ['Clim monosplit/multisplit', 'Chambres froides', 'Vitrines réfrigérées']),
+                      _buildDomainCard(context, Icons.ac_unit, 'Froid', 'Climatisation, chambres froides, vitrines réfrigérées', kPrimaryBlue, ['Clim monosplit/multisplit', 'Chambres froides', 'Vitrines réfrigérées']),
                       const SizedBox(height: 20),
-                      _buildDomainCard(Icons.local_fire_department, 'Chaud', 'Chauffage, pompes à chaleur, chaudières', kAccentOrange, ['Pompes à chaleur', 'Chaudières', 'Plancher chauffant']),
+                      _buildDomainCard(context, Icons.local_fire_department, 'Chaud', 'Chauffage, pompes à chaleur, chaudières', kAccentOrange, ['Pompes à chaleur', 'Chaudières', 'Plancher chauffant']),
                       const SizedBox(height: 20),
-                      _buildDomainCard(Icons.water_drop, 'Eau', 'Plomberie, sanitaires, dépannage', kPrimaryBlue, ['Dépannage fuites', 'Installation sanitaires', 'Chauffe-eau']),
+                      _buildDomainCard(context, Icons.water_drop, 'Eau', 'Plomberie, sanitaires, dépannage', kPrimaryBlue, ['Dépannage fuites', 'Installation sanitaires', 'Chauffe-eau']),
                     ],
                   );
                 },
@@ -2656,11 +2919,12 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDomainCard(IconData icon, String title, String description, Color color, List<String> features) {
+  Widget _buildDomainCard(BuildContext context, IconData icon, String title, String description, Color color, List<String> features) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -2701,7 +2965,7 @@ class _AProposPage extends StatelessWidget {
             description,
             style: TextStyle(
               fontSize: 15,
-              color: Colors.grey.shade600,
+              color: colorScheme.onSurfaceVariant,
               height: 1.5,
             ),
           ),
@@ -2712,7 +2976,7 @@ class _AProposPage extends StatelessWidget {
               children: [
                 Icon(Icons.check_circle, color: color, size: 20),
                 const SizedBox(width: 10),
-                Text(f, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                Text(f, style: TextStyle(fontSize: 14, color: colorScheme.onSurface)),
               ],
             ),
           )),
@@ -2721,7 +2985,9 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildQualityCommitment(bool isMobile) {
+  Widget _buildQualityCommitment(BuildContext context, bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -2729,10 +2995,10 @@ class _AProposPage extends StatelessWidget {
         vertical: 70,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         border: Border(
-          top: BorderSide(color: Colors.grey.shade200),
-          bottom: BorderSide(color: Colors.grey.shade200),
+          top: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+          bottom: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
         ),
       ),
       child: Center(
@@ -2749,13 +3015,13 @@ class _AProposPage extends StatelessWidget {
                 child: const Icon(Icons.verified_user, color: kPrimaryBlue, size: 40),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'Notre engagement qualité',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: kDarkBlue,
+                  color: isDark ? colorScheme.onSurface : kDarkBlue,
                 ),
               ),
               const SizedBox(height: 24),
@@ -2764,7 +3030,7 @@ class _AProposPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 17,
-                  color: Colors.grey.shade700,
+                  color: colorScheme.onSurfaceVariant,
                   height: 1.8,
                 ),
               ),
@@ -2772,16 +3038,16 @@ class _AProposPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 decoration: BoxDecoration(
-                  color: kLightBlue,
+                  color: isDark ? kPrimaryBlue.withOpacity(0.15) : kLightBlue,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
+                child: Text(
                   '« Notre objectif : votre confort thermique optimal, été comme hiver, tout en maîtrisant votre consommation d\'énergie. »',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
-                    color: kDarkBlue,
+                    color: isDark ? colorScheme.onSurface : kDarkBlue,
                     height: 1.6,
                   ),
                 ),
@@ -2793,9 +3059,11 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCoreValues(bool isMobile) {
+  Widget _buildCoreValues(BuildContext context, bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: kBackgroundColor,
+      color: colorScheme.background,
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 80,
         vertical: 70,
@@ -2805,12 +3073,12 @@ class _AProposPage extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 1100),
           child: Column(
             children: [
-              const Text(
+              Text(
                 'Nos valeurs',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: kDarkBlue,
+                  color: isDark ? colorScheme.onBackground : kDarkBlue,
                 ),
               ),
               const SizedBox(height: 50),
@@ -2819,21 +3087,21 @@ class _AProposPage extends StatelessWidget {
                   if (constraints.maxWidth > 800) {
                     return Row(
                       children: [
-                        Expanded(child: _buildValueCard(Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur. Nous comprenons l\'urgence de vos besoins.', kAccentOrange)),
+                        Expanded(child: _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur. Nous comprenons l\'urgence de vos besoins.', kAccentOrange)),
                         const SizedBox(width: 24),
-                        Expanded(child: _buildValueCard(Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise. Nous vous expliquons chaque intervention.', kPrimaryBlue)),
+                        Expanded(child: _buildValueCard(context, Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise. Nous vous expliquons chaque intervention.', kPrimaryBlue)),
                         const SizedBox(width: 24),
-                        Expanded(child: _buildValueCard(Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque. Votre satisfaction est notre priorité.', kAccentYellow)),
+                        Expanded(child: _buildValueCard(context, Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque. Votre satisfaction est notre priorité.', kAccentYellow)),
                       ],
                     );
                   }
                   return Column(
                     children: [
-                      _buildValueCard(Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur.', kAccentOrange),
+                      _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur.', kAccentOrange),
                       const SizedBox(height: 20),
-                      _buildValueCard(Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise.', kPrimaryBlue),
+                      _buildValueCard(context, Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise.', kPrimaryBlue),
                       const SizedBox(height: 20),
-                      _buildValueCard(Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque.', kAccentYellow),
+                      _buildValueCard(context, Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque.', kAccentYellow),
                     ],
                   );
                 },
@@ -2845,16 +3113,17 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildValueCard(IconData icon, String title, String description, Color color) {
+  Widget _buildValueCard(BuildContext context, IconData icon, String title, String description, Color color) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withOpacity(0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: colorScheme.shadow.withOpacity(0.03),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -2885,7 +3154,7 @@ class _AProposPage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: colorScheme.onSurfaceVariant,
               height: 1.6,
             ),
           ),
@@ -2999,9 +3268,12 @@ class _ContactPageState extends State<_ContactPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      final dialogColorScheme = Theme.of(context).colorScheme;
+      final dialogIsDark = Theme.of(context).brightness == Brightness.dark;
       showDialog(
         context: context,
         builder: (context) => Dialog(
+          backgroundColor: dialogColorScheme.surface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           child: Container(
             padding: const EdgeInsets.all(32),
@@ -3012,18 +3284,18 @@ class _ContactPageState extends State<_ContactPage> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.green.shade50,
+                    color: Colors.green.withOpacity(dialogIsDark ? 0.2 : 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(Icons.check_circle, color: Colors.green.shade600, size: 48),
                 ),
                 const SizedBox(height: 24),
-                const Text(
+                Text(
                   'Message envoyé !',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: kDarkBlue,
+                    color: dialogIsDark ? dialogColorScheme.onSurface : kDarkBlue,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -3032,7 +3304,7 @@ class _ContactPageState extends State<_ContactPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey.shade600,
+                    color: dialogColorScheme.onSurfaceVariant,
                     height: 1.5,
                   ),
                 ),
@@ -3074,7 +3346,7 @@ class _ContactPageState extends State<_ContactPage> {
           _buildContactHero(isMobile),
           // Contenu principal
           Container(
-            color: kBackgroundColor,
+            color: Theme.of(context).colorScheme.background,
             padding: EdgeInsets.symmetric(
               horizontal: isMobile ? 20 : 80,
               vertical: 60,
@@ -3195,15 +3467,17 @@ class _ContactPageState extends State<_ContactPage> {
   }
 
   Widget _buildContactInfo() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Nos coordonnées',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: kDarkBlue,
+            color: isDark ? colorScheme.onSurface : kDarkBlue,
           ),
         ),
         const SizedBox(height: 8),
@@ -3211,7 +3485,7 @@ class _ContactPageState extends State<_ContactPage> {
           'Plusieurs moyens de nous joindre',
           style: TextStyle(
             fontSize: 15,
-            color: Colors.grey.shade600,
+            color: colorScheme.onSurfaceVariant,
           ),
         ),
         const SizedBox(height: 32),
@@ -3262,22 +3536,22 @@ class _ContactPageState extends State<_ContactPage> {
         Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: kLightBlue,
+            color: isDark ? kPrimaryBlue.withOpacity(0.15) : kLightBlue,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.schedule, color: kPrimaryBlue, size: 24),
-                  SizedBox(width: 12),
+                  const Icon(Icons.schedule, color: kPrimaryBlue, size: 24),
+                  const SizedBox(width: 12),
                   Text(
                     'Horaires',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: kDarkBlue,
+                      color: isDark ? colorScheme.onSurface : kDarkBlue,
                     ),
                   ),
                 ],
@@ -3306,14 +3580,16 @@ class _ContactPageState extends State<_ContactPage> {
     required String actionLabel,
     required IconData actionIcon,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: colorScheme.shadow.withOpacity(0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -3336,10 +3612,10 @@ class _ContactPageState extends State<_ContactPage> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: kDarkBlue,
+                    color: isDark ? colorScheme.onSurface : kDarkBlue,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -3347,16 +3623,16 @@ class _ContactPageState extends State<_ContactPage> {
                   subtitle,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey.shade500,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -3411,10 +3687,12 @@ class _ContactPageState extends State<_ContactPage> {
   }
 
   Widget _buildContactForm() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(36),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -3440,7 +3718,7 @@ class _ContactPageState extends State<_ContactPage> {
                   child: const Icon(Icons.description, color: kPrimaryBlue, size: 24),
                 ),
                 const SizedBox(width: 14),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -3448,14 +3726,14 @@ class _ContactPageState extends State<_ContactPage> {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: kDarkBlue,
+                        color: isDark ? colorScheme.onSurface : kDarkBlue,
                       ),
                     ),
                     Text(
                       'Gratuit et sans engagement',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.grey,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -3487,18 +3765,21 @@ class _ContactPageState extends State<_ContactPage> {
             // Type de demande
             DropdownButtonFormField<String>(
               value: _selectedService,
+              dropdownColor: colorScheme.surface,
+              style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: 'Type de prestation',
+                labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                 prefixIcon: const Icon(Icons.build_outlined, color: kPrimaryBlue),
                 filled: true,
-                fillColor: kBackgroundColor,
+                fillColor: colorScheme.surfaceVariant,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
+                  borderSide: BorderSide(color: colorScheme.outline),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -3524,22 +3805,24 @@ class _ContactPageState extends State<_ContactPage> {
             TextFormField(
               controller: _messageController,
               maxLines: 5,
+              style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: 'Décrivez votre projet ou besoin',
+                labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                 alignLabelWithHint: true,
                 prefixIcon: const Padding(
                   padding: EdgeInsets.only(bottom: 80),
                   child: Icon(Icons.message_outlined, color: kPrimaryBlue),
                 ),
                 filled: true,
-                fillColor: kBackgroundColor,
+                fillColor: colorScheme.surfaceVariant,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
+                  borderSide: BorderSide(color: colorScheme.outline),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -3602,20 +3885,23 @@ class _ContactPageState extends State<_ContactPage> {
   }
 
   Widget _buildModernTextField(TextEditingController controller, String label, IconData icon, {bool required = true}) {
+    final colorScheme = Theme.of(context).colorScheme;
     return TextFormField(
       controller: controller,
+      style: TextStyle(color: colorScheme.onSurface),
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
         prefixIcon: Icon(icon, color: kPrimaryBlue),
         filled: true,
-        fillColor: kBackgroundColor,
+        fillColor: colorScheme.surfaceVariant,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: colorScheme.outline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -3623,7 +3909,7 @@ class _ContactPageState extends State<_ContactPage> {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red),
+          borderSide: BorderSide(color: colorScheme.error),
         ),
       ),
       validator: required ? (v) => v == null || v.isEmpty ? 'Champ requis' : null : null,
@@ -4330,6 +4616,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Stack(
       children: [
         // Bulle de bienvenue (avant ouverture)
@@ -4348,11 +4635,11 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: colorScheme.shadow.withOpacity(0.15),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -4361,17 +4648,18 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       '👋 Besoin d\'aide ?',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () => setState(() => _showWelcome = false),
-                      child: const Icon(Icons.close, size: 16, color: Colors.grey),
+                      child: Icon(Icons.close, size: 16, color: colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -4405,8 +4693,8 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 width: 75,
                 height: 75,
                 decoration: BoxDecoration(
-                  // Fond blanc pour mieux voir la mascotte
-                  color: Colors.white,
+                  // Fond adaptatif au thème
+                  color: colorScheme.surface,
                   shape: BoxShape.circle,
                   // Bordure bleue
                   border: Border.all(
@@ -4420,7 +4708,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                       offset: const Offset(0, 8),
                     ),
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: colorScheme.shadow.withOpacity(0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -4477,16 +4765,17 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
   Widget _buildChatWindow() {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 500;
+    final colorScheme = Theme.of(context).colorScheme;
     
     return Container(
       width: isMobile ? screenWidth - 40 : 380,
       height: 500,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: colorScheme.shadow.withOpacity(0.15),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
@@ -4591,16 +4880,17 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
   }
 
   Widget _buildMessageList() {
+    final colorScheme = Theme.of(context).colorScheme;
     if (_messages.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.chat_bubble_outline, size: 48, color: Colors.grey.shade300),
+            Icon(Icons.chat_bubble_outline, size: 48, color: colorScheme.outline),
             const SizedBox(height: 16),
             Text(
               'Démarrez la conversation !',
-              style: TextStyle(color: Colors.grey.shade500),
+              style: TextStyle(color: colorScheme.onSurfaceVariant),
             ),
           ],
         ),
@@ -4624,13 +4914,15 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
 
   /// Indicateur animé "bot en train d'écrire..."
   Widget _buildTypingIndicator() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: kLightBlue,
+          color: isDark ? colorScheme.surfaceVariant : kLightBlue,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(18),
             topRight: Radius.circular(18),
@@ -4678,6 +4970,15 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
   }
 
   Widget _buildMessageBubble(_ChatMessage message) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    // Couleurs adaptatives pour les bulles
+    final botBubbleColor = isDark ? colorScheme.surfaceVariant : kLightBlue;
+    final botTextColor = colorScheme.onSurface;
+    final userBubbleColor = kPrimaryBlue;
+    const userTextColor = Colors.white;
+    
     return Align(
       alignment: message.isBot ? Alignment.centerLeft : Alignment.centerRight,
       child: Container(
@@ -4685,7 +4986,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         padding: const EdgeInsets.all(14),
         constraints: const BoxConstraints(maxWidth: 280),
         decoration: BoxDecoration(
-          color: message.isBot ? kLightBlue : kPrimaryBlue,
+          color: message.isBot ? botBubbleColor : userBubbleColor,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(18),
             topRight: const Radius.circular(18),
@@ -4696,7 +4997,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         child: Text(
           message.text,
           style: TextStyle(
-            color: message.isBot ? Colors.black87 : Colors.white,
+            color: message.isBot ? botTextColor : userTextColor,
             fontSize: 14,
             height: 1.4,
           ),
