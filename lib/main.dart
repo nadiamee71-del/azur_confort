@@ -272,7 +272,7 @@ class AppFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20), // RÉDUIT
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
@@ -282,8 +282,8 @@ class AppFooter extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: kDarkBlue.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, -10),
+            blurRadius: 15,
+            offset: const Offset(0, -5),
           ),
         ],
       ),
@@ -291,81 +291,75 @@ class AppFooter extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
+            mainAxisSize: MainAxisSize.min, // COMPACT
             children: [
-              // Logo et nom
+              // Logo et nom - COMPACT
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(6), // RÉDUIT
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.ac_unit, color: Colors.white, size: 28),
+                    child: const Icon(Icons.ac_unit, color: Colors.white, size: 20), // RÉDUIT
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 10),
                   const Text(
                     'AZUR CONFORT',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 16, // RÉDUIT
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8), // RÉDUIT
               
               // Baseline
               Text(
                 'Artisan frigoriste sur la Côte d\'Azur (06 & 83)',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.75),
-                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 12, // RÉDUIT
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 14), // RÉDUIT
               
-              // Séparateur
+              // Séparateur - plus discret
               Container(
-                width: 100,
-                height: 2,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.white.withOpacity(0.0),
-                      Colors.white.withOpacity(0.3),
-                      Colors.white.withOpacity(0.0),
-                    ],
-                  ),
-                ),
+                width: 60, // RÉDUIT
+                height: 1, // RÉDUIT
+                color: Colors.white.withOpacity(0.2),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 14), // RÉDUIT
               
-              // Copyright
-              Text(
-                '© 2025 Azur Confort – Tous droits réservés',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.5),
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 20),
-              
-              // Liens légaux
+              // Liens légaux + Copyright sur même ligne si possible
               Wrap(
                 alignment: WrapAlignment.center,
-                spacing: 24,
-                runSpacing: 12,
+                spacing: 16, // RÉDUIT
+                runSpacing: 8,
                 children: [
                   _buildLegalLink(context, 'Mentions légales', 3),
                   _buildLegalLink(context, 'Confidentialité', 4),
                   _buildLegalLink(context, 'Cookies', 5),
                   _buildLegalLink(context, 'CGU', 6),
                 ],
+              ),
+              const SizedBox(height: 12), // RÉDUIT
+              
+              // Copyright
+              Text(
+                '© 2025 Azur Confort – Tous droits réservés',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.45),
+                  fontSize: 10, // RÉDUIT
+                ),
               ),
             ],
           ),
@@ -385,19 +379,14 @@ class AppFooter extends StatelessWidget {
             _AzurConfortHomeState.navigateToPage(pageIndex);
           }
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
-          ),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.85),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 11, // COMPACT
+            fontWeight: FontWeight.w400,
+            decoration: TextDecoration.underline,
+            decorationColor: Colors.white.withOpacity(0.3),
           ),
         ),
       ),
