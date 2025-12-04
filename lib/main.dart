@@ -1075,6 +1075,148 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
 }
 
 // ============================================================================
+// CARROUSEL DE VILLES ANIMÉ
+// ============================================================================
+
+class _CitiesCarousel extends StatefulWidget {
+  const _CitiesCarousel();
+
+  @override
+  State<_CitiesCarousel> createState() => _CitiesCarouselState();
+}
+
+class _CitiesCarouselState extends State<_CitiesCarousel> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrolling = true;
+
+  // Liste des villes avec leur département
+  final List<Map<String, dynamic>> _cities = [
+    {'name': 'Nice', 'dept': '06'},
+    {'name': 'Cannes', 'dept': '06'},
+    {'name': 'Antibes', 'dept': '06'},
+    {'name': 'Grasse', 'dept': '06'},
+    {'name': 'Menton', 'dept': '06'},
+    {'name': 'Cagnes-sur-Mer', 'dept': '06'},
+    {'name': 'Mandelieu', 'dept': '06'},
+    {'name': 'Vence', 'dept': '06'},
+    {'name': 'Fréjus', 'dept': '83'},
+    {'name': 'Saint-Raphaël', 'dept': '83'},
+    {'name': 'Toulon', 'dept': '83'},
+    {'name': 'Hyères', 'dept': '83'},
+    {'name': 'Draguignan', 'dept': '83'},
+    {'name': 'Sainte-Maxime', 'dept': '83'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Démarrer l'animation après le build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startAutoScroll();
+    });
+  }
+
+  void _startAutoScroll() async {
+    while (_isScrolling && mounted) {
+      await Future.delayed(const Duration(milliseconds: 30));
+      if (_scrollController.hasClients && _isScrolling && mounted) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final currentScroll = _scrollController.offset;
+        
+        if (currentScroll >= maxScroll) {
+          // Revenir au début en douceur
+          _scrollController.jumpTo(0);
+        } else {
+          _scrollController.jumpTo(currentScroll + 0.8);
+        }
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _isScrolling = false;
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Doubler la liste pour un effet de boucle infinie
+    final displayCities = [..._cities, ..._cities];
+    
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isScrolling = false),
+      onExit: (_) {
+        setState(() => _isScrolling = true);
+        _startAutoScroll();
+      },
+      child: SizedBox(
+        height: 40,
+        child: ListView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: displayCities.length,
+          itemBuilder: (context, index) {
+            final city = displayCities[index];
+            final is06 = city['dept'] == '06';
+            final accentColor = is06 ? kPrimaryBlue : kAccentOrange;
+            
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    color: is06 ? Colors.white : kAccentYellow,
+                    size: 14,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    city['name'] as String,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: is06 ? Colors.white.withOpacity(0.2) : kAccentOrange.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      city['dept'] as String,
+                      style: TextStyle(
+                        color: is06 ? Colors.white : kAccentYellow,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
 // PAGE ACCUEIL - DESIGN WAOUH
 // ============================================================================
 
@@ -1709,285 +1851,218 @@ class _AccueilPage extends StatelessWidget {
     return const _ServicesTabSection();
   }
 
-  // ======================== ZONES D'INTERVENTION ========================
+  // ======================== ZONES D'INTERVENTION - VERSION COMPACTE AVEC CARROUSEL ========================
   Widget _buildZonesSection(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 900;
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    // Villes principales avec leur département
-    final cities = [
-      {'name': 'Nice', 'dept': '06', 'main': true},
-      {'name': 'Cannes', 'dept': '06', 'main': true},
-      {'name': 'Antibes', 'dept': '06', 'main': false},
-      {'name': 'Grasse', 'dept': '06', 'main': false},
-      {'name': 'Menton', 'dept': '06', 'main': false},
-      {'name': 'Cagnes-sur-Mer', 'dept': '06', 'main': false},
-      {'name': 'Fréjus', 'dept': '83', 'main': true},
-      {'name': 'Saint-Raphaël', 'dept': '83', 'main': false},
-      {'name': 'Toulon', 'dept': '83', 'main': true},
-      {'name': 'Hyères', 'dept': '83', 'main': false},
-    ];
-    
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 40),
-      padding: const EdgeInsets.symmetric(vertical: 60),
+      margin: const EdgeInsets.symmetric(vertical: 30),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 40 : 50, horizontal: 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [
-            kPrimaryBlue.withOpacity(0.03),
-            const Color(0xFF7C4DFF).withOpacity(0.03),
+            kDarkBlue.withOpacity(isDark ? 0.3 : 1.0),
+            kPrimaryBlue.withOpacity(isDark ? 0.2 : 0.9),
           ],
         ),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                _buildSectionTitle(context,
-                  'Zones d\'intervention',
-                  'Climatisation et plomberie dans les Alpes-Maritimes (06) et le Var (83)',
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Column(
+            children: [
+              // Titre
+              const Icon(Icons.map_outlined, color: Colors.white, size: 36),
+              const SizedBox(height: 12),
+              Text(
+                'Zone d\'intervention',
+                style: TextStyle(
+                  fontSize: isMobile ? 22 : 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                const SizedBox(height: 48),
-                
-                // ==================== CARTE GOOGLE MAPS TERRAIN ====================
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: isDark 
-                            ? Colors.black.withOpacity(0.3) 
-                            : kPrimaryBlue.withOpacity(0.15),
-                        blurRadius: 25,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      // En-tête avec badges départements
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [kDarkBlue, kPrimaryBlue],
-                          ),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                          ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Nous intervenons dans tout le 06 et le 83',
+                style: TextStyle(
+                  fontSize: isMobile ? 14 : 16,
+                  color: Colors.white.withOpacity(0.85),
+                ),
+              ),
+              const SizedBox(height: 28),
+              
+              // 2 Badges départements côte à côte
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 16,
+                runSpacing: 12,
+                children: [
+                  // Badge Alpes-Maritimes
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: kPrimaryBlue.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.location_on, color: kPrimaryBlue, size: 22),
+                        ),
+                        const SizedBox(width: 12),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Badge 06
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.location_on, color: Colors.white, size: 18),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    'Alpes-Maritimes (06)',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            // Séparateur
-                            Container(
-                              width: 2,
-                              height: 30,
-                              color: Colors.white.withOpacity(0.3),
-                            ),
-                            const SizedBox(width: 16),
-                            // Badge 83
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: kAccentOrange.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.location_on, color: Colors.white, size: 18),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    'Var (83)',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      // Carte Google Maps Terrain (taille réduite)
-                      ClipRRect(
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: isMobile ? 200 : 250,
-                          child: HtmlElementView(
-                            viewType: 'google-map-zones-iframe',
-                            onPlatformViewCreated: (int viewId) {
-                              // Carte créée
-                            },
-                          ),
-                        ),
-                      ),
-                      
-                      // Bloc inférieur avec vignettes de villes
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: isDark 
-                              ? colorScheme.surfaceVariant.withOpacity(0.5)
-                              : Colors.white,
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(24),
-                            bottomRight: Radius.circular(24),
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            // Titre
                             Text(
-                              'Nos principales zones d\'intervention',
+                              'Alpes-Maritimes',
                               style: TextStyle(
-                                fontSize: 16,
+                                color: kDarkBlue,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? colorScheme.onSurface : kDarkBlue,
+                                fontSize: 15,
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            
-                            // Grille de villes
-                            Wrap(
-                              alignment: WrapAlignment.center,
-                              spacing: 12,
-                              runSpacing: 12,
-                              children: cities.map((city) {
-                                final is06 = city['dept'] == '06';
-                                final isMain = city['main'] == true;
-                                final accentColor = is06 ? kPrimaryBlue : kAccentOrange;
-                                
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: isMain 
-                                        ? accentColor.withOpacity(0.15)
-                                        : (isDark ? colorScheme.surface : Colors.grey.shade100),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: accentColor.withOpacity(isMain ? 0.4 : 0.2),
-                                      width: isMain ? 2 : 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: accentColor,
-                                        size: isMain ? 18 : 14,
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        city['name'] as String,
-                                        style: TextStyle(
-                                          color: isDark ? colorScheme.onSurface : kDarkBlue,
-                                          fontWeight: isMain ? FontWeight.bold : FontWeight.w500,
-                                          fontSize: isMain ? 14 : 13,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                        decoration: BoxDecoration(
-                                          color: accentColor.withOpacity(0.2),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: Text(
-                                          city['dept'] as String,
-                                          style: TextStyle(
-                                            color: accentColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                            
-                            const SizedBox(height: 20),
-                            
-                            // Badge "Et plus encore"
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [kDarkBlue, kPrimaryBlue],
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: kPrimaryBlue.withOpacity(0.3),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.add_location_alt, color: Colors.white, size: 20),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'Et toutes les communes des Alpes-Maritimes et du Var',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
+                            Text(
+                              'Département 06',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
                               ),
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                  ),
+                  // Badge Var
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: kAccentOrange.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.location_on, color: kAccentOrange, size: 22),
+                        ),
+                        const SizedBox(width: 12),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Var',
+                              style: TextStyle(
+                                color: kDarkBlue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              'Département 83',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 28),
+              
+              // Carrousel de villes animé
+              const _CitiesCarousel(),
+              
+              const SizedBox(height: 28),
+              
+              // Ligne info + bouton
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 24,
+                runSpacing: 12,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle, color: kAccentYellow, size: 18),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Déplacement gratuit',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle, color: kAccentYellow, size: 18),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Devis offert',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => _AzurConfortHomeState.navigateToPage(2),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kAccentYellow,
+                      foregroundColor: Colors.black87,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.phone, size: 18),
+                    label: const Text('Nous contacter', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
