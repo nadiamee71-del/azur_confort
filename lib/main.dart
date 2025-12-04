@@ -7749,6 +7749,12 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               ],
             ),
           ),
+          // Bouton corbeille (effacer conversation)
+          IconButton(
+            onPressed: _clearConversation,
+            icon: const Icon(Icons.delete_outline, color: Colors.white70, size: 22),
+            tooltip: 'Effacer la conversation',
+          ),
           // Bouton fermer
           IconButton(
             onPressed: _toggleChat,
@@ -7757,6 +7763,18 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         ],
       ),
     );
+  }
+
+  // Effacer la conversation
+  void _clearConversation() {
+    setState(() {
+      _messages.clear();
+      // Afficher le message de bienvenue
+      _messages.add(_ChatMessage(
+        text: '👋 Conversation effacée !\n\nComment puis-je vous aider ?',
+        isBot: true,
+      ));
+    });
   }
 
   Widget _buildMessageList() {
