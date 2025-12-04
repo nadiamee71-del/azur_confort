@@ -4121,8 +4121,8 @@ class _AProposPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: 60,
+        horizontal: isMobile ? 20 : 60,
+        vertical: 32, // RÉDUIT de 60 à 32
       ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -4131,31 +4131,32 @@ class _AProposPage extends StatelessWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
+          constraints: const BoxConstraints(maxWidth: 700),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 'Prêt à améliorer votre confort ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: isMobile ? 20 : 24, // RÉDUIT
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10), // RÉDUIT
               Text(
                 'Contactez-nous pour un devis gratuit et personnalisé',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: isMobile ? 13 : 14, // RÉDUIT
                   color: Colors.white.withOpacity(0.85),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 20), // RÉDUIT
               Wrap(
-                spacing: 16,
-                runSpacing: 16,
+                spacing: 12,
+                runSpacing: 12,
                 alignment: WrapAlignment.center,
                 children: [
                   ElevatedButton.icon(
@@ -4163,22 +4164,30 @@ class _AProposPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: kDarkBlue,
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 20 : 28, 
+                        vertical: isMobile ? 12 : 14,
+                      ), // RÉDUIT
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    icon: const Icon(Icons.phone),
-                    label: const Text('Appeler maintenant', style: TextStyle(fontWeight: FontWeight.bold)),
+                    icon: Icon(Icons.phone, size: isMobile ? 18 : 20),
+                    label: Text('Appeler maintenant', 
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 13 : 14)),
                   ),
                   OutlinedButton.icon(
                     onPressed: () => _AzurConfortHomeState.navigateToPage(2),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white, width: 2),
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      side: const BorderSide(color: Colors.white, width: 1.5),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 20 : 28, 
+                        vertical: isMobile ? 12 : 14,
+                      ), // RÉDUIT
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    icon: const Icon(Icons.mail),
-                    label: const Text('Demander un devis', style: TextStyle(fontWeight: FontWeight.bold)),
+                    icon: Icon(Icons.mail, size: isMobile ? 18 : 20),
+                    label: Text('Demander un devis', 
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 13 : 14)),
                   ),
                 ],
               ),
