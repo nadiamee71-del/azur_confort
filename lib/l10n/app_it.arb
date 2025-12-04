@@ -19,6 +19,8 @@
   "servicePac": "Pompe di calore",
   "serviceChauffage": "Riscaldamento",
   "servicePlomberie": "Idraulica",
+  "serviceElectricite": "Elettricità",
+  "electriciteDesc": "Installazione, ristrutturazione e riparazione elettrica per privati e professionisti.",
   "climatisationDesc": "Installazione, manutenzione e riparazione di sistemi di climatizzazione per privati e professionisti.",
   "frigoristeDesc": "Esperto in refrigerazione commerciale e industriale: celle frigorifere, vetrine refrigerate, attrezzature frigorifere.",
   "pacDesc": "Soluzioni ecologiche ed economiche per riscaldare e rinfrescare la vostra casa tutto l'anno.",

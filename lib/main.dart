@@ -2042,7 +2042,7 @@ class _AccueilPage extends StatelessWidget {
             children: [
               // Titre SEO H2
               Text(
-                'Artisan climatisation, pompe à chaleur et plomberie – Alpes-Maritimes (06) & Var (83)',
+                'Artisan climatisation, pompe à chaleur, plomberie et électricité – Alpes-Maritimes (06) & Var (83)',
                 style: textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onSurface,
@@ -2053,7 +2053,7 @@ class _AccueilPage extends StatelessWidget {
               
               // Paragraphe 1 - Zone d'intervention et services
               Text(
-                'Azur Confort intervient dans toutes les Alpes-Maritimes (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton…) et dans le Var (Fréjus, Saint-Raphaël, Toulon, Hyères…). L\'entreprise est spécialisée dans l\'installation, l\'entretien et le dépannage de climatisations mono-split et multi-split, pompes à chaleur air-air et air-eau, systèmes de chauffage domestique et travaux de plomberie (rénovation de salle de bain, recherche de fuites, remplacement de robinetterie, dépannage d\'urgence).',
+                'Azur Confort intervient dans toutes les Alpes-Maritimes (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton…) et dans le Var (Fréjus, Saint-Raphaël, Toulon, Hyères…). L\'entreprise est spécialisée dans l\'installation, l\'entretien et le dépannage de climatisations mono-split et multi-split, pompes à chaleur air-air et air-eau, systèmes de chauffage domestique, travaux de plomberie (rénovation de salle de bain, recherche de fuites, remplacement de robinetterie) et travaux d\'électricité (installation de tableaux électriques, mise aux normes, dépannage électrique d\'urgence).',
                 style: textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   height: 1.7,
@@ -2063,7 +2063,7 @@ class _AccueilPage extends StatelessWidget {
               
               // Paragraphe 2 - Avantages et accompagnement
               Text(
-                'En choisissant Azur Confort, vous bénéficiez d\'un artisan frigoriste et plombier chauffagiste de proximité, à l\'écoute de vos besoins. Nous vous accompagnons dans le choix du matériel, l\'installation de clim réversible dans le 06 et le 83, la mise en service, l\'entretien annuel de climatisation et de pompe à chaleur, et le dépannage climatisation et plomberie. L\'objectif : garantir votre confort thermique toute l\'année, avec des interventions rapides, des conseils personnalisés et un travail soigné.',
+                'Azur Confort vous accompagne pour vos projets de climatisation, pompes à chaleur, chauffage, plomberie et électricité, avec une intervention rapide dans le 06 et le 83. Un seul interlocuteur pour l\'ensemble de vos installations thermiques et électriques. L\'objectif : garantir votre confort toute l\'année, avec des interventions rapides, des conseils personnalisés et un travail soigné par un électricien pour particuliers et professionnels.',
                 style: textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   height: 1.7,
@@ -2082,8 +2082,9 @@ class _AccueilPage extends StatelessWidget {
                   _buildSeoTag(context, 'Pompe à chaleur air-eau'),
                   _buildSeoTag(context, 'Artisan frigoriste'),
                   _buildSeoTag(context, 'Plombier chauffagiste'),
-                  _buildSeoTag(context, 'Dépannage clim 06'),
-                  _buildSeoTag(context, 'Entretien PAC 83'),
+                  _buildSeoTag(context, 'Électricien 06 83'),
+                  _buildSeoTag(context, 'Dépannage électrique'),
+                  _buildSeoTag(context, 'Mise aux normes électrique'),
                 ],
               ),
             ],
@@ -2306,6 +2307,25 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
         'Chauffe-eau / cumulus',
       ],
       imagePath: 'assets/images/service_plomberie.png',
+    ),
+    // ============================================================
+    // SERVICE ÉLECTRICITÉ - Nouveau service ajouté
+    // ============================================================
+    _ServiceData(
+      id: 'electricite',
+      title: 'Électricité',
+      icon: Icons.electrical_services,
+      color: kAccentYellow,
+      description: 'Azur Confort intervient pour tous vos travaux d\'électricité dans les Alpes-Maritimes (06) et le Var (83) : installation de tableaux électriques, rénovation complète, mise aux normes, ajout de prises et points lumineux, recherche de panne et dépannage d\'urgence. Nous accompagnons particuliers et professionnels pour sécuriser leurs installations et améliorer leur confort au quotidien.',
+      prestations: [
+        'Installation et remplacement de tableaux électriques',
+        'Mise aux normes et sécurisation des installations',
+        'Ajout de prises, interrupteurs et points lumineux',
+        'Dépannage électrique d\'urgence (panne, court-circuit)',
+        'Éclairage intérieur et extérieur',
+        'Diagnostic et recherche de panne',
+      ],
+      imagePath: 'assets/images/service_electricite.jpg',
     ),
   ];
 

@@ -66,6 +66,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get servicePlomberie => 'Plomberie';
 
   @override
+  String get serviceElectricite => 'Électricité';
+
+  @override
+  String get electriciteDesc =>
+      'Installation, rénovation et dépannage électrique pour particuliers et professionnels.';
+
+  @override
   String get climatisationDesc =>
       'Installation, entretien et dépannage de systèmes de climatisation pour particuliers et professionnels.';
 

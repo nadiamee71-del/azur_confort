@@ -19,6 +19,8 @@
   "servicePac": "Heat Pumps",
   "serviceChauffage": "Heating",
   "servicePlomberie": "Plumbing",
+  "serviceElectricite": "Electricity",
+  "electriciteDesc": "Electrical installation, renovation and repair for individuals and professionals.",
   "climatisationDesc": "Installation, maintenance and repair of air conditioning systems for individuals and professionals.",
   "frigoristeDesc": "Expert in commercial and industrial refrigeration: cold rooms, refrigerated displays, refrigeration equipment.",
   "pacDesc": "Ecological and economical solutions to heat and cool your home all year round.",

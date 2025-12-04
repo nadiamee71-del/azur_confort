@@ -96,6 +96,7 @@ flutter:
     - assets/images/service_pac.jpg
     - assets/images/service_chauffage.png
     - assets/images/service_plomberie.png
+    - assets/images/service_electricite.jpg
     - assets/images/chatbot_mascot.png
     - assets/images/contact_hero.png
 

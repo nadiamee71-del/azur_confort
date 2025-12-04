@@ -19,6 +19,8 @@
   "servicePac": "Wärmepumpen",
   "serviceChauffage": "Heizung",
   "servicePlomberie": "Sanitär",
+  "serviceElectricite": "Elektrik",
+  "electriciteDesc": "Elektroinstallation, Renovierung und Reparatur für Privat- und Geschäftskunden.",
   "climatisationDesc": "Installation, Wartung und Reparatur von Klimaanlagen für Privat- und Geschäftskunden.",
   "frigoristeDesc": "Experte für gewerbliche und industrielle Kältetechnik: Kühlräume, Kühlvitrinen, Kälteanlagen.",
   "pacDesc": "Ökologische und wirtschaftliche Lösungen zum Heizen und Kühlen Ihres Hauses das ganze Jahr über.",

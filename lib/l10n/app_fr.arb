@@ -92,6 +92,16 @@
     "description": "Service plomberie"
   },
   
+  "serviceElectricite": "Électricité",
+  "@serviceElectricite": {
+    "description": "Service électricité"
+  },
+  
+  "electriciteDesc": "Installation, rénovation et dépannage électrique pour particuliers et professionnels.",
+  "@electriciteDesc": {
+    "description": "Description électricité"
+  },
+  
   "climatisationDesc": "Installation, entretien et dépannage de systèmes de climatisation pour particuliers et professionnels.",
   "@climatisationDesc": {
     "description": "Description climatisation"

@@ -19,6 +19,8 @@
   "servicePac": "Bombas de calor",
   "serviceChauffage": "Calefacción",
   "servicePlomberie": "Fontanería",
+  "serviceElectricite": "Electricidad",
+  "electriciteDesc": "Instalación, renovación y reparación eléctrica para particulares y profesionales.",
   "climatisationDesc": "Instalación, mantenimiento y reparación de sistemas de climatización para particulares y profesionales.",
   "frigoristeDesc": "Experto en frío comercial e industrial: cámaras frigoríficas, vitrinas refrigeradas, equipos frigoríficos.",
   "pacDesc": "Soluciones ecológicas y económicas para calentar y refrescar su hogar durante todo el año.",

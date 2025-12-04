@@ -212,6 +212,18 @@ abstract class AppLocalizations {
   /// **'Plomberie'**
   String get servicePlomberie;
 
+  /// Service électricité
+  ///
+  /// In fr, this message translates to:
+  /// **'Électricité'**
+  String get serviceElectricite;
+
+  /// Description électricité
+  ///
+  /// In fr, this message translates to:
+  /// **'Installation, rénovation et dépannage électrique pour particuliers et professionnels.'**
+  String get electriciteDesc;
+
   /// Description climatisation
   ///
   /// In fr, this message translates to:
