@@ -3437,7 +3437,8 @@ class _AProposPage extends StatelessWidget {
           // Nos valeurs
           _buildCoreValues(context, isMobile),
           // Call to action
-          _buildCallToAction(isMobile),
+          _buildCallToAction(context, isMobile),
+          const SizedBox(height: 40),
           // FOOTER UNIFIÉ
           const AppFooter(),
         ],
@@ -4117,83 +4118,105 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCallToAction(bool isMobile) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 20 : 60,
-        vertical: 32, // RÉDUIT de 60 à 32
-      ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [kDarkBlue, kPrimaryBlue],
+  Widget _buildCallToAction(BuildContext context, bool isMobile) {
+    final textTheme = Theme.of(context).textTheme;
+    
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 40),
+      child: Container(
+        padding: EdgeInsets.all(isMobile ? 20 : 28),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [kDarkBlue, kPrimaryBlue],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: kPrimaryBlue.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 700),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Prêt à améliorer votre confort ?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: isMobile ? 20 : 24, // RÉDUIT
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 10), // RÉDUIT
-              Text(
-                'Contactez-nous pour un devis gratuit et personnalisé',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: isMobile ? 13 : 14, // RÉDUIT
-                  color: Colors.white.withOpacity(0.85),
-                ),
-              ),
-              const SizedBox(height: 20), // RÉDUIT
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
+        child: isMobile
+            // VERSION MOBILE - Colonne
+            ? Column(
                 children: [
+                  Text(
+                    'Prêt à améliorer votre confort ?',
+                    textAlign: TextAlign.center,
+                    style: textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Devis gratuit et intervention rapide dans le 06 et le 83',
+                    textAlign: TextAlign.center,
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: launchPhone,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: kDarkBlue,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 20 : 28, 
-                        vertical: isMobile ? 12 : 14,
-                      ), // RÉDUIT
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: kAccentYellow,
+                      foregroundColor: Colors.black87,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    icon: Icon(Icons.phone, size: isMobile ? 18 : 20),
-                    label: Text('Appeler maintenant', 
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 13 : 14)),
+                    icon: const Icon(Icons.phone, size: 18),
+                    label: const Text('Appeler', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  OutlinedButton.icon(
-                    onPressed: () => _AzurConfortHomeState.navigateToPage(2),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white, width: 1.5),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 20 : 28, 
-                        vertical: isMobile ? 12 : 14,
-                      ), // RÉDUIT
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ],
+              )
+            // VERSION DESKTOP - Row comme "Besoin d'un artisan de confiance"
+            : Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Prêt à améliorer votre confort ?',
+                          style: textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Devis gratuit et intervention rapide dans le 06 et le 83',
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                        ),
+                      ],
                     ),
-                    icon: Icon(Icons.mail, size: isMobile ? 18 : 20),
-                    label: Text('Demander un devis', 
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: isMobile ? 13 : 14)),
+                  ),
+                  const SizedBox(width: 24),
+                  ElevatedButton.icon(
+                    onPressed: launchPhone,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kAccentYellow,
+                      foregroundColor: Colors.black87,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.phone),
+                    label: const Text('Appeler', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
