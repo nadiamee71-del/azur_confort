@@ -2421,7 +2421,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
         'Groupes froids',
         'Maintenance préventive',
       ],
-      imagePath: 'assets/images/service_frigoriste.png',
+      imagePath: 'assets/images/service_frigoriste_new.png',
     ),
     _ServiceData(
       id: 'pac',
@@ -2436,7 +2436,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
         'Entretien annuel PAC',
         'Dépannage et SAV',
       ],
-      imagePath: 'assets/images/service_pac.jpg',
+      imagePath: 'assets/images/service_pac_new.png',
     ),
     _ServiceData(
       id: 'chauffage',
@@ -2485,7 +2485,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
         'Éclairage intérieur et extérieur',
         'Diagnostic et recherche de panne',
       ],
-      imagePath: 'assets/images/service_electricite.jpg',
+      imagePath: 'assets/images/service_electricite_new.png',
     ),
   ];
 
@@ -3246,7 +3246,7 @@ class _AProposPage extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             Image.asset(
-              'assets/images/service_pac.jpg',
+              'assets/images/about_hero.png',
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => Container(
                 color: kLightBlue,
@@ -4517,57 +4517,121 @@ class _ContactPageState extends State<_ContactPage> {
   }
 
   Widget _buildInterventionZone(bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    // Villes principales avec leur département
+    final cities = [
+      {'name': 'Nice', 'dept': '06'},
+      {'name': 'Cannes', 'dept': '06'},
+      {'name': 'Antibes', 'dept': '06'},
+      {'name': 'Grasse', 'dept': '06'},
+      {'name': 'Menton', 'dept': '06'},
+      {'name': 'Cagnes-sur-Mer', 'dept': '06'},
+      {'name': 'Fréjus', 'dept': '83'},
+      {'name': 'Saint-Raphaël', 'dept': '83'},
+    ];
+    
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: 50,
+        horizontal: isMobile ? 20 : 80,
+        vertical: 60,
       ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [kDarkBlue, kPrimaryBlue],
+      decoration: BoxDecoration(
+        color: isDark ? colorScheme.surface : const Color(0xFFF8FAFC),
+        border: Border(
+          top: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
         ),
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
+          constraints: const BoxConstraints(maxWidth: 1100),
           child: Column(
             children: [
-              const Icon(Icons.location_on, color: kAccentYellow, size: 36),
-              const SizedBox(height: 16),
-              const Text(
+              // En-tête
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: kPrimaryBlue.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.location_on, color: kPrimaryBlue, size: 32),
+              ),
+              const SizedBox(height: 20),
+              Text(
                 'Zone d\'intervention',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: isDark ? colorScheme.onSurface : kDarkBlue,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Text(
-                'Nous intervenons sur toute la Côte d\'Azur',
+                'Alpes-Maritimes (06) & Var (83)',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white.withOpacity(0.85),
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 28),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
-                children: [
-                  _buildZoneChip('Nice'),
-                  _buildZoneChip('Cannes'),
-                  _buildZoneChip('Antibes'),
-                  _buildZoneChip('Grasse'),
-                  _buildZoneChip('Fréjus'),
-                  _buildZoneChip('Saint-Raphaël'),
-                  _buildZoneChip('Menton'),
-                  _buildZoneChip('Monaco'),
-                  _buildZoneChip('Cagnes-sur-Mer'),
-                  _buildZoneChip('+ tout le 06 & 83'),
-                ],
+              const SizedBox(height: 40),
+              
+              // Grille des villes
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final crossAxisCount = constraints.maxWidth > 800 ? 4 : (constraints.maxWidth > 500 ? 3 : 2);
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 2.5,
+                    ),
+                    itemCount: cities.length,
+                    itemBuilder: (context, index) {
+                      final city = cities[index];
+                      return _buildCityCard(city['name']!, city['dept']!, isDark, colorScheme);
+                    },
+                  );
+                },
+              ),
+              
+              const SizedBox(height: 32),
+              
+              // Badge "Et plus encore"
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [kDarkBlue, kPrimaryBlue],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: kPrimaryBlue.withOpacity(0.3),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.add_location_alt, color: Colors.white, size: 22),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'Et toutes les communes des Alpes-Maritimes et du Var',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -4576,21 +4640,64 @@ class _ContactPageState extends State<_ContactPage> {
     );
   }
 
-  Widget _buildZoneChip(String city) {
+  Widget _buildCityCard(String city, String dept, bool isDark, ColorScheme colorScheme) {
+    final is06 = dept == '06';
+    final accentColor = is06 ? kPrimaryBlue : kAccentOrange;
+    
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
-      ),
-      child: Text(
-        city,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
+        color: isDark ? colorScheme.surfaceVariant : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: accentColor.withOpacity(0.2),
+          width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.location_on_outlined,
+            color: accentColor,
+            size: 18,
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              city,
+              style: TextStyle(
+                color: isDark ? colorScheme.onSurface : kDarkBlue,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: accentColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              dept,
+              style: TextStyle(
+                color: accentColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 11,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -5621,11 +5728,11 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
     return Stack(
       children: [
         // Bulle de bienvenue (avant ouverture)
-        // Mode jour = fond sombre (bleu) | Mode nuit = fond clair (blanc)
+        // Fond BLANC permanent (jour et nuit)
         if (_showWelcome && !_isOpen)
           Positioned(
-            bottom: 100,
-            right: 20,
+            bottom: 70,
+            right: 16,
             child: AnimatedBuilder(
               animation: _bounceAnimation,
               builder: (context, child) {
@@ -5635,36 +5742,19 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 );
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  // Mode jour = fond bleu sombre | Mode nuit = fond blanc
-                  gradient: isDark
-                      ? const LinearGradient(
-                          colors: [Colors.white, Color(0xFFF5F5F5)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                      : const LinearGradient(
-                          colors: [kPrimaryBlue, kDarkBlue],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                  borderRadius: BorderRadius.circular(20),
+                  // Fond BLANC permanent
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isDark ? kPrimaryBlue : kAccentYellow.withOpacity(0.5),
-                    width: 2,
+                    color: kPrimaryBlue.withOpacity(0.3),
+                    width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark 
-                          ? Colors.white.withOpacity(0.3)
-                          : kPrimaryBlue.withOpacity(0.4),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                    BoxShadow(
-                      color: colorScheme.shadow.withOpacity(0.2),
-                      blurRadius: 10,
+                      color: kPrimaryBlue.withOpacity(0.15),
+                      blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -5672,30 +5762,27 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       '👋 Besoin d\'aide ?',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        // Mode jour = texte blanc | Mode nuit = texte sombre
-                        color: isDark ? kDarkBlue : Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                        color: kDarkBlue,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     GestureDetector(
                       onTap: () => setState(() => _showWelcome = false),
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: isDark 
-                              ? kPrimaryBlue.withOpacity(0.2)
-                              : Colors.white.withOpacity(0.2),
+                          color: Colors.grey.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.close, 
-                          size: 14, 
-                          color: isDark ? kDarkBlue : Colors.white,
+                          size: 12, 
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -5708,16 +5795,16 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         // Fenêtre du chatbot
         if (_isOpen)
           Positioned(
-            bottom: 100,
-            right: 20,
+            bottom: 75,
+            right: 16,
             child: _buildChatWindow(),
           ),
         
-        // Bouton flottant avec mascotte
-        // Mode jour = fond sombre | Mode nuit = fond clair
+        // Bouton flottant avec mascotte - COMPACT
+        // Fond BLANC permanent (jour et nuit)
         Positioned(
-          bottom: 20,
-          right: 20,
+          bottom: 16,
+          right: 16,
           child: GestureDetector(
             onTap: _toggleChat,
             child: AnimatedBuilder(
@@ -5729,40 +5816,20 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 );
               },
               child: Container(
-                width: 75,
-                height: 75,
+                width: 52,
+                height: 52,
                 decoration: BoxDecoration(
-                  // Mode jour = fond bleu sombre | Mode nuit = fond blanc
-                  gradient: isDark
-                      ? const LinearGradient(
-                          colors: [Colors.white, Color(0xFFF0F0F0)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                      : const LinearGradient(
-                          colors: [kPrimaryBlue, kDarkBlue],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                  // Fond BLANC permanent
+                  color: Colors.white,
                   shape: BoxShape.circle,
-                  // Bordure adaptative
                   border: Border.all(
-                    color: isDark ? kPrimaryBlue : kAccentYellow,
-                    width: 3,
+                    color: kPrimaryBlue,
+                    width: 2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark 
-                          ? Colors.white.withOpacity(0.4)
-                          : kPrimaryBlue.withOpacity(0.5),
-                      blurRadius: 25,
-                      offset: const Offset(0, 8),
-                    ),
-                    BoxShadow(
-                      color: isDark
-                          ? kPrimaryBlue.withOpacity(0.3)
-                          : kAccentYellow.withOpacity(0.2),
-                      blurRadius: 15,
+                      color: kPrimaryBlue.withOpacity(0.25),
+                      blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -5770,18 +5837,18 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    // Mascotte - plus grande et visible
+                    // Mascotte
                     ClipOval(
                       child: Image.asset(
                         'assets/images/chatbot_mascot.png',
-                        width: 65,
-                        height: 65,
+                        width: 44,
+                        height: 44,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
                           return Icon(
                             _isOpen ? Icons.close : Icons.chat,
                             color: kPrimaryBlue,
-                            size: 36,
+                            size: 24,
                           );
                         },
                       ),
@@ -5792,16 +5859,16 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                         top: -2,
                         right: -2,
                         child: Container(
-                          padding: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
+                            border: Border.all(color: Colors.white, width: 1.5),
                           ),
                           child: const Icon(
                             Icons.close,
                             color: Colors.white,
-                            size: 14,
+                            size: 10,
                           ),
                         ),
                       ),

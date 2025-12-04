@@ -93,12 +93,16 @@ flutter:
     - assets/images/hero_background.png
     - assets/images/service_climatisation.png
     - assets/images/service_frigoriste.png
+    - assets/images/service_frigoriste_new.png
     - assets/images/service_pac.jpg
+    - assets/images/service_pac_new.png
     - assets/images/service_chauffage.png
     - assets/images/service_plomberie.png
     - assets/images/service_electricite.jpg
+    - assets/images/service_electricite_new.png
     - assets/images/chatbot_mascot.png
     - assets/images/contact_hero.png
+    - assets/images/about_hero.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
