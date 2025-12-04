@@ -703,40 +703,55 @@ class _AccueilPage extends StatelessWidget {
             ),
           ),
           
-          // Motifs décoratifs (cercles)
+          // ============================================================
+          // DECOR BACKGROUND ICONS IMPROVED - Motifs décoratifs (cercles)
+          // Très discrets, adaptés au thème jour/nuit
+          // ============================================================
           Positioned(
             top: -100,
             right: -100,
-            child: Container(
-              width: 400,
-              height: 400,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.05),
+            child: Opacity(
+              opacity: 0.04, // DECOR BACKGROUND ICON IMPROVED - très discret
+              child: Container(
+                width: 380,
+                height: 380,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.onSurface, // DECOR BACKGROUND ICON IMPROVED
+                ),
               ),
             ),
           ),
           Positioned(
             bottom: -150,
             left: -150,
-            child: Container(
-              width: 500,
-              height: 500,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.03),
+            child: Opacity(
+              opacity: 0.03, // DECOR BACKGROUND ICON IMPROVED - très discret
+              child: Container(
+                width: 450,
+                height: 450,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.onSurface, // DECOR BACKGROUND ICON IMPROVED
+                ),
               ),
             ),
           ),
           
-          // Flocons décoratifs
-          ...List.generate(8, (i) => Positioned(
-            top: 50.0 + (i * 60),
-            left: (i.isEven ? 50.0 : screenWidth - 100) + (i * 30 % 200),
-            child: Icon(
-              Icons.ac_unit,
-              color: Colors.white.withOpacity(0.1),
-              size: 30 + (i * 5).toDouble(),
+          // ============================================================
+          // DECOR BACKGROUND ICONS IMPROVED - Flocons décoratifs
+          // Icônes très discrètes, adaptées au thème, taille réduite
+          // ============================================================
+          ...List.generate(6, (i) => Positioned( // DECOR BACKGROUND ICON IMPROVED - réduit à 6 icônes
+            top: 60.0 + (i * 70),
+            left: (i.isEven ? 40.0 : screenWidth - 90) + (i * 25 % 180),
+            child: Opacity(
+              opacity: 0.08, // DECOR BACKGROUND ICON IMPROVED - très discret (8%)
+              child: Icon(
+                Icons.ac_unit,
+                color: Theme.of(context).colorScheme.onSurface, // DECOR BACKGROUND ICON IMPROVED
+                size: (25 + (i * 4).toDouble()) * 0.85, // DECOR BACKGROUND ICON IMPROVED - taille réduite
+              ),
             ),
           )),
           
@@ -751,7 +766,7 @@ class _AccueilPage extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 1200),
                 child: isMobile
                     ? _buildHeroContentMobile()
-                    : _buildHeroContentDesktop(),
+                    : _buildHeroContentDesktop(context),
               ),
             ),
           ),
@@ -760,7 +775,7 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroContentDesktop() {
+  Widget _buildHeroContentDesktop(BuildContext context) {
     return Row(
       children: [
         // Texte à gauche
@@ -874,10 +889,10 @@ class _AccueilPage extends StatelessWidget {
             ],
           ),
         ),
-        // Illustration à droite
+        // Illustration à droite - DECOR BACKGROUND ICON IMPROVED
         Expanded(
           flex: 4,
-          child: _buildHeroIllustration(),
+          child: _buildHeroIllustration(context),
         ),
       ],
     );
@@ -1051,53 +1066,66 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroIllustration() {
+  // ============================================================
+  // DECOR BACKGROUND ICON IMPROVED - Illustration Hero
+  // Icônes très discrètes, adaptées au thème jour/nuit
+  // ============================================================
+  Widget _buildHeroIllustration(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(40),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Cercle de fond
-          Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  Colors.white.withOpacity(0.15),
-                  Colors.white.withOpacity(0.05),
-                  Colors.transparent,
-                ],
+          // DECOR BACKGROUND ICON IMPROVED - Cercle de fond très discret
+          Opacity(
+            opacity: 0.12, // DECOR BACKGROUND ICON IMPROVED
+            child: Container(
+              width: 280,
+              height: 280,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    colorScheme.onSurface.withOpacity(0.15), // DECOR BACKGROUND ICON IMPROVED
+                    colorScheme.onSurface.withOpacity(0.05), // DECOR BACKGROUND ICON IMPROVED
+                    Colors.transparent,
+                  ],
+                ),
               ),
             ),
           ),
-          // Icône principale
-          Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.1),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.2),
-                width: 2,
+          // DECOR BACKGROUND ICON IMPROVED - Icône principale très discrète
+          Opacity(
+            opacity: 0.10, // DECOR BACKGROUND ICON IMPROVED
+            child: Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: colorScheme.onSurface.withOpacity(0.08), // DECOR BACKGROUND ICON IMPROVED
+                border: Border.all(
+                  color: colorScheme.onSurface.withOpacity(0.12), // DECOR BACKGROUND ICON IMPROVED
+                  width: 1.5,
+                ),
+              ),
+              child: Icon(
+                Icons.ac_unit,
+                size: 80, // DECOR BACKGROUND ICON IMPROVED - taille réduite
+                color: colorScheme.onSurface.withOpacity(0.15), // DECOR BACKGROUND ICON IMPROVED
               ),
             ),
-            child: const Icon(
-              Icons.ac_unit,
-              size: 100,
-              color: Colors.white,
-            ),
           ),
-          // Icônes orbitales
-          ..._buildOrbitalIcons(),
+          // DECOR BACKGROUND ICON IMPROVED - Icônes orbitales très discrètes
+          ..._buildOrbitalIcons(context),
         ],
       ),
     );
   }
 
-  List<Widget> _buildOrbitalIcons() {
+  // DECOR BACKGROUND ICON IMPROVED - Icônes orbitales
+  List<Widget> _buildOrbitalIcons(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final icons = [
       Icons.thermostat,
       Icons.water_drop,
@@ -1105,26 +1133,26 @@ class _AccueilPage extends StatelessWidget {
       Icons.build,
     ];
     return List.generate(4, (i) {
-      final angle = i * 3.14159 / 2;
       return Positioned(
-        left: 150 + 120 * (i == 0 || i == 3 ? 1 : -1).toDouble(),
-        top: 150 + 120 * (i < 2 ? -1 : 1).toDouble(),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 20,
+        left: 150 + 100 * (i == 0 || i == 3 ? 1 : -1).toDouble(), // DECOR BACKGROUND ICON IMPROVED - rayon réduit
+        top: 150 + 100 * (i < 2 ? -1 : 1).toDouble(), // DECOR BACKGROUND ICON IMPROVED - rayon réduit
+        child: Opacity(
+          opacity: 0.12, // DECOR BACKGROUND ICON IMPROVED - très discret
+          child: Container(
+            padding: const EdgeInsets.all(12), // DECOR BACKGROUND ICON IMPROVED - padding réduit
+            decoration: BoxDecoration(
+              color: colorScheme.onSurface.withOpacity(0.08), // DECOR BACKGROUND ICON IMPROVED
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: colorScheme.onSurface.withOpacity(0.10), // DECOR BACKGROUND ICON IMPROVED
+                width: 1,
               ),
-            ],
-          ),
-          child: Icon(
-            icons[i],
-            color: kPrimaryBlue,
-            size: 28,
+            ),
+            child: Icon(
+              icons[i],
+              color: colorScheme.onSurface.withOpacity(0.20), // DECOR BACKGROUND ICON IMPROVED
+              size: 22, // DECOR BACKGROUND ICON IMPROVED - taille réduite
+            ),
           ),
         ),
       );
