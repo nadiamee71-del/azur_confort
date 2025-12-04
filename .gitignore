@@ -30,7 +30,11 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+# On garde build/web pour Vercel, mais on ignore le reste
+/build/flutter_assets/
+/build/*.dill
+/build/*.dill.track.dill
+/build/82be8cf27aafef9cff620ddb80ada9d1/
 /coverage/
 
 # Symbolication related
