@@ -850,7 +850,7 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
                 onTap: () => _showTrustMessage(context),
                 child: Image.asset(
                   'assets/images/ChatGPT Image 5 déc. 2025, 13_19_35.png',
-                  height: isMobile ? 40 : 50,
+                  height: isMobile ? 50 : 65,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => Row(
                     mainAxisSize: MainAxisSize.min,
