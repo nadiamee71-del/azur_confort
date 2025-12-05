@@ -2194,10 +2194,16 @@ class _AccueilPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 30),
       padding: EdgeInsets.symmetric(vertical: isMobile ? 40 : 50, horizontal: 24),
       decoration: BoxDecoration(
-        color: isDark ? colorScheme.surface : const Color(0xFFF8FAFC),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: isDark
+              ? [colorScheme.surface, colorScheme.surfaceVariant.withOpacity(0.5)]
+              : [kLightBlue.withOpacity(0.5), kLightBlue.withOpacity(0.3)],
+        ),
         border: Border(
-          top: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
-          bottom: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
+          top: BorderSide(color: kPrimaryBlue.withOpacity(0.1)),
+          bottom: BorderSide(color: kPrimaryBlue.withOpacity(0.1)),
         ),
       ),
       child: Center(
@@ -2469,8 +2475,11 @@ class _AccueilPage extends StatelessWidget {
   // ======================== POURQUOI NOUS ========================
   Widget _buildWhyUsSection(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: colorScheme.surface,
+      decoration: BoxDecoration(
+        color: isDark ? colorScheme.surface : kLightBlue.withOpacity(0.4),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
       child: Center(
         child: ConstrainedBox(
@@ -2974,7 +2983,12 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      color: colorScheme.surface,
+      decoration: BoxDecoration(
+        color: isDark ? colorScheme.surface : Colors.white,
+        border: Border(
+          bottom: BorderSide(color: kPrimaryBlue.withOpacity(0.08)),
+        ),
+      ),
       // Padding réduit en haut pour remonter la section
       padding: const EdgeInsets.only(top: 30, bottom: 50),
       child: Column(
