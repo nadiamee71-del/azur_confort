@@ -1489,7 +1489,7 @@ class _AccueilPage extends StatelessWidget {
                   const SizedBox(width: 48),
                   _buildStat('500+', 'Clients satisfaits'),
                   const SizedBox(width: 48),
-                  _buildStat('24h', 'Intervention rapide'),
+                  _buildStat('Rapide', 'Intervention'),
                 ],
               ),
             ],
@@ -1571,7 +1571,7 @@ class _AccueilPage extends StatelessWidget {
           children: [
             _buildStatMobile('10+', 'Ans'),
             _buildStatMobile('500+', 'Clients'),
-            _buildStatMobile('24h', 'Réponse'),
+            _buildStatMobile('Rapide', 'Réponse'),
           ],
         ),
       ],
@@ -1871,8 +1871,8 @@ class _AccueilPage extends StatelessWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1000),
-          child: Column(
-            children: [
+            child: Column(
+              children: [
               // Titre
               const Icon(Icons.map_outlined, color: Colors.white, size: 36),
               const SizedBox(height: 12),
@@ -1903,25 +1903,25 @@ class _AccueilPage extends StatelessWidget {
                   // Badge Alpes-Maritimes
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
+      decoration: BoxDecoration(
+        color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
+        boxShadow: [
+          BoxShadow(
                           color: Colors.black.withOpacity(0.15),
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
                       ],
-                    ),
-                    child: Row(
+            ),
+            child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
+              children: [
+                Container(
                           padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
+                  decoration: BoxDecoration(
                             color: kPrimaryBlue.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(Icons.location_on, color: kPrimaryBlue, size: 22),
                         ),
@@ -1931,15 +1931,15 @@ class _AccueilPage extends StatelessWidget {
                           children: [
                             Text(
                               'Alpes-Maritimes',
-                              style: TextStyle(
+                    style: TextStyle(
                                 color: kDarkBlue,
-                                fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
                             ),
                             Text(
                               'Département 06',
-                              style: TextStyle(
+                    style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 12,
                               ),
@@ -1948,9 +1948,9 @@ class _AccueilPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
               
               const SizedBox(height: 28),
               
@@ -1982,19 +1982,19 @@ class _AccueilPage extends StatelessWidget {
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+              children: [
                       Icon(Icons.check_circle, color: kAccentYellow, size: 18),
-                      const SizedBox(width: 6),
-                      Text(
+                const SizedBox(width: 6),
+                Text(
                         'Devis offert',
-                        style: TextStyle(
+                  style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
                           fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
+                    fontSize: 13,
                   ),
+                ),
+              ],
+            ),
                   ElevatedButton.icon(
                     onPressed: () => _AzurConfortHomeState.navigateToPage(2),
                     style: ElevatedButton.styleFrom(
@@ -2248,7 +2248,7 @@ class _AccueilPage extends StatelessWidget {
                           children: [
                             Expanded(child: _buildWhyUsItem(context, Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
                             const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention sous 24h', kAccentOrange)),
+                            Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention rapide', kAccentOrange)),
                             const SizedBox(width: 24),
                             Expanded(child: _buildWhyUsItem(context, Icons.description, 'Transparence', 'Devis gratuit détaillé', kPrimaryBlue)),
                             const SizedBox(width: 24),
@@ -2261,7 +2261,7 @@ class _AccueilPage extends StatelessWidget {
                               children: [
                                 Expanded(child: _buildWhyUsItem(context, Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
                                 const SizedBox(width: 16),
-                                Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention 24h', kAccentOrange)),
+                                Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention rapide', kAccentOrange)),
                               ],
                             ),
                             const SizedBox(height: 16),
@@ -2479,7 +2479,7 @@ class _AccueilPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+              Text(
                             'Besoin d\'un artisan de confiance ?',
                             style: textTheme.titleLarge?.copyWith(
                               color: Colors.white,
@@ -2491,11 +2491,11 @@ class _AccueilPage extends StatelessWidget {
                             'Devis gratuit et intervention rapide dans les Alpes-Maritimes (06)',
                             style: textTheme.bodyMedium?.copyWith(
                               color: Colors.white.withOpacity(0.9),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                ),
+              ),
+            ],
+          ),
+        ),
                     if (!isMobile) ...[
                       const SizedBox(width: 24),
                       ElevatedButton.icon(
@@ -2711,6 +2711,11 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
   void initState() {
     super.initState();
     _tabController = TabController(length: _services.length, vsync: this);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -2760,57 +2765,72 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
           ),
           const SizedBox(height: 24),
           
-          // TabBar - Onglets cliquables
+          // TabBar - Onglets cliquables - Centré
           Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: isDark ? colorScheme.surfaceVariant : kLightBlue,
+                color: isDark ? colorScheme.surfaceVariant : kLightBlue,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
                   padding: const EdgeInsets.all(6),
-                  labelPadding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 20),
-                  indicator: BoxDecoration(
-                    color: colorScheme.surface,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: _services.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final service = entry.value;
+                          final isSelected = _tabController.index == index;
+                          return GestureDetector(
+                            onTap: () => _tabController.animateTo(index),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              margin: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 6),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isMobile ? 12 : 18,
+                                vertical: isMobile ? 10 : 14,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected ? colorScheme.surface : Colors.transparent,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
+                                boxShadow: isSelected ? [
                       BoxShadow(
                         color: kPrimaryBlue.withOpacity(0.2),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
-                    ],
-                  ),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
-                  labelColor: kDarkBlue,
-                  unselectedLabelColor: kPrimaryBlue.withOpacity(0.7),
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                  unselectedLabelStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                  tabs: _services.map((service) {
-                    return Tab(
-                      height: isMobile ? 50 : 56,
+                                ] : null,
+                              ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(service.icon, size: isMobile ? 18 : 22),
+                                  Icon(
+                                    service.icon, 
+                                    size: isMobile ? 18 : 22,
+                                    color: isSelected ? kDarkBlue : kPrimaryBlue.withOpacity(0.7),
+                                  ),
                           const SizedBox(width: 8),
-                          Text(service.title),
-                        ],
+                                  Text(
+                                    service.title,
+                                    style: TextStyle(
+                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                      fontSize: 14,
+                                      color: isSelected ? kDarkBlue : kPrimaryBlue.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ],
+                              ),
                       ),
                     );
                   }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -3568,7 +3588,7 @@ class _AProposPage extends StatelessWidget {
           spacing: 24,
           runSpacing: 16,
           children: [
-            _buildMiniFeature(context, Icons.schedule, 'Intervention 24h'),
+            _buildMiniFeature(context, Icons.schedule, 'Réponse dans la journée'),
             _buildMiniFeature(context, Icons.thumb_up, 'Devis gratuit'),
             _buildMiniFeature(context, Icons.eco, 'Solutions éco'),
           ],
@@ -3623,7 +3643,7 @@ class _AProposPage extends StatelessWidget {
                       const SizedBox(height: 24),
                       _buildNumberCard('500+', 'Clients satisfaits', Icons.people),
                       const SizedBox(height: 24),
-                      _buildNumberCard('24h', 'Délai d\'intervention', Icons.flash_on),
+                      _buildNumberCard('Rapide', 'Intervention', Icons.flash_on),
                       const SizedBox(height: 24),
                       _buildNumberCard('100%', 'Devis gratuits', Icons.description),
                     ],
@@ -3632,7 +3652,7 @@ class _AProposPage extends StatelessWidget {
                     children: [
                       Expanded(child: _buildNumberCard('10+', 'Années d\'expérience', Icons.calendar_today)),
                       Expanded(child: _buildNumberCard('500+', 'Clients satisfaits', Icons.people)),
-                      Expanded(child: _buildNumberCard('24h', 'Délai d\'intervention', Icons.flash_on)),
+                      Expanded(child: _buildNumberCard('Rapide', 'Intervention', Icons.flash_on)),
                       Expanded(child: _buildNumberCard('100%', 'Devis gratuits', Icons.description)),
                     ],
                   ),
@@ -3993,7 +4013,7 @@ class _AProposPage extends StatelessWidget {
         padding: EdgeInsets.all(isMobile ? 20 : 28),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [kDarkBlue, kPrimaryBlue],
+          colors: [kDarkBlue, kPrimaryBlue],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -4009,20 +4029,20 @@ class _AProposPage extends StatelessWidget {
         child: isMobile
             // VERSION MOBILE - Colonne
             ? Column(
-                children: [
+            children: [
                   Text(
-                    'Prêt à améliorer votre confort ?',
-                    textAlign: TextAlign.center,
+                'Prêt à améliorer votre confort ?',
+                textAlign: TextAlign.center,
                     style: textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
+                  color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
-                    ),
-                  ),
+                ),
+              ),
                   const SizedBox(height: 8),
-                  Text(
+              Text(
                     'Devis gratuit et intervention rapide dans les Alpes-Maritimes (06)',
-                    textAlign: TextAlign.center,
+                textAlign: TextAlign.center,
                     style: textTheme.bodyMedium?.copyWith(
                       color: Colors.white.withOpacity(0.9),
                     ),
@@ -4063,9 +4083,9 @@ class _AProposPage extends StatelessWidget {
                           style: textTheme.bodyMedium?.copyWith(
                             color: Colors.white.withOpacity(0.9),
                           ),
-                        ),
-                      ],
-                    ),
+              ),
+            ],
+          ),
                   ),
                   const SizedBox(width: 24),
                   ElevatedButton.icon(
@@ -4082,7 +4102,7 @@ class _AProposPage extends StatelessWidget {
                     label: const Text('Appeler', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
-              ),
+        ),
       ),
     );
   }
@@ -4847,7 +4867,7 @@ class _ContactPageState extends State<_ContactPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
-                  children: [
+                children: [
                     const Text(
                       'Nos villes d\'intervention',
                       style: TextStyle(
@@ -4915,10 +4935,10 @@ class _ContactPageState extends State<_ContactPage> {
           ),
           const SizedBox(width: 4),
           Text(
-            city,
+        city,
             style: TextStyle(
               color: isDark ? colorScheme.onSurface : kDarkBlue,
-              fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w500,
               fontSize: 12,
             ),
           ),
@@ -5092,8 +5112,8 @@ class _GoogleMapSection extends StatelessWidget {
                               style: TextStyle(
                                 color: kPrimaryBlue,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
+          fontSize: 14,
+        ),
                             ),
                           ],
                         ),
@@ -6217,13 +6237,13 @@ https://ec.europa.eu/consumers/odr''',
                 Expanded(
                   child: Text(
                     'Ces informations sont mises à jour régulièrement pour garantir leur conformité avec la réglementation en vigueur.',
-                    style: TextStyle(
+        style: TextStyle(
                       fontSize: 13,
                       height: 1.5,
                       color: colorScheme.onSurface.withOpacity(0.8),
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
+          fontStyle: FontStyle.italic,
+        ),
+      ),
                 ),
               ],
             ),
@@ -6325,7 +6345,7 @@ https://ec.europa.eu/consumers/odr''',
                       padding: const EdgeInsets.all(24),
                       child: SelectableText(
                         section.content,
-                        style: TextStyle(
+        style: TextStyle(
                           fontSize: 14,
                           height: 1.8,
                           color: colorScheme.onSurface.withOpacity(0.85),
@@ -6855,7 +6875,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         case 'faq_delai':
           response = '⏱️ **Délai d\'intervention**\n\n'
               '• **Urgences :** intervention le jour même si possible\n'
-              '• **Dépannage standard :** sous 24 à 48h\n'
+              '• **Dépannage standard :** réponse dans la journée\n'
               '• **Installation :** selon planning, généralement sous 1 semaine\n\n'
               'Nous faisons notre maximum pour vous dépanner rapidement !';
           subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
@@ -6951,7 +6971,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
           launchEmail();
           response = '📧 **Email envoyé**\n\n'
               'Adresse : **azurconfort21@gmail.com**\n\n'
-              'Décrivez votre projet en détail, nous vous répondons sous 24h ouvrées.';
+              'Décrivez votre projet en détail, nous vous répondons dans la journée.';
           subOptions = [_QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back)];
           break;
           
@@ -7675,7 +7695,7 @@ const List<_FaqEntry> kFaqDatabase = [
         '• Conseil sur le dimensionnement\n'
         '• Installation aux normes\n'
         '• Mise en service et essais\n\n'
-        '💰 Devis gratuit sous 24-48h',
+        '💰 Devis gratuit - Réponse dans la journée',
   ),
   _FaqEntry(
     category: 'Climatisation',
