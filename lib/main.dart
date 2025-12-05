@@ -694,69 +694,27 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               ),
             ),
             const SizedBox(width: 14),
-            // Logo cliquable avec message de confiance
-            Tooltip(
-              message: 'Vous êtes entre de bonnes mains 🤝',
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () => _AzurConfortHomeState.navigateToPage(0), // Retour à l'accueil
-                  child: Row(
+            // Logo image cliquable
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => _AzurConfortHomeState.navigateToPage(0), // Retour à l'accueil
+                child: Image.asset(
+                  'assets/images/logo Azur Confort .png',
+                  height: isMobile ? 40 : 50,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Logo image
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/images/ChatGPT Image 5 déc. 2025, 13_19_35.png',
-                          height: isMobile ? 40 : 50,
-                          width: isMobile ? 40 : 50,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            height: isMobile ? 40 : 50,
-                            width: isMobile ? 40 : 50,
-                            decoration: BoxDecoration(
-                              color: kPrimaryBlue.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(Icons.home_repair_service, color: kPrimaryBlue),
-                          ),
+                      Icon(Icons.home_repair_service, color: kPrimaryBlue, size: isMobile ? 24 : 28),
+                      const SizedBox(width: 8),
+                      Text(
+                        'AZUR CONFORT',
+                        style: TextStyle(
+                          color: kDarkBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: isMobile ? 14 : 18,
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      // Texte Azur Confort
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ShaderMask(
-                            shaderCallback: (bounds) => LinearGradient(
-                              colors: widget.isDarkMode 
-                                  ? [kDarkTextPrimary, kPrimaryBlue]
-                                  : [kDarkBlue, kPrimaryBlue],
-                  ).createShader(bounds),
-                  child: Text(
-                    'AZUR',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                                fontSize: isMobile ? 14 : 18,
-                      letterSpacing: 2,
-                      height: 1,
-                    ),
-                  ),
-                ),
-                Text(
-                  'CONFORT',
-                  style: TextStyle(
-                    color: kAccentOrange,
-                    fontWeight: FontWeight.w600,
-                              fontSize: isMobile ? 9 : 11,
-                    letterSpacing: 3,
-                    height: 1.2,
-                  ),
-                ),
-              ],
                       ),
                     ],
                   ),
