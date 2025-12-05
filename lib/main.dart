@@ -4245,8 +4245,8 @@ class _ContactPageState extends State<_ContactPage> {
               ),
             ),
           ),
-          // Zone d'intervention
-          _buildInterventionZone(isMobile),
+          // Nos Engagements
+          _buildEngagements(isMobile),
           // FOOTER UNIFIÉ
           const AppFooter(),
         ],
@@ -4788,24 +4788,36 @@ class _ContactPageState extends State<_ContactPage> {
     );
   }
 
-  Widget _buildInterventionZone(bool isMobile) {
+  // ==================== NOS ENGAGEMENTS (Page Accueil) ====================
+  Widget _buildEngagements(bool isMobile) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    // Villes principales - Alpes-Maritimes (06) uniquement
-    final cities = [
-      {'name': 'Nice', 'dept': '06'},
-      {'name': 'Cannes', 'dept': '06'},
-      {'name': 'Antibes', 'dept': '06'},
-      {'name': 'Grasse', 'dept': '06'},
-      {'name': 'Menton', 'dept': '06'},
-      {'name': 'Cagnes-sur-Mer', 'dept': '06'},
-      {'name': 'Mandelieu', 'dept': '06'},
-      {'name': 'Mougins', 'dept': '06'},
-      {'name': 'Valbonne', 'dept': '06'},
-      {'name': 'Vence', 'dept': '06'},
-      {'name': 'Saint-Laurent-du-Var', 'dept': '06'},
-      {'name': 'Villeneuve-Loubet', 'dept': '06'},
+    final engagements = [
+      {
+        'icon': Icons.description_outlined,
+        'title': 'Devis gratuit',
+        'description': 'Sans engagement, transparent et détaillé',
+        'color': kPrimaryBlue,
+      },
+      {
+        'icon': Icons.flash_on,
+        'title': 'Intervention rapide',
+        'description': 'Réponse dans la journée',
+        'color': kAccentOrange,
+      },
+      {
+        'icon': Icons.euro,
+        'title': 'Prix transparents',
+        'description': 'Pas de surprise, tout est clair',
+        'color': kAccentYellow,
+      },
+      {
+        'icon': Icons.build_outlined,
+        'title': 'Travail soigné',
+        'description': 'Artisan qualifié et professionnel',
+        'color': kPrimaryBlue,
+      },
     ];
     
     return Container(
@@ -4832,11 +4844,11 @@ class _ContactPageState extends State<_ContactPage> {
                   color: kPrimaryBlue.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.location_on, color: kPrimaryBlue, size: 32),
+                child: const Icon(Icons.verified_outlined, color: kPrimaryBlue, size: 32),
               ),
               const SizedBox(height: 20),
               Text(
-                'Zone d\'intervention',
+                'Nos Engagements',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -4845,68 +4857,101 @@ class _ContactPageState extends State<_ContactPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                'Alpes-Maritimes (06)',
+                'Votre satisfaction est notre priorité',
                 style: TextStyle(
                   fontSize: 16,
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 32),
-              
-              // ==================== CARTE GOOGLE MAPS ====================
-              _GoogleMapSection(isDark: isDark, isMobile: isMobile),
               const SizedBox(height: 40),
               
-              // Carrousel de villes animé (identique à la page Accueil)
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [kDarkBlue, kPrimaryBlue],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                children: [
-                    const Text(
-                      'Nos villes d\'intervention',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    const _CitiesCarousel(),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.add_location_alt, color: Colors.white, size: 14),
-                          SizedBox(width: 6),
-                          Text(
-                            'Et toutes les communes des Alpes-Maritimes (06)',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
-                            ),
+              // Cartes d'engagements
+              isMobile
+                  ? Column(
+                      children: engagements.map((e) => Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildEngagementCard(
+                          e['icon'] as IconData,
+                          e['title'] as String,
+                          e['description'] as String,
+                          e['color'] as Color,
+                          isDark,
+                          colorScheme,
+                        ),
+                      )).toList(),
+                    )
+                  : Row(
+                      children: engagements.map((e) => Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: _buildEngagementCard(
+                            e['icon'] as IconData,
+                            e['title'] as String,
+                            e['description'] as String,
+                            e['color'] as Color,
+                            isDark,
+                            colorScheme,
                           ),
-                        ],
-                      ),
+                        ),
+                      )).toList(),
                     ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Carte d'engagement
+  Widget _buildEngagementCard(IconData icon, String title, String description, Color color, bool isDark, ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: isDark ? colorScheme.surfaceVariant.withOpacity(0.5) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: color.withOpacity(0.2),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 28),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: isDark ? colorScheme.onSurface : kDarkBlue,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
+          ),
+        ],
       ),
     );
   }
