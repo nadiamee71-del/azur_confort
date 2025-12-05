@@ -1249,6 +1249,166 @@ class _CitiesCarouselState extends State<_CitiesCarousel> {
 }
 
 // ============================================================================
+// CARROUSEL D'ENGAGEMENTS ANIMÉ (Page Accueil)
+// ============================================================================
+
+class _EngagementsCarousel extends StatefulWidget {
+  const _EngagementsCarousel();
+
+  @override
+  State<_EngagementsCarousel> createState() => _EngagementsCarouselState();
+}
+
+class _EngagementsCarouselState extends State<_EngagementsCarousel> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrolling = true;
+
+  // Liste des engagements
+  final List<Map<String, dynamic>> _engagements = [
+    {
+      'icon': Icons.description_outlined,
+      'title': 'Devis gratuit',
+      'description': 'Sans engagement',
+      'color': const Color(0xFF1E88E5),
+    },
+    {
+      'icon': Icons.flash_on,
+      'title': 'Intervention rapide',
+      'description': 'Réponse dans la journée',
+      'color': const Color(0xFFFF6B35),
+    },
+    {
+      'icon': Icons.euro,
+      'title': 'Prix transparents',
+      'description': 'Pas de surprise',
+      'color': const Color(0xFFFFB800),
+    },
+    {
+      'icon': Icons.build_outlined,
+      'title': 'Travail soigné',
+      'description': 'Artisan qualifié',
+      'color': const Color(0xFF1E88E5),
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startAutoScroll();
+    });
+  }
+
+  void _startAutoScroll() async {
+    while (_isScrolling && mounted) {
+      await Future.delayed(const Duration(milliseconds: 35));
+      if (_scrollController.hasClients && _isScrolling && mounted) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final currentScroll = _scrollController.offset;
+        
+        if (currentScroll >= maxScroll) {
+          _scrollController.jumpTo(0);
+        } else {
+          _scrollController.jumpTo(currentScroll + 0.7);
+        }
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _isScrolling = false;
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayEngagements = [..._engagements, ..._engagements, ..._engagements];
+    
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isScrolling = false),
+      onExit: (_) {
+        setState(() => _isScrolling = true);
+        _startAutoScroll();
+      },
+      child: SizedBox(
+        height: 90,
+        child: ListView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: displayEngagements.length,
+          itemBuilder: (context, index) {
+            final engagement = displayEngagements[index];
+            final color = engagement['color'] as Color;
+            
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: color.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                border: Border.all(
+                  color: color.withOpacity(0.3),
+                  width: 1.5,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      engagement['icon'] as IconData,
+                      color: color,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        engagement['title'] as String,
+                        style: TextStyle(
+                          color: kDarkBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        engagement['description'] as String,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
 // PAGE ACCUEIL - DESIGN WAOUH
 // ============================================================================
 
@@ -1916,7 +2076,7 @@ class _AccueilPage extends StatelessWidget {
     return const _ServicesTabSection();
   }
 
-  // ======================== ZONES D'INTERVENTION - VERSION COMPACTE AVEC CARROUSEL ========================
+  // ======================== NOS ENGAGEMENTS - CARROUSEL ANIMÉ ========================
   Widget _buildZonesSection(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 900;
@@ -1927,156 +2087,63 @@ class _AccueilPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 30),
       padding: EdgeInsets.symmetric(vertical: isMobile ? 40 : 50, horizontal: 24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            kDarkBlue.withOpacity(isDark ? 0.3 : 1.0),
-            kPrimaryBlue.withOpacity(isDark ? 0.2 : 0.9),
-          ],
+        color: isDark ? colorScheme.surface : const Color(0xFFF8FAFC),
+        border: Border(
+          top: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
+          bottom: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
         ),
       ),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1000),
-            child: Column(
-              children: [
+          child: Column(
+            children: [
               // Titre
-              const Icon(Icons.map_outlined, color: Colors.white, size: 36),
-              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: kPrimaryBlue.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.verified_outlined, color: kPrimaryBlue, size: 32),
+              ),
+              const SizedBox(height: 16),
               Text(
-                'Zone d\'intervention',
+                'Nos Engagements',
                 style: TextStyle(
                   fontSize: isMobile ? 22 : 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: isDark ? colorScheme.onSurface : kDarkBlue,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Nous intervenons dans toutes les Alpes-Maritimes (06)',
+                'Votre satisfaction est notre priorité',
                 style: TextStyle(
                   fontSize: isMobile ? 14 : 16,
-                  color: Colors.white.withOpacity(0.85),
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 30),
               
-              // 2 Badges départements côte à côte
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 16,
-                runSpacing: 12,
-                children: [
-                  // Badge Alpes-Maritimes
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-            ),
-            child: Row(
-                      mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                          padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                            color: kPrimaryBlue.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(Icons.location_on, color: kPrimaryBlue, size: 22),
-                        ),
-                        const SizedBox(width: 12),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Alpes-Maritimes',
-                    style: TextStyle(
-                                color: kDarkBlue,
-                      fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              'Département 06',
-                    style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                ),
-              ],
-            ),
+              // Carrousel d'engagements animé
+              const _EngagementsCarousel(),
               
-              const SizedBox(height: 28),
+              const SizedBox(height: 30),
               
-              // Carrousel de villes animé
-              const _CitiesCarousel(),
-              
-              const SizedBox(height: 28),
-              
-              // Ligne info + bouton
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 24,
-                runSpacing: 12,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.check_circle, color: kAccentYellow, size: 18),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Devis gratuit',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-              children: [
-                      Icon(Icons.check_circle, color: kAccentYellow, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                        'Devis offert',
-                  style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontWeight: FontWeight.w500,
-                    fontSize: 13,
+              // Bouton contact
+              ElevatedButton.icon(
+                onPressed: () => _AzurConfortHomeState.navigateToPage(2),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPrimaryBlue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              ],
-            ),
-                  ElevatedButton.icon(
-                    onPressed: () => _AzurConfortHomeState.navigateToPage(2),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kAccentYellow,
-                      foregroundColor: Colors.black87,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    icon: const Icon(Icons.phone, size: 18),
-                    label: const Text('Nous contacter', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                ],
+                icon: const Icon(Icons.phone, size: 18),
+                label: const Text('Nous contacter', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -4310,8 +4377,8 @@ class _ContactPageState extends State<_ContactPage> {
               ),
             ),
           ),
-          // Nos Engagements
-          _buildEngagements(isMobile),
+          // Google Maps + Zone d'intervention
+          _buildMapAndZones(isMobile),
           // FOOTER UNIFIÉ
           const AppFooter(),
         ],
@@ -4850,6 +4917,138 @@ class _ContactPageState extends State<_ContactPage> {
         ),
       ),
       validator: required ? (v) => v == null || v.isEmpty ? 'Champ requis' : null : null,
+    );
+  }
+
+  // ==================== GOOGLE MAPS + ZONE D'INTERVENTION (Page Contact) ====================
+  Widget _buildMapAndZones(bool isMobile) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 20 : 80,
+        vertical: 60,
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            kDarkBlue.withOpacity(isDark ? 0.3 : 1.0),
+            kPrimaryBlue.withOpacity(isDark ? 0.2 : 0.9),
+          ],
+        ),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: Column(
+            children: [
+              // Titre
+              const Icon(Icons.map_outlined, color: Colors.white, size: 36),
+              const SizedBox(height: 12),
+              Text(
+                'Zone d\'intervention',
+                style: TextStyle(
+                  fontSize: isMobile ? 22 : 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Nous intervenons dans toutes les Alpes-Maritimes (06)',
+                style: TextStyle(
+                  fontSize: isMobile ? 14 : 16,
+                  color: Colors.white.withOpacity(0.85),
+                ),
+              ),
+              const SizedBox(height: 30),
+              
+              // Google Maps
+              _GoogleMapSection(isDark: isDark, isMobile: isMobile),
+              
+              const SizedBox(height: 30),
+              
+              // Badge Alpes-Maritimes
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: kPrimaryBlue.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.location_on, color: kPrimaryBlue, size: 22),
+                    ),
+                    const SizedBox(width: 12),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Alpes-Maritimes',
+                          style: TextStyle(
+                            color: kDarkBlue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          'Département 06',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              // Carrousel de villes animé
+              const _CitiesCarousel(),
+              
+              const SizedBox(height: 24),
+              
+              // Info devis gratuit
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.check_circle, color: kAccentYellow, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Devis gratuit dans toutes ces villes',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
