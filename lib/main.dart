@@ -4286,11 +4286,29 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
+  // ==================== NOTRE MÉTHODE DE TRAVAIL ====================
   Widget _buildCoreValues(BuildContext context, bool isMobile) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    final steps = [
+      {'num': '1', 'title': 'Contact', 'desc': 'Appelez-nous ou remplissez le formulaire', 'icon': Icons.phone_in_talk},
+      {'num': '2', 'title': 'Diagnostic', 'desc': 'Analyse de votre besoin sur place', 'icon': Icons.search},
+      {'num': '3', 'title': 'Devis gratuit', 'desc': 'Proposition détaillée sans engagement', 'icon': Icons.description},
+      {'num': '4', 'title': 'Intervention', 'desc': 'Travail soigné par notre artisan', 'icon': Icons.build},
+      {'num': '5', 'title': 'Satisfaction', 'desc': 'Vérification et conseils d\'entretien', 'icon': Icons.thumb_up},
+    ];
+    
     return Container(
-      color: colorScheme.background,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: isDark
+              ? [colorScheme.surface, colorScheme.background]
+              : [kLightBlue.withOpacity(0.5), Colors.white],
+        ),
+      ),
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24 : 80,
         vertical: 70,
@@ -4300,39 +4318,73 @@ class _AProposPage extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 1100),
           child: Column(
             children: [
+              // Titre
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: kPrimaryBlue.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.route, color: kPrimaryBlue, size: 32),
+              ),
+              const SizedBox(height: 20),
               Text(
-                'Nos valeurs',
+                'Notre méthode de travail',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: isMobile ? 26 : 32,
                   fontWeight: FontWeight.bold,
                   color: isDark ? colorScheme.onBackground : kDarkBlue,
                 ),
               ),
-              const SizedBox(height: 50),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  if (constraints.maxWidth > 800) {
-                    return Row(
-                      children: [
-                        Expanded(child: _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention dans tout le département des Alpes-Maritimes (06). Nous comprenons l\'urgence de vos besoins.', kAccentOrange)),
-                        const SizedBox(width: 24),
-                        Expanded(child: _buildValueCard(context, Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise. Nous vous expliquons chaque intervention.', kPrimaryBlue)),
-                        const SizedBox(width: 24),
-                        Expanded(child: _buildValueCard(context, Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque. Votre satisfaction est notre priorité.', kAccentYellow)),
-                      ],
-                    );
-                  }
-                  return Column(
-                    children: [
-                      _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention dans tout le département des Alpes-Maritimes (06).', kAccentOrange),
-                      const SizedBox(height: 20),
-                      _buildValueCard(context, Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise.', kPrimaryBlue),
-                      const SizedBox(height: 20),
-                      _buildValueCard(context, Icons.workspace_premium, 'Excellence', 'Travail soigné avec des équipements de marque.', kAccentYellow),
-                    ],
-                  );
-                },
+              const SizedBox(height: 12),
+              Text(
+                'Un processus simple et transparent',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
+              const SizedBox(height: 50),
+              
+              // Timeline des étapes
+              isMobile
+                  ? Column(
+                      children: steps.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final step = entry.value;
+                        final isLast = index == steps.length - 1;
+                        return _buildTimelineStep(
+                          step['num'] as String,
+                          step['title'] as String,
+                          step['desc'] as String,
+                          step['icon'] as IconData,
+                          isLast,
+                          isDark,
+                          colorScheme,
+                          true,
+                        );
+                      }).toList(),
+                    )
+                  : Row(
+                      children: steps.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final step = entry.value;
+                        final isLast = index == steps.length - 1;
+                        return Expanded(
+                          child: _buildTimelineStepDesktop(
+                            step['num'] as String,
+                            step['title'] as String,
+                            step['desc'] as String,
+                            step['icon'] as IconData,
+                            isLast,
+                            isDark,
+                            colorScheme,
+                          ),
+                        );
+                      }).toList(),
+                    ),
             ],
           ),
         ),
@@ -4340,53 +4392,196 @@ class _AProposPage extends StatelessWidget {
     );
   }
 
-  Widget _buildValueCard(BuildContext context, IconData icon, String title, String description, Color color) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.03),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
+  Widget _buildTimelineStep(String num, String title, String desc, IconData icon, bool isLast, bool isDark, ColorScheme colorScheme, bool isMobile) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Ligne et numéro
+        Column(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [kPrimaryBlue, kDarkBlue],
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: kPrimaryBlue.withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  num,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+            if (!isLast)
+              Container(
+                width: 3,
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [kPrimaryBlue, kPrimaryBlue.withOpacity(0.3)],
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(width: 20),
+        // Contenu
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(bottom: isLast ? 0 : 20),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
+              color: isDark ? colorScheme.surfaceVariant : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: kPrimaryBlue.withOpacity(0.08),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
-            child: Icon(icon, color: color, size: 32),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: color,
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: kPrimaryBlue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, color: kPrimaryBlue, size: 24),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? colorScheme.onSurface : kDarkBlue,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        desc,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            description,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimelineStepDesktop(String num, String title, String desc, IconData icon, bool isLast, bool isDark, ColorScheme colorScheme) {
+    return Column(
+      children: [
+        // Ligne horizontale + numéro
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 3,
+                color: kPrimaryBlue.withOpacity(0.3),
+              ),
+            ),
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [kPrimaryBlue, kDarkBlue],
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: kPrimaryBlue.withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  num,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 3,
+                color: isLast ? Colors.transparent : kPrimaryBlue.withOpacity(0.3),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        // Icône
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: kPrimaryBlue.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: kPrimaryBlue, size: 28),
+        ),
+        const SizedBox(height: 12),
+        // Titre
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: isDark ? colorScheme.onSurface : kDarkBlue,
+          ),
+        ),
+        const SizedBox(height: 6),
+        // Description
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(
+            desc,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               color: colorScheme.onSurfaceVariant,
-              height: 1.6,
+              height: 1.4,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
