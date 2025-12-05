@@ -6382,71 +6382,82 @@ class _CentreJuridiquePageState extends State<_CentreJuridiquePage> with SingleT
   Widget _buildTabBar(BuildContext context, bool isMobile, bool isDark) {
     final colorScheme = Theme.of(context).colorScheme;
     
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark 
-            ? colorScheme.surfaceVariant.withOpacity(0.5) 
-            : kLightBlue.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
           color: isDark 
-              ? kPrimaryBlue.withOpacity(0.2) 
-              : kPrimaryBlue.withOpacity(0.1),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
+              ? colorScheme.surfaceVariant.withOpacity(0.5) 
+              : kLightBlue.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
             color: isDark 
-                ? Colors.black.withOpacity(0.2) 
-                : kPrimaryBlue.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+                ? kPrimaryBlue.withOpacity(0.2) 
+                : kPrimaryBlue.withOpacity(0.1),
+            width: 1,
           ),
-        ],
-      ),
-      child: TabBar(
-        controller: _tabController,
-        isScrollable: true,
-        padding: const EdgeInsets.all(8),
-        labelPadding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 16),
-        indicator: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [kPrimaryBlue, Color(0xFF1976D2)],
-          ),
-          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: kPrimaryBlue.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+              color: isDark 
+                  ? Colors.black.withOpacity(0.2) 
+                  : kPrimaryBlue.withOpacity(0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        indicatorSize: TabBarIndicatorSize.tab,
-        dividerColor: Colors.transparent,
-        labelColor: Colors.white,
-        unselectedLabelColor: isDark 
-            ? colorScheme.onSurface.withOpacity(0.7) 
-            : kDarkBlue.withOpacity(0.8),
-        labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-        tabs: _tabs.map((tab) {
-          return Tab(
-            height: isMobile ? 52 : 58,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(tab.icon, size: isMobile ? 18 : 22),
-                  const SizedBox(width: 10),
-                  Text(tab.title),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
+        child: isMobile
+            ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: _buildTabBarContent(isMobile, isDark, colorScheme),
+              )
+            : _buildTabBarContent(isMobile, isDark, colorScheme),
       ),
+    );
+  }
+  
+  Widget _buildTabBarContent(bool isMobile, bool isDark, ColorScheme colorScheme) {
+    return TabBar(
+      controller: _tabController,
+      isScrollable: isMobile,
+      padding: const EdgeInsets.all(8),
+      labelPadding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 20),
+      indicator: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [kPrimaryBlue, Color(0xFF1976D2)],
+        ),
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: kPrimaryBlue.withOpacity(0.4),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      indicatorSize: TabBarIndicatorSize.tab,
+      dividerColor: Colors.transparent,
+      labelColor: Colors.white,
+      unselectedLabelColor: isDark 
+          ? colorScheme.onSurface.withOpacity(0.7) 
+          : kDarkBlue.withOpacity(0.8),
+      labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+      tabs: _tabs.map((tab) {
+        return Tab(
+          height: isMobile ? 52 : 58,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(tab.icon, size: isMobile ? 18 : 22),
+                const SizedBox(width: 10),
+                Text(tab.title),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
