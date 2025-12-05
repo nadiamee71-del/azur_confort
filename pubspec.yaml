@@ -103,6 +103,7 @@ flutter:
     - assets/images/chatbot_mascot.png
     - assets/images/contact_hero.png
     - assets/images/about_hero.png
+    - "assets/images/logo Azur Confort .png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

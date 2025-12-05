@@ -3,13 +3,14 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "c2ff51236fc21758bd1d5829d69a017c",
-"assets/AssetManifest.bin.json": "c2bf4f31f091fc614e2e88808034cf01",
-"assets/AssetManifest.json": "be90b281b771f03d4e397bbf365ff01f",
+const RESOURCES = {"assets/AssetManifest.bin": "49d02450d5dccc5ab9a7071a65bf7bb4",
+"assets/AssetManifest.bin.json": "5e51b8567094fa6b3a112f0f2c19cd93",
+"assets/AssetManifest.json": "f0e0a11be0ae8b34c4c3ae10b3345438",
 "assets/assets/images/about_hero.png": "f0ca6b0c0b68a9deec95bfc23807f9cb",
 "assets/assets/images/chatbot_mascot.png": "20f9df8429e7ffaeef484bba624a061a",
 "assets/assets/images/contact_hero.png": "52355d598d3766fd31f32017054e98d9",
 "assets/assets/images/hero_background.png": "0e57225c29e70fe449c5321948015072",
+"assets/assets/images/logo%2520Azur%2520Confort%2520.png": "f7fb632d94fb8068b02e437b5519039e",
 "assets/assets/images/service_chauffage.png": "256396c99f64e6e6208bda53caa794e0",
 "assets/assets/images/service_climatisation.png": "56c228d2c7be8860126d6dd990d6fc99",
 "assets/assets/images/service_electricite.jpg": "256396c99f64e6e6208bda53caa794e0",
@@ -38,7 +39,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "c2ff51236fc21758bd1d5829d69a017c
 "canvaskit/skwasm_heavy.wasm": "8034ad26ba2485dab2fd49bdd786837b",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "888483df48293866f9f41d3d9274a779",
-"flutter_bootstrap.js": "5bfa739e791b21d72d8da81a24abb4b3",
+"flutter_bootstrap.js": "162dec6a8fd67a8a671df264993437fa",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
