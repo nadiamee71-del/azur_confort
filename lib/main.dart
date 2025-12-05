@@ -670,7 +670,7 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
                 const SizedBox(height: 16),
                 // Message
                 Text(
-                  'Vous êtes entre de bonnes mains.\nNotre équipe est à votre service pour tous vos besoins en climatisation, chauffage et plomberie.',
+                  'Vous êtes entre de bonnes mains.\nNotre équipe est à votre service pour tous vos besoins en climatisation, froid commercial, chauffage et plomberie.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
