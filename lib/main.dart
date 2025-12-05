@@ -5385,17 +5385,22 @@ class _GoogleMapSection extends StatelessWidget {
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            child: Image.asset(
-              'assets/images/ChatGPT Image 5 déc. 2025, 16_51_42.png',
+            child: Container(
               width: double.infinity,
-              height: isMobile ? 220 : 300,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
+              color: isDark ? const Color(0xFF1a3a5c) : const Color(0xFF2d5a7b),
+              padding: const EdgeInsets.all(8),
+              child: Image.asset(
+                'assets/images/ChatGPT Image 5 déc. 2025, 16_51_42.png',
                 width: double.infinity,
-                height: isMobile ? 220 : 300,
-                color: isDark ? colorScheme.surfaceVariant : kLightBlue,
-                child: const Center(
-                  child: Icon(Icons.map, size: 60, color: kPrimaryBlue),
+                height: isMobile ? 280 : 380,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  width: double.infinity,
+                  height: isMobile ? 280 : 380,
+                  color: isDark ? colorScheme.surfaceVariant : kLightBlue,
+                  child: const Center(
+                    child: Icon(Icons.map, size: 60, color: kPrimaryBlue),
+                  ),
                 ),
               ),
             ),
