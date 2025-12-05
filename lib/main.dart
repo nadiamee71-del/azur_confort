@@ -229,10 +229,14 @@ Locale loadLocalePreference() {
 }
 
 // ============================================================================
-// NUMÉRO DE TÉLÉPHONE
+// NUMÉRO DE TÉLÉPHONE ET INFORMATIONS ENTREPRISE
 // ============================================================================
-const String kPhoneNumber = '0746559768';
-const String kPhoneNumberFormatted = '07 46 55 97 68';
+const String kPhoneNumber = '0752926568';
+const String kPhoneNumberFormatted = '07 52 92 65 68';
+const String kEmail = 'azurconfort21@gmail.com';
+const String kAddress = '60 avenue de la Bornala, 06200 Nice';
+const String kSiret = '801 234 840';
+const String kResponsable = 'Monsieur Bouteben';
 
 /// Ouvre le numéro de téléphone (appel)
 /// Utilise window.location.href pour les liens tel: (plus fiable)
@@ -252,7 +256,7 @@ void launchWhatsApp() {
 /// Ouvre le client email
 void launchEmail() {
   if (kIsWeb) {
-    html.window.location.href = 'mailto:contact@azur-confort.fr';
+    html.window.location.href = 'mailto:azurconfort21@gmail.com';
   }
 }
 
@@ -322,7 +326,7 @@ class AppFooter extends StatelessWidget {
               
               // Baseline
               Text(
-                'Artisan frigoriste sur la Côte d\'Azur (06 & 83)',
+                'Artisan frigoriste sur la Côte d\'Azur - Alpes-Maritimes (06)',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.7),
@@ -431,16 +435,16 @@ void _registerGoogleMapIframe() {
   );
 }
 
-/// Enregistre l'iframe Google Maps pour la zone d'intervention (06 + 83) en mode terrain
+/// Enregistre l'iframe Google Maps pour la zone d'intervention (06) en mode terrain
 void _registerZonesMapIframe() {
-  // Carte Google Maps en mode TERRAIN centrée entre Nice et Toulon
-  // pour montrer les départements Alpes-Maritimes (06) et Var (83)
+  // Carte Google Maps en mode TERRAIN centrée sur Nice
+  // pour montrer le département Alpes-Maritimes (06)
   // Coordonnées : ~43.5°N, 6.8°E avec zoom 9 pour voir les 2 départements
   ui_web.platformViewRegistry.registerViewFactory(
     'google-map-zones-iframe',
     (int viewId) {
       final iframe = html.IFrameElement()
-        // Mode terrain (t) avec zoom 9 centré entre Nice et Fréjus
+        // Mode terrain (t) avec zoom 10 centré sur Nice
         ..src = 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d370000!2d6.8!3d43.55!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sfr!2sfr!4v1701700000000'
         ..style.border = 'none'
         ..style.width = '100%'
@@ -733,12 +737,8 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
             _buildNavButton(AppLocalizations.of(context)?.navAbout ?? 'À propos', 1, Icons.info_outline),
             _buildNavButton(AppLocalizations.of(context)?.navContact ?? 'Contact', 2, Icons.mail_outline),
             const SizedBox(width: 8),
-            // Sélecteur de langue
-            _buildLanguageSelector(context),
             const SizedBox(width: 16),
           ] else ...[
-            // Sélecteur de langue compact pour mobile
-            _buildLanguageSelectorMobile(context),
             const SizedBox(width: 8),
             // Menu hamburger pour mobile
             PopupMenuButton<int>(
@@ -1089,7 +1089,7 @@ class _CitiesCarouselState extends State<_CitiesCarousel> {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = true;
 
-  // Liste des villes avec leur département
+  // Liste des villes avec leur département - Alpes-Maritimes (06) uniquement
   final List<Map<String, dynamic>> _cities = [
     {'name': 'Nice', 'dept': '06'},
     {'name': 'Cannes', 'dept': '06'},
@@ -1099,12 +1099,10 @@ class _CitiesCarouselState extends State<_CitiesCarousel> {
     {'name': 'Cagnes-sur-Mer', 'dept': '06'},
     {'name': 'Mandelieu', 'dept': '06'},
     {'name': 'Vence', 'dept': '06'},
-    {'name': 'Fréjus', 'dept': '83'},
-    {'name': 'Saint-Raphaël', 'dept': '83'},
-    {'name': 'Toulon', 'dept': '83'},
-    {'name': 'Hyères', 'dept': '83'},
-    {'name': 'Draguignan', 'dept': '83'},
-    {'name': 'Sainte-Maxime', 'dept': '83'},
+    {'name': 'Mougins', 'dept': '06'},
+    {'name': 'Valbonne', 'dept': '06'},
+    {'name': 'Saint-Laurent-du-Var', 'dept': '06'},
+    {'name': 'Villeneuve-Loubet', 'dept': '06'},
   ];
 
   @override
@@ -1159,8 +1157,7 @@ class _CitiesCarouselState extends State<_CitiesCarousel> {
           itemCount: displayCities.length,
           itemBuilder: (context, index) {
             final city = displayCities[index];
-            final is06 = city['dept'] == '06';
-            final accentColor = is06 ? kPrimaryBlue : kAccentOrange;
+            final accentColor = kPrimaryBlue;
             
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -1178,7 +1175,7 @@ class _CitiesCarouselState extends State<_CitiesCarousel> {
                 children: [
                   Icon(
                     Icons.location_on,
-                    color: is06 ? Colors.white : kAccentYellow,
+                    color: Colors.white,
                     size: 14,
                   ),
                   const SizedBox(width: 6),
@@ -1194,13 +1191,13 @@ class _CitiesCarouselState extends State<_CitiesCarousel> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: is06 ? Colors.white.withOpacity(0.2) : kAccentOrange.withOpacity(0.4),
+                      color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       city['dept'] as String,
-                      style: TextStyle(
-                        color: is06 ? Colors.white : kAccentYellow,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 10,
                       ),
@@ -1413,7 +1410,7 @@ class _AccueilPage extends StatelessWidget {
                     Icon(Icons.bolt, color: Colors.black87, size: 20),
                     SizedBox(width: 8),
                     Text(
-                      'Intervention rapide 06 & 83',
+                      'Intervention rapide Alpes-Maritimes (06)',
                       style: TextStyle(
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
@@ -1523,7 +1520,7 @@ class _AccueilPage extends StatelessWidget {
               Icon(Icons.bolt, color: Colors.black87, size: 18),
               SizedBox(width: 6),
               Text(
-                'Intervention rapide 06 & 83',
+                'Intervention rapide Alpes-Maritimes (06)',
                 style: TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.bold,
@@ -1889,7 +1886,7 @@ class _AccueilPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Nous intervenons dans tout le 06 et le 83',
+                'Nous intervenons dans toutes les Alpes-Maritimes (06)',
                 style: TextStyle(
                   fontSize: isMobile ? 14 : 16,
                   color: Colors.white.withOpacity(0.85),
@@ -1952,55 +1949,6 @@ class _AccueilPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Badge Var
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: kAccentOrange.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(Icons.location_on, color: kAccentOrange, size: 22),
-                        ),
-                        const SizedBox(width: 12),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Var',
-                              style: TextStyle(
-                                color: kDarkBlue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              'Département 83',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
               
@@ -2023,7 +1971,7 @@ class _AccueilPage extends StatelessWidget {
                       Icon(Icons.check_circle, color: kAccentYellow, size: 18),
                       const SizedBox(width: 6),
                       Text(
-                        'Déplacement gratuit',
+                        'Devis gratuit',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
                           fontWeight: FontWeight.w500,
@@ -2208,145 +2156,6 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  /// Carte du Var (83) avec villes positionnées
-  Widget _buildMapCard83(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: kAccentOrange.withOpacity(0.3), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: kAccentOrange.withOpacity(0.1),
-            blurRadius: 30,
-            offset: const Offset(0, 15),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // En-tête avec dégradé orange/jaune
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [kAccentOrange, Color(0xFFFF9800)],
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(22),
-                topRight: Radius.circular(22),
-              ),
-            ),
-            child: Row(
-              children: [
-                // Badge numéro avec accent bleu
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [kDarkBlue, kPrimaryBlue],
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: kDarkBlue.withOpacity(0.4),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: const Text(
-                    '83',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                const Expanded(
-                  child: Text(
-                    'Var',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                ),
-                // Icône
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.location_on, color: Colors.white, size: 22),
-                ),
-              ],
-            ),
-          ),
-          // Carte
-          Container(
-            height: 320,
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            child: CustomPaint(
-              painter: _VarMapPainter(),
-              child: Stack(
-                children: [
-                  // Positions basées sur la vraie géographie
-                  // Fréjus (est côte) - PRINCIPALE
-                  _buildCityMarker('Fréjus', 0.86, 0.55, kAccentOrange, isMain: true),
-                  // Saint-Raphaël (est côte)
-                  _buildCityMarker('St-Raphaël', 0.90, 0.52, kAccentOrange),
-                  // Sainte-Maxime (golfe St-Tropez)
-                  _buildCityMarker('Ste-Maxime', 0.80, 0.62, kAccentOrange),
-                  // Saint-Tropez
-                  _buildCityMarker('St-Tropez', 0.74, 0.70, kAccentOrange),
-                  // Draguignan (intérieur nord-est)
-                  _buildCityMarker('Draguignan', 0.68, 0.25, kAccentOrange),
-                  // Toulon (sud-ouest côte) - PRINCIPALE
-                  _buildCityMarker('Toulon', 0.25, 0.78, kAccentOrange, isMain: true),
-                  // Hyères (sud, près presqu'île Giens)
-                  _buildCityMarker('Hyères', 0.48, 0.82, kAccentOrange),
-                  // Bandol (ouest côte)
-                  _buildCityMarker('Bandol', 0.10, 0.75, kAccentOrange),
-                  // La Seyne-sur-Mer (près Toulon)
-                  _buildCityMarker('La Seyne', 0.18, 0.78, kAccentOrange),
-                  // Brignoles (intérieur centre)
-                  _buildCityMarker('Brignoles', 0.42, 0.35, kAccentOrange),
-                ],
-              ),
-            ),
-          ),
-          // Légende
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.location_on, color: kAccentOrange, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  'Intervention dans tout le département',
-                  style: TextStyle(
-                    color: colorScheme.onSurfaceVariant,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// Marqueur de ville sur la carte
   Widget _buildCityMarker(String name, double left, double top, Color color, {bool isMain = false}) {
     return Positioned(
@@ -2428,7 +2237,7 @@ class _AccueilPage extends StatelessWidget {
             children: [
               _buildSectionTitle(context,
                 'Pourquoi nous choisir ?',
-                'Artisan frigoriste et plombier chauffagiste de confiance – Intervention rapide 06 & 83',
+                'Artisan frigoriste et plombier chauffagiste de confiance – Intervention rapide Alpes-Maritimes (06)',
               ),
               const SizedBox(height: 48),
               LayoutBuilder(
@@ -2573,7 +2382,7 @@ class _AccueilPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Un seul interlocuteur pour tous vos besoins thermiques et électriques',
+                'Un seul interlocuteur pour tous vos besoins thermiques',
                 textAlign: TextAlign.center,
                 style: textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
@@ -2593,7 +2402,7 @@ class _AccueilPage extends StatelessWidget {
                               context,
                               icon: Icons.location_on,
                               title: 'Zone d\'intervention',
-                              content: 'Nous intervenons dans toutes les **Alpes-Maritimes** (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton) et dans le **Var** (Fréjus, Saint-Raphaël, Toulon, Hyères).',
+                              content: 'Nous intervenons dans toutes les **Alpes-Maritimes (06)** : Nice, Cannes, Mandelieu, Grasse, Antibes, Menton, Cagnes-sur-Mer, Vence, Mougins, Valbonne...',
                               color: kPrimaryBlue,
                             )),
                             const SizedBox(width: 20),
@@ -2601,7 +2410,7 @@ class _AccueilPage extends StatelessWidget {
                               context,
                               icon: Icons.build_circle,
                               title: 'Nos spécialités',
-                              content: 'Climatisation mono/multi-split, pompes à chaleur air-air et air-eau, chauffage, plomberie, et travaux d\'électricité (tableaux, mise aux normes, dépannage).',
+                              content: 'Climatisation mono/multi-split, pompes à chaleur air-air et air-eau, chauffage et plomberie.',
                               color: kAccentOrange,
                             )),
                             const SizedBox(width: 20),
@@ -2620,7 +2429,7 @@ class _AccueilPage extends StatelessWidget {
                               context,
                               icon: Icons.location_on,
                               title: 'Zone d\'intervention',
-                              content: 'Nous intervenons dans toutes les **Alpes-Maritimes** (Nice, Cannes, Mandelieu, Grasse, Antibes, Menton) et dans le **Var** (Fréjus, Saint-Raphaël, Toulon, Hyères).',
+                              content: 'Nous intervenons dans toutes les **Alpes-Maritimes (06)** : Nice, Cannes, Mandelieu, Grasse, Antibes, Menton, Cagnes-sur-Mer, Vence, Mougins, Valbonne...',
                               color: kPrimaryBlue,
                             ),
                             const SizedBox(height: 16),
@@ -2628,7 +2437,7 @@ class _AccueilPage extends StatelessWidget {
                               context,
                               icon: Icons.build_circle,
                               title: 'Nos spécialités',
-                              content: 'Climatisation mono/multi-split, pompes à chaleur air-air et air-eau, chauffage, plomberie, et travaux d\'électricité (tableaux, mise aux normes, dépannage).',
+                              content: 'Climatisation mono/multi-split, pompes à chaleur air-air et air-eau, chauffage et plomberie.',
                               color: kAccentOrange,
                             ),
                             const SizedBox(height: 16),
@@ -2679,7 +2488,7 @@ class _AccueilPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Devis gratuit et intervention rapide dans le 06 et le 83',
+                            'Devis gratuit et intervention rapide dans les Alpes-Maritimes (06)',
                             style: textTheme.bodyMedium?.copyWith(
                               color: Colors.white.withOpacity(0.9),
                             ),
@@ -2840,7 +2649,7 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
       title: 'Frigoriste',
       icon: Icons.severe_cold,
       color: kDarkBlue,
-      description: 'Expert en froid commercial et industriel : chambres froides, vitrines réfrigérées, équipements frigorifiques.',
+      description: 'Expert en froid commercial : chambres froides, vitrines réfrigérées, équipements frigorifiques.',
       prestations: [
         'Chambres froides positives/négatives',
         'Vitrines réfrigérées',
@@ -2872,11 +2681,12 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
       color: kAccentOrange,
       description: 'Installation et maintenance de systèmes de chauffage performants pour votre confort thermique.',
       prestations: [
-        'Chaudières gaz/fioul',
+        'Chaudières gaz',
         'Radiateurs électriques',
         'Plancher chauffant',
         'Entretien chaudière',
         'Dépannage chauffage',
+        'Chauffe-eau / Chauffe-eau électrique',
       ],
       imagePath: 'assets/images/service_chauffage.png',
     ),
@@ -2887,32 +2697,13 @@ class _ServicesTabSectionState extends State<_ServicesTabSection> with SingleTic
       color: kPrimaryBlue,
       description: 'Dépannage, installation et rénovation de tous vos équipements sanitaires et canalisations.',
       prestations: [
-        'Dépannage fuite d\'eau',
+        'Recherche de fuite',
         'Installation sanitaires',
         'Rénovation salle de bain',
         'Débouchage canalisations',
         'Chauffe-eau / cumulus',
       ],
       imagePath: 'assets/images/service_plomberie.png',
-    ),
-    // ============================================================
-    // SERVICE ÉLECTRICITÉ - Nouveau service ajouté
-    // ============================================================
-    _ServiceData(
-      id: 'electricite',
-      title: 'Électricité',
-      icon: Icons.electrical_services,
-      color: kAccentYellow,
-      description: 'Azur Confort intervient pour tous vos travaux d\'électricité dans les Alpes-Maritimes (06) et le Var (83) : installation de tableaux électriques, rénovation complète, mise aux normes, ajout de prises et points lumineux, recherche de panne et dépannage d\'urgence. Nous accompagnons particuliers et professionnels pour sécuriser leurs installations et améliorer leur confort au quotidien.',
-      prestations: [
-        'Installation et remplacement de tableaux électriques',
-        'Mise aux normes et sécurisation des installations',
-        'Ajout de prises, interrupteurs et points lumineux',
-        'Dépannage électrique d\'urgence (panne, court-circuit)',
-        'Éclairage intérieur et extérieur',
-        'Diagnostic et recherche de panne',
-      ],
-      imagePath: 'assets/images/service_electricite_new.png',
     ),
   ];
 
@@ -3577,7 +3368,7 @@ class _AProposPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Text(
-                        'Depuis plus de 10 ans',
+                        'Artisan qualifié',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -3705,7 +3496,7 @@ class _AProposPage extends StatelessWidget {
                     Icon(Icons.verified, color: kPrimaryBlue, size: 24),
                     SizedBox(width: 10),
                     Text(
-                      'Certifié RGE',
+                      'Artisan qualifié',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: kDarkBlue,
@@ -3755,7 +3546,7 @@ class _AProposPage extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          'Azur Confort est une entreprise artisanale spécialisée dans les métiers du froid et du chaud. Basés sur la Côte d\'Azur, nous intervenons dans les Alpes-Maritimes (06) et le Var (83) pour tous vos besoins en climatisation, chauffage, pompes à chaleur et plomberie.',
+          'Azur Confort est une entreprise artisanale spécialisée dans les métiers du froid et du chaud. Basés sur la Côte d\'Azur, nous intervenons dans les Alpes-Maritimes (06) pour tous vos besoins en climatisation, chauffage, pompes à chaleur et plomberie.',
           style: TextStyle(
             fontSize: 16,
             color: colorScheme.onSurfaceVariant,
@@ -4117,7 +3908,7 @@ class _AProposPage extends StatelessWidget {
                   if (constraints.maxWidth > 800) {
                     return Row(
                       children: [
-                        Expanded(child: _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur. Nous comprenons l\'urgence de vos besoins.', kAccentOrange)),
+                        Expanded(child: _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention dans tout le département des Alpes-Maritimes (06). Nous comprenons l\'urgence de vos besoins.', kAccentOrange)),
                         const SizedBox(width: 24),
                         Expanded(child: _buildValueCard(context, Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise. Nous vous expliquons chaque intervention.', kPrimaryBlue)),
                         const SizedBox(width: 24),
@@ -4127,7 +3918,7 @@ class _AProposPage extends StatelessWidget {
                   }
                   return Column(
                     children: [
-                      _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention rapide sous 24h sur toute la Côte d\'Azur.', kAccentOrange),
+                      _buildValueCard(context, Icons.flash_on, 'Réactivité', 'Intervention dans tout le département des Alpes-Maritimes (06).', kAccentOrange),
                       const SizedBox(height: 20),
                       _buildValueCard(context, Icons.handshake, 'Transparence', 'Devis gratuits, détaillés et sans surprise.', kPrimaryBlue),
                       const SizedBox(height: 20),
@@ -4230,7 +4021,7 @@ class _AProposPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Devis gratuit et intervention rapide dans le 06 et le 83',
+                    'Devis gratuit et intervention rapide dans les Alpes-Maritimes (06)',
                     textAlign: TextAlign.center,
                     style: textTheme.bodyMedium?.copyWith(
                       color: Colors.white.withOpacity(0.9),
@@ -4268,7 +4059,7 @@ class _AProposPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Devis gratuit et intervention rapide dans le 06 et le 83',
+                          'Devis gratuit et intervention rapide dans les Alpes-Maritimes (06)',
                           style: textTheme.bodyMedium?.copyWith(
                             color: Colors.white.withOpacity(0.9),
                           ),
@@ -4588,7 +4379,7 @@ class _ContactPageState extends State<_ContactPage> {
           iconBgColor: kAccentOrange,
           title: 'Email',
           subtitle: 'Pour vos demandes détaillées',
-          value: 'contact@azur-confort.fr',
+          value: 'azurconfort21@gmail.com',
           onTap: launchEmail,
           actionLabel: 'Écrire',
           actionIcon: Icons.send,
@@ -4620,9 +4411,7 @@ class _ContactPageState extends State<_ContactPage> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildScheduleRow('Lundi - Vendredi', '8h00 - 19h00'),
-              const SizedBox(height: 8),
-              _buildScheduleRow('Samedi', '9h00 - 17h00'),
+              _buildScheduleRow('Lundi - Vendredi', '8h00 - 17h00'),
               const SizedBox(height: 8),
               _buildScheduleRow('Urgences', '7j/7', isHighlight: true),
             ],
@@ -4983,7 +4772,7 @@ class _ContactPageState extends State<_ContactPage> {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    // Villes principales avec leur département
+    // Villes principales - Alpes-Maritimes (06) uniquement
     final cities = [
       {'name': 'Nice', 'dept': '06'},
       {'name': 'Cannes', 'dept': '06'},
@@ -4991,8 +4780,12 @@ class _ContactPageState extends State<_ContactPage> {
       {'name': 'Grasse', 'dept': '06'},
       {'name': 'Menton', 'dept': '06'},
       {'name': 'Cagnes-sur-Mer', 'dept': '06'},
-      {'name': 'Fréjus', 'dept': '83'},
-      {'name': 'Saint-Raphaël', 'dept': '83'},
+      {'name': 'Mandelieu', 'dept': '06'},
+      {'name': 'Mougins', 'dept': '06'},
+      {'name': 'Valbonne', 'dept': '06'},
+      {'name': 'Vence', 'dept': '06'},
+      {'name': 'Saint-Laurent-du-Var', 'dept': '06'},
+      {'name': 'Villeneuve-Loubet', 'dept': '06'},
     ];
     
     return Container(
@@ -5032,7 +4825,7 @@ class _ContactPageState extends State<_ContactPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                'Alpes-Maritimes (06) & Var (83)',
+                'Alpes-Maritimes (06)',
                 style: TextStyle(
                   fontSize: 16,
                   color: colorScheme.onSurfaceVariant,
@@ -5044,45 +4837,48 @@ class _ContactPageState extends State<_ContactPage> {
               _GoogleMapSection(isDark: isDark, isMobile: isMobile),
               const SizedBox(height: 40),
               
-              // Villes en Wrap compact (pas de grille)
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                runSpacing: 10,
-                children: cities.map((city) {
-                  return _buildCityChip(city['name']!, city['dept']!, isDark, colorScheme);
-                }).toList(),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // Badge "Et plus encore" - compact
+              // Carrousel de villes animé (identique à la page Accueil)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [kDarkBlue, kPrimaryBlue],
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: kPrimaryBlue.withOpacity(0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
+                child: Column(
                   children: [
-                    Icon(Icons.add_location_alt, color: Colors.white, size: 16),
-                    SizedBox(width: 8),
-                    Text(
-                      'Et toutes les communes du 06 et 83',
+                    const Text(
+                      'Nos villes d\'intervention',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const _CitiesCarousel(),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.add_location_alt, color: Colors.white, size: 14),
+                          SizedBox(width: 6),
+                          Text(
+                            'Et toutes les communes des Alpes-Maritimes (06)',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -5097,8 +4893,7 @@ class _ContactPageState extends State<_ContactPage> {
 
   // Chip compact pour les villes (page Contact)
   Widget _buildCityChip(String city, String dept, bool isDark, ColorScheme colorScheme) {
-    final is06 = dept == '06';
-    final accentColor = is06 ? kPrimaryBlue : kAccentOrange;
+    final accentColor = kPrimaryBlue;
     
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -5245,7 +5040,7 @@ class _GoogleMapSection extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Azur Confort – Artisan frigoriste (06 & 83)',
+                        'Azur Confort – Artisan frigoriste Alpes-Maritimes (06)',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -5465,170 +5260,6 @@ class _AlpesMaritimesMapPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Peintre pour la carte du Var (83) - FORME RÉELLE
-/// Basé sur les coordonnées géographiques réelles du département
-class _VarMapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Couleurs orange/jaune pour le Var
-    final paint = Paint()
-      ..color = const Color(0xFFFF9800).withOpacity(0.12)
-      ..style = PaintingStyle.fill;
-    
-    final borderPaint = Paint()
-      ..color = const Color(0xFFFF9800).withOpacity(0.5)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5;
-
-    // Forme RÉELLE du Var basée sur les coordonnées géographiques
-    // Le département a une forme plus large, avec la rade de Toulon,
-    // la presqu'île de Giens, le golfe de Saint-Tropez
-    final path = Path();
-    
-    // Départ de Bandol (sud-ouest côte)
-    path.moveTo(size.width * 0.08, size.height * 0.78);
-    // Vers Six-Fours
-    path.lineTo(size.width * 0.12, size.height * 0.82);
-    // La Seyne-sur-Mer
-    path.lineTo(size.width * 0.18, size.height * 0.80);
-    // Rade de Toulon (entrée)
-    path.lineTo(size.width * 0.22, size.height * 0.85);
-    // Toulon
-    path.lineTo(size.width * 0.28, size.height * 0.82);
-    // La Garde
-    path.lineTo(size.width * 0.35, size.height * 0.85);
-    // Presqu'île de Giens
-    path.lineTo(size.width * 0.42, size.height * 0.92);
-    path.lineTo(size.width * 0.45, size.height * 0.95);
-    path.lineTo(size.width * 0.48, size.height * 0.92);
-    // Hyères
-    path.lineTo(size.width * 0.52, size.height * 0.88);
-    // Bormes-les-Mimosas
-    path.lineTo(size.width * 0.58, size.height * 0.85);
-    // Le Lavandou
-    path.lineTo(size.width * 0.62, size.height * 0.82);
-    // Cavalaire
-    path.lineTo(size.width * 0.68, size.height * 0.80);
-    // Saint-Tropez (presqu'île)
-    path.lineTo(size.width * 0.72, size.height * 0.75);
-    path.lineTo(size.width * 0.75, size.height * 0.70);
-    path.lineTo(size.width * 0.78, size.height * 0.72);
-    // Sainte-Maxime
-    path.lineTo(size.width * 0.82, size.height * 0.65);
-    // Fréjus
-    path.lineTo(size.width * 0.88, size.height * 0.58);
-    // Saint-Raphaël
-    path.lineTo(size.width * 0.92, size.height * 0.55);
-    // Limite avec 06 (côte)
-    path.lineTo(size.width * 0.98, size.height * 0.48);
-    // Frontière nord-est avec 06 (intérieur)
-    path.lineTo(size.width * 0.95, size.height * 0.35);
-    path.lineTo(size.width * 0.90, size.height * 0.25);
-    // Fayence direction
-    path.lineTo(size.width * 0.82, size.height * 0.18);
-    // Draguignan
-    path.lineTo(size.width * 0.70, size.height * 0.22);
-    // Lorgues
-    path.lineTo(size.width * 0.58, size.height * 0.28);
-    // Brignoles
-    path.lineTo(size.width * 0.45, size.height * 0.32);
-    // Saint-Maximin
-    path.lineTo(size.width * 0.32, size.height * 0.28);
-    // Limite nord (Bouches-du-Rhône)
-    path.lineTo(size.width * 0.18, size.height * 0.22);
-    path.lineTo(size.width * 0.08, size.height * 0.25);
-    // Limite ouest
-    path.lineTo(size.width * 0.03, size.height * 0.35);
-    path.lineTo(size.width * 0.02, size.height * 0.50);
-    // Retour côte ouest (Sanary)
-    path.lineTo(size.width * 0.05, size.height * 0.65);
-    path.lineTo(size.width * 0.06, size.height * 0.72);
-    path.close();
-
-    canvas.drawPath(path, paint);
-    canvas.drawPath(path, borderPaint);
-
-    // Ligne de côte
-    final seaPaint = Paint()
-      ..color = const Color(0xFF9575CD).withOpacity(0.4)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..strokeCap = StrokeCap.round;
-
-    final seaPath = Path();
-    seaPath.moveTo(size.width * 0.02, size.height * 0.82);
-    seaPath.quadraticBezierTo(
-      size.width * 0.25, size.height * 0.90,
-      size.width * 0.45, size.height * 0.98,
-    );
-    seaPath.quadraticBezierTo(
-      size.width * 0.60, size.height * 0.92,
-      size.width * 0.75, size.height * 0.80,
-    );
-    seaPath.quadraticBezierTo(
-      size.width * 0.88, size.height * 0.65,
-      size.width * 1.0, size.height * 0.52,
-    );
-    canvas.drawPath(seaPath, seaPaint);
-
-    // Îles d'Hyères (indication)
-    final islandPaint = Paint()
-      ..color = const Color(0xFF7C4DFF).withOpacity(0.3)
-      ..style = PaintingStyle.fill;
-    
-    // Porquerolles
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(size.width * 0.48, size.height * 0.98),
-        width: 25,
-        height: 8,
-      ),
-      islandPaint,
-    );
-    
-    // Port-Cros
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(size.width * 0.55, size.height * 0.96),
-        width: 12,
-        height: 6,
-      ),
-      islandPaint,
-    );
-
-    // Label Mer
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: 'Méditerranée',
-        style: TextStyle(
-          color: const Color(0xFF7C4DFF).withOpacity(0.35),
-          fontSize: 11,
-          fontStyle: FontStyle.italic,
-        ),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(size.width * 0.25, size.height * 0.96));
-
-    // Indicateur îles
-    final ilesPainter = TextPainter(
-      text: TextSpan(
-        text: 'Îles d\'Hyères',
-        style: TextStyle(
-          color: const Color(0xFF7C4DFF).withOpacity(0.4),
-          fontSize: 8,
-        ),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    ilesPainter.layout();
-    ilesPainter.paint(canvas, Offset(size.width * 0.52, size.height * 0.99));
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
 
 // ============================================================================
 // CENTRE JURIDIQUE PREMIUM - PAGE UNIFIÉE AVEC ONGLETS PROFESSIONNELS
@@ -5982,14 +5613,16 @@ class _CentreJuridiquePageState extends State<_CentreJuridiquePage> with SingleT
           title: '1. Éditeur du site',
           content: '''Conformément aux dispositions de l'article 6 de la loi n°2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique (LCEN), le présent site est édité par :
 
-Raison sociale : [À compléter]
-Forme juridique : [À compléter : Micro-entreprise / EI / EURL / SARL...]
-Adresse du siège social : [À compléter]
-Téléphone : [À compléter]
-Email : contact@azurconfort.fr
-Numéro SIRET : [À compléter]
-Numéro TVA intracommunautaire : [À compléter si applicable]
-Directeur de la publication : [À compléter - nom du responsable légal]''',
+Raison sociale : Azur Confort
+Forme juridique : Entreprise individuelle (EI)
+Adresse du siège social : 60 avenue de la Bornala, 06200 Nice
+Téléphone : 07 52 92 65 68
+Email : azurconfort21@gmail.com
+Numéro SIRET : 801 234 840
+Inscription : RCS Nice
+Directeur de la publication : Monsieur Bouteben
+
+Les prix affichés sont TTC (TVA non applicable – article 293B du CGI).''',
         ),
         
         // Section 2 - Statut de l'artisan
@@ -6001,17 +5634,15 @@ Directeur de la publication : [À compléter - nom du responsable légal]''',
 • Climatisation (mono-split, multi-split, gainable)
 • Pompes à chaleur (air-air, air-eau)
 • Frigoriste (chambres froides, vitrines réfrigérées)
-• Chauffage (chaudières, radiateurs, plancher chauffant)
-• Plomberie (sanitaires, fuites, rénovation)
-• Électricité (installation, mise aux normes, dépannage)
+• Chauffage (chaudières gaz, radiateurs, plancher chauffant, chauffe-eau)
+• Plomberie (sanitaires, recherche de fuite, rénovation, cumulus)
 
 Inscriptions professionnelles :
-• RCS / Répertoire des Métiers : [À compléter]
-• Assurance décennale : [À compléter - Nom assureur + N° contrat]
-• Responsabilité Civile Professionnelle : [À compléter]
-• Certification RGE : [À compléter si applicable]
+• RCS Nice
+• Assurance décennale : [Champ réservé - à compléter]
+• Responsabilité Civile Professionnelle : [Champ réservé - à compléter]
 
-Zone d'intervention : Alpes-Maritimes (06) et Var (83).''',
+Zone d'intervention : Alpes-Maritimes (06).''',
         ),
         
         // Section 3 - Hébergeur
@@ -6061,7 +5692,7 @@ Azur Confort décline toute responsabilité :
           content: '''Devis et tarification :
 • Tous les devis sont établis gratuitement et sans engagement
 • Un devis détaillé est obligatoirement fourni avant toute intervention
-• Les prix indiqués sont en euros TTC (TVA applicable selon régime)
+• Les prix indiqués sont en euros TTC (TVA non applicable – article 293B du CGI)
 • La validité d'un devis est de 30 jours sauf mention contraire
 
 Conditions d'intervention :
@@ -6088,7 +5719,8 @@ En cas de litige relatif à l'interprétation ou l'exécution des présentes, le
 
 Médiation de la consommation :
 Conformément à l'article L.612-1 du Code de la consommation, le client peut recourir gratuitement à un médiateur de la consommation en cas de litige.
-Médiateur : [À compléter - nom et coordonnées du médiateur]''',
+
+En cas de litige, vous pouvez saisir un médiateur de la consommation. Les coordonnées seront ajoutées dès l'inscription au dispositif de médiation.''',
         ),
       ],
     );
@@ -6107,11 +5739,11 @@ Médiateur : [À compléter - nom et coordonnées du médiateur]''',
 
 Azur Confort
 Adresse : [À compléter]
-Email : contact@azurconfort.fr
+Email : azurconfort21@gmail.com
 Téléphone : [À compléter]
 
 Délégué à la Protection des Données (DPO) :
-Email : contact@azurconfort.fr''',
+Email : azurconfort21@gmail.com''',
         ),
         
         // Section 2 - Données collectées
@@ -6208,7 +5840,7 @@ Vos données ne sont jamais vendues ni cédées à des tiers à des fins commerc
 • Droit d'opposition : vous opposer au traitement pour motifs légitimes
 • Droit de retirer votre consentement : à tout moment pour les traitements basés sur le consentement
 
-Pour exercer vos droits : contact@azurconfort.fr
+Pour exercer vos droits : azurconfort21@gmail.com
 Délai de réponse : 1 mois maximum''',
         ),
         
@@ -6244,7 +5876,7 @@ Si vous êtes parent ou tuteur et que vous pensez que votre enfant nous a fourni
           title: '10. Contact et réclamation',
           content: '''Pour toute question relative à la protection de vos données personnelles :
 
-Email : contact@azurconfort.fr
+Email : azurconfort21@gmail.com
 Courrier : [Adresse à compléter]
 
 En cas de difficulté, vous pouvez introduire une réclamation auprès de la CNIL :
@@ -6373,7 +6005,7 @@ Note : Le refus des cookies n'empêche pas l'accès au site mais peut dégrader 
           title: '7. Contact',
           content: '''Pour toute question concernant notre politique de cookies ou pour exercer vos droits :
 
-Email : contact@azurconfort.fr
+Email : azurconfort21@gmail.com
 
 Pour en savoir plus sur les cookies et vos droits, vous pouvez consulter le site de la CNIL :
 www.cnil.fr/fr/cookies-et-autres-traceurs
@@ -6411,9 +6043,8 @@ Date de dernière mise à jour : Décembre 2025''',
 • Climatisation : installation, entretien et dépannage de systèmes mono-split, multi-split et gainables
 • Pompes à chaleur : installation et maintenance de PAC air-air et air-eau
 • Frigoriste : chambres froides, vitrines réfrigérées, équipements professionnels
-• Chauffage : chaudières, radiateurs, plancher chauffant
-• Plomberie : sanitaires, fuites, rénovation de salle de bain
-• Électricité : installation, mise aux normes, dépannage
+• Chauffage : chaudières gaz, radiateurs, plancher chauffant, chauffe-eau
+• Plomberie : sanitaires, recherche de fuite, rénovation de salle de bain, cumulus
 
 Le site permet également de :
 • Demander un devis gratuit
@@ -6513,7 +6144,7 @@ Les liens de type "deep linking" ou utilisant la technique du "framing" sont int
 En utilisant le site, vous acceptez le traitement de vos données conformément à cette politique.
 
 Pour toute question relative à vos données personnelles :
-contact@azurconfort.fr''',
+azurconfort21@gmail.com''',
         ),
         
         // Section 9 - Loi applicable
@@ -6845,7 +6476,7 @@ https://ec.europa.eu/consumers/odr''',
               ),
               const SizedBox(height: 8),
               Text(
-                'Artisan climatisation, pompe à chaleur et plomberie - Alpes-Maritimes (06) & Var (83)',
+                'Artisan climatisation, pompe à chaleur et plomberie - Alpes-Maritimes (06)',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.4),
@@ -7109,9 +6740,9 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               'Chez Azur Confort, tous nos devis sont **gratuits et personnalisés**.\n\n'
               'Pour vous établir une proposition adaptée, j\'ai besoin de :\n'
               '• Type de prestation souhaitée\n'
-              '• Votre ville (06 ou 83)\n'
+              '• Votre ville (Alpes-Maritimes)\n'
               '• Vos coordonnées\n\n'
-              '📞 Réponse sous 24h garantie !';
+              '📞 Réponse dans la journée !';
           subOptions = [
             _QuickOption(id: 'formulaire', label: '📝 Formulaire de contact', icon: Icons.edit),
             _QuickOption(id: 'appeler', label: '📞 Appeler maintenant', icon: Icons.phone),
@@ -7125,8 +6756,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               '• ❄️ Panne de climatisation\n'
               '• 💧 Fuite d\'eau urgente\n'
               '• 🔥 Panne de chauffage\n'
-              '• 🧊 Problème de chambre froide\n'
-              '• ⚡ Panne électrique\n\n'
+              '• 🧊 Problème de chambre froide\n\n'
               '⚡ **Intervention rapide 7j/7**\n'
               '📞 Appelez-nous maintenant : **$kPhoneNumberFormatted**';
           subOptions = [
@@ -7138,13 +6768,12 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         // ==================== SERVICES ====================
         case 'services':
           response = '🔧 **Nos services professionnels**\n\n'
-              'Azur Confort, artisan qualifié depuis plus de 10 ans :\n\n'
+              'Azur Confort, artisan qualifié :\n\n'
               '❄️ **Climatisation** - Mono/multi-split, gainable\n'
               '🧊 **Frigoriste** - Chambres froides, vitrines\n'
               '🌡️ **Pompes à chaleur** - PAC air/air, air/eau\n'
-              '🔥 **Chauffage** - Chaudières, radiateurs\n'
-              '💧 **Plomberie** - Sanitaires, fuites\n'
-              '⚡ **Électricité** - Dépannage, mise aux normes\n\n'
+              '🔥 **Chauffage** - Chaudières gaz, radiateurs, chauffe-eau\n'
+              '💧 **Plomberie** - Sanitaires, recherche de fuite, cumulus\n\n'
               'Quel service vous intéresse ?';
           subOptions = [
             _QuickOption(id: 'clim', label: '❄️ Climatisation', icon: Icons.ac_unit),
@@ -7152,7 +6781,6 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
             _QuickOption(id: 'pac', label: '🌡️ Pompes à chaleur', icon: Icons.thermostat),
             _QuickOption(id: 'chauffage', label: '🔥 Chauffage', icon: Icons.local_fire_department),
             _QuickOption(id: 'plomberie', label: '💧 Plomberie', icon: Icons.water_drop),
-            _QuickOption(id: 'electricite', label: '⚡ Électricité', icon: Icons.electrical_services),
           ];
           break;
           
@@ -7177,13 +6805,11 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
           
         // ==================== ZONES D'INTERVENTION ====================
         case 'zones':
-          response = '📍 **Zones d\'intervention**\n\n'
+          response = '📍 **Zone d\'intervention**\n\n'
               '**Alpes-Maritimes (06) :**\n'
               'Nice, Cannes, Antibes, Grasse, Menton, Cagnes-sur-Mer, Mandelieu, Mougins, Valbonne, Vence, Saint-Laurent-du-Var, Villeneuve-Loubet...\n\n'
-              '**Var (83) :**\n'
-              'Fréjus, Saint-Raphaël, Toulon, Hyères, Draguignan, Sainte-Maxime, Saint-Tropez...\n\n'
-              '🚗 **Déplacement gratuit** dans la plupart des communes.\n'
-              '⏱️ **Délai moyen :** 24-48h (urgences : le jour même)';
+              '✅ **Devis gratuit**\n'
+              '⏱️ **Délai moyen :** Réponse dans la journée';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
             _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
@@ -7194,13 +6820,12 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         // ==================== CERTIFICATIONS ====================
         case 'certifications':
           response = '🏆 **Nos certifications & garanties**\n\n'
-              '✅ **Garantie décennale** - Vos travaux couverts 10 ans\n'
+              '✅ **Garantie décennale** - Vos travaux couverts\n'
               '✅ **Assurance RC Professionnelle** - Protection complète\n'
               '✅ **Installateur qualifié** - Formation continue\n'
               '✅ **Attestation de capacité fluides frigorigènes**\n\n'
               '🔧 **Marques installées :**\n'
-              'Daikin, Mitsubishi Electric, Atlantic, Toshiba, Panasonic\n\n'
-              '💯 **+500 clients satisfaits** sur la Côte d\'Azur';
+              'Daikin, Mitsubishi Electric, Atlantic, Toshiba, Panasonic';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Demander un devis', icon: Icons.description),
             _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
@@ -7213,18 +6838,16 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
           response = '❓ **Questions fréquentes**\n\n'
               'Choisissez une question :\n\n'
               '1️⃣ Quel est votre délai d\'intervention ?\n'
-              '2️⃣ Intervenez-vous dans le Var ?\n'
-              '3️⃣ Le devis est-il gratuit ?\n'
-              '4️⃣ Quelles marques installez-vous ?\n'
-              '5️⃣ Ma clim ne refroidit plus, que faire ?\n'
-              '6️⃣ Faites-vous des contrats d\'entretien ?';
+              '2️⃣ Le devis est-il gratuit ?\n'
+              '3️⃣ Quelles marques installez-vous ?\n'
+              '4️⃣ Ma clim ne refroidit plus, que faire ?\n'
+              '5️⃣ Faites-vous des contrats d\'entretien ?';
           subOptions = [
             _QuickOption(id: 'faq_delai', label: '1️⃣ Délai', icon: Icons.schedule),
-            _QuickOption(id: 'faq_var', label: '2️⃣ Var ?', icon: Icons.location_on),
-            _QuickOption(id: 'faq_devis', label: '3️⃣ Devis gratuit ?', icon: Icons.euro),
-            _QuickOption(id: 'faq_marques', label: '4️⃣ Marques', icon: Icons.verified),
-            _QuickOption(id: 'faq_panne', label: '5️⃣ Panne clim', icon: Icons.ac_unit),
-            _QuickOption(id: 'faq_entretien', label: '6️⃣ Entretien', icon: Icons.build),
+            _QuickOption(id: 'faq_devis', label: '2️⃣ Devis gratuit ?', icon: Icons.euro),
+            _QuickOption(id: 'faq_marques', label: '3️⃣ Marques', icon: Icons.verified),
+            _QuickOption(id: 'faq_panne', label: '4️⃣ Panne clim', icon: Icons.ac_unit),
+            _QuickOption(id: 'faq_entretien', label: '5️⃣ Entretien', icon: Icons.build),
           ];
           break;
           
@@ -7238,14 +6861,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
           subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
           break;
           
-        case 'faq_var':
-          response = '📍 **Intervention dans le Var (83)**\n\n'
-              'Oui, nous intervenons dans tout le Var !\n\n'
-              'Fréjus, Saint-Raphaël, Toulon, Hyères, Draguignan, Sainte-Maxime, Les Arcs...\n\n'
-              'Le déplacement est inclus ou facturé selon la distance.';
-          subOptions = _actionOptions + [_QuickOption(id: 'faq', label: '❓ Autres questions', icon: Icons.help)];
-          break;
-          
+        
         case 'faq_devis':
           response = '✅ **Devis 100% gratuit**\n\n'
               'Oui, tous nos devis sont **gratuits et sans engagement**.\n\n'
@@ -7297,12 +6913,11 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
           response = '📞 **Contactez Azur Confort**\n\n'
               '📱 **Téléphone :** $kPhoneNumberFormatted\n'
               '💬 **WhatsApp :** Disponible\n'
-              '📧 **Email :** contact@azur-confort.fr\n\n'
+              '📧 **Email :** azurconfort21@gmail.com\n\n'
               '🕐 **Horaires :**\n'
-              '• Lun-Ven : 8h - 19h\n'
-              '• Samedi : 9h - 17h\n'
+              '• Lun-Ven : 8h - 17h\n'
               '• Urgences : 7j/7\n\n'
-              '📍 Nice et toute la Côte d\'Azur (06 & 83)';
+              '📍 Nice et tout le département des Alpes-Maritimes (06)';
           subOptions = [
             _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
             _QuickOption(id: 'whatsapp', label: '💬 WhatsApp', icon: Icons.message),
@@ -7335,7 +6950,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         case 'email':
           launchEmail();
           response = '📧 **Email envoyé**\n\n'
-              'Adresse : **contact@azur-confort.fr**\n\n'
+              'Adresse : **azurconfort21@gmail.com**\n\n'
               'Décrivez votre projet en détail, nous vous répondons sous 24h ouvrées.';
           subOptions = [_QuickOption(id: 'retour', label: '↩️ Menu', icon: Icons.arrow_back)];
           break;
@@ -7360,7 +6975,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               '• Dépannage et réparation\n'
               '• Remplacement de climatiseur\n\n'
               '**Marques :** Daikin, Mitsubishi, Atlantic, Toshiba\n\n'
-              '💰 **Devis gratuit** - Intervention rapide 06 & 83';
+              '💰 **Devis gratuit** - Intervention Alpes-Maritimes (06)';
           subOptions = [
             _QuickOption(id: 'devis', label: '📋 Devis climatisation', icon: Icons.description),
             _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
@@ -7407,7 +7022,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         case 'chauffage':
           response = '🔥 **Chauffage**\n\n'
               '**Nos prestations :**\n'
-              '• Chaudières gaz/fioul\n'
+              '• Chaudières gaz\n'
               '• Radiateurs électriques\n'
               '• Plancher chauffant\n'
               '• Entretien chaudière annuel\n'
@@ -7424,7 +7039,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
         case 'plomberie':
           response = '💧 **Plomberie**\n\n'
               '**Nos prestations :**\n'
-              '• Dépannage fuite d\'eau\n'
+              '• Recherche de fuite\n'
               '• Installation sanitaires\n'
               '• Rénovation salle de bain\n'
               '• Débouchage canalisations\n'
@@ -7438,25 +7053,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
           ];
           break;
           
-        // ==================== ÉLECTRICITÉ (NOUVEAU) ====================
-        case 'electricite':
-          response = '⚡ **Électricité**\n\n'
-              '**Nos prestations :**\n'
-              '• Dépannage électrique urgent\n'
-              '• Mise aux normes NF C 15-100\n'
-              '• Tableaux électriques\n'
-              '• Installation éclairage LED\n'
-              '• Recherche de défaut\n'
-              '• Prises et interrupteurs\n'
-              '• Raccordement équipements\n\n'
-              '⚠️ **Sécurité garantie** - Travail soigné';
-          subOptions = [
-            _QuickOption(id: 'devis', label: '📋 Devis électricité', icon: Icons.description),
-            _QuickOption(id: 'appeler', label: '📞 Appeler', icon: Icons.phone),
-            _QuickOption(id: 'services', label: '↩️ Autres services', icon: Icons.arrow_back),
-          ];
-          break;
-          
+        
         // ==================== RETOUR MENU ====================
         case 'retour':
           response = 'Comment puis-je vous aider ?';
@@ -8313,55 +7910,6 @@ const List<_FaqEntry> kFaqDatabase = [
         '🏠 Pour un chauffage homogène',
   ),
   
-  // ==================== ÉLECTRICITÉ ====================
-  _FaqEntry(
-    category: 'Électricité',
-    keywords: ['coupure', 'courant', 'électricité', 'panne', 'plus', 'rien'],
-    question: 'Coupure de courant',
-    answer: '⚡ **Coupure électrique**\n\n'
-        '**Vérifications à faire :**\n'
-        '1. Le disjoncteur général est-il en position ON ?\n'
-        '2. Un disjoncteur divisionnaire a-t-il sauté ?\n'
-        '3. Vos voisins ont-ils du courant ?\n\n'
-        '**Si le problème persiste :**\n'
-        '• Recherche de court-circuit\n'
-        '• Vérification du tableau électrique\n'
-        '• Contrôle des prises et circuits\n\n'
-        '🔌 Intervention pour dépannage électrique basique',
-  ),
-  _FaqEntry(
-    category: 'Électricité',
-    keywords: ['disjoncteur', 'saute', 'déclenche', 'tableau', 'différentiel'],
-    question: 'Disjoncteur qui saute',
-    answer: '⚡ **Disjoncteur qui saute**\n\n'
-        '**Causes possibles :**\n'
-        '• Surcharge électrique\n'
-        '• Court-circuit\n'
-        '• Appareil défectueux\n'
-        '• Défaut d\'isolement\n\n'
-        '**Notre intervention :**\n'
-        '• Identification de la cause\n'
-        '• Test des circuits\n'
-        '• Remplacement disjoncteur si nécessaire\n'
-        '• Mise en conformité\n\n'
-        '🔧 Dépannage électrique basique inclus',
-  ),
-  _FaqEntry(
-    category: 'Électricité',
-    keywords: ['thermostat', 'installation', 'programmateur', 'régulation', 'connecté', 'wifi'],
-    question: 'Installation thermostat',
-    answer: '🌡️ **Thermostat / Régulation**\n\n'
-        '**Nous installons :**\n'
-        '• Thermostat d\'ambiance\n'
-        '• Thermostat programmable\n'
-        '• Thermostat connecté (WiFi)\n'
-        '• Régulation par zone\n\n'
-        '**Avantages :**\n'
-        '• Confort optimal\n'
-        '• Économies d\'énergie (15-25%)\n'
-        '• Pilotage à distance\n\n'
-        '💡 Compatible PAC, chaudière, radiateurs',
-  ),
   
   // ==================== ZONES D'INTERVENTION ====================
   _FaqEntry(
@@ -8377,37 +7925,21 @@ const List<_FaqEntry> kFaqDatabase = [
         '• Cagnes-sur-Mer, Saint-Laurent-du-Var\n'
         '• Villeneuve-Loubet, Biot\n'
         '• Carros, Vence, Saint-Paul\n\n'
-        '✅ **Déplacement gratuit** selon intervention\n'
-        '📞 $kPhoneNumberFormatted',
-  ),
-  _FaqEntry(
-    category: 'Zone',
-    keywords: ['fréjus', 'saint', 'raphaël', 'draguignan', '83', 'var', 'toulon'],
-    question: 'Intervention Var (83)',
-    answer: '📍 **Var (83)**\n\n'
-        '**Villes desservies :**\n'
-        '• Fréjus, Saint-Raphaël\n'
-        '• Draguignan\n'
-        '• Sainte-Maxime\n'
-        '• Roquebrune-sur-Argens\n'
-        '• Le Muy, Puget-sur-Argens\n'
-        '• Trans-en-Provence\n\n'
-        '✅ **Déplacement gratuit** selon intervention\n'
+        '✅ **Devis gratuit**\n'
         '📞 $kPhoneNumberFormatted',
   ),
   _FaqEntry(
     category: 'Zone',
     keywords: ['déplacement', 'frais', 'gratuit', 'zone', 'secteur', 'intervention'],
     question: 'Frais de déplacement',
-    answer: '🚗 **Frais de déplacement**\n\n'
+    answer: '🚗 **Devis gratuit**\n\n'
         '**Notre politique :**\n'
-        '• Déplacement **GRATUIT** pour toute intervention\n'
+        '• Devis **100% gratuit**\n'
         '• Devis sur place offert\n'
         '• Pas de frais cachés\n\n'
         '📍 **Zone couverte :**\n'
-        '• Alpes-Maritimes (06)\n'
-        '• Var Est (83)\n\n'
-        '💡 Le déplacement est inclus dans le prix de l\'intervention',
+        '• Alpes-Maritimes (06)\n\n'
+        '💡 Devis gratuit et sans engagement',
   ),
   
   // ==================== HORAIRES ====================
@@ -8417,7 +7949,7 @@ const List<_FaqEntry> kFaqDatabase = [
     question: 'Horaires d\'ouverture',
     answer: '🕐 **Nos horaires**\n\n'
         '**Interventions standards :**\n'
-        '• Lundi - Samedi : **8h - 20h**\n'
+        '• Lundi - Vendredi : **8h - 17h**\n'
         '• Dimanche : sur rendez-vous\n\n'
         '**Urgences :**\n'
         '• Disponible **7j/7**\n'
@@ -8449,7 +7981,7 @@ const List<_FaqEntry> kFaqDatabase = [
         '**Notre engagement :**\n'
         '• Devis **100% gratuit**\n'
         '• Sans engagement\n'
-        '• Réponse sous 24-48h\n\n'
+        '• Réponse dans la journée\n\n'
         '**Pour un devis précis :**\n'
         '• Décrivez votre besoin\n'
         '• Envoyez des photos si possible\n'
@@ -8473,57 +8005,6 @@ const List<_FaqEntry> kFaqDatabase = [
         '💡 Les photos nous aident à établir un devis précis',
   ),
   
-  // ==================== ÉLECTRICITÉ (NOUVEAU) ====================
-  _FaqEntry(
-    category: 'Électricité',
-    keywords: ['panne', 'électrique', 'électricité', 'courant', 'prise', 'lumière'],
-    question: 'Panne électrique',
-    answer: '⚡ **Panne électrique**\n\n'
-        '**Intervention rapide pour :**\n'
-        '• Coupure de courant\n'
-        '• Disjoncteur qui saute\n'
-        '• Prise ou interrupteur défaillant\n'
-        '• Court-circuit\n\n'
-        '🔧 **Nos services :**\n'
-        '• Dépannage électrique\n'
-        '• Mise aux normes NF C 15-100\n'
-        '• Tableaux électriques\n'
-        '• Installation éclairage LED\n\n'
-        '📞 Appelez-nous : \$kPhoneNumberFormatted',
-  ),
-  _FaqEntry(
-    category: 'Électricité',
-    keywords: ['norme', 'mise', 'aux', 'normes', 'conformité', 'sécurité', 'tableau'],
-    question: 'Mise aux normes électrique',
-    answer: '⚡ **Mise aux normes électrique**\n\n'
-        '**Nous réalisons :**\n'
-        '• Diagnostic de votre installation\n'
-        '• Mise en conformité NF C 15-100\n'
-        '• Remplacement tableau électrique\n'
-        '• Installation différentiel 30mA\n'
-        '• Mise à la terre\n\n'
-        '✅ **Obligatoire pour :**\n'
-        '• Vente immobilière\n'
-        '• Location\n'
-        '• Assurance\n\n'
-        '💰 Devis gratuit',
-  ),
-  _FaqEntry(
-    category: 'Électricité',
-    keywords: ['led', 'éclairage', 'lampe', 'spot', 'luminaire', 'ampoule'],
-    question: 'Installation éclairage LED',
-    answer: '💡 **Éclairage LED**\n\n'
-        '**Nos installations :**\n'
-        '• Spots LED encastrés\n'
-        '• Bandeaux LED\n'
-        '• Éclairage extérieur\n'
-        '• Remplacement ampoules\n\n'
-        '**Avantages LED :**\n'
-        '• Économie d\'énergie 80%\n'
-        '• Durée de vie 25 000h\n'
-        '• Pas de chaleur\n\n'
-        '📋 Devis gratuit',
-  ),
   
   // ==================== TARIFS ====================
   _FaqEntry(
@@ -8546,13 +8027,12 @@ const List<_FaqEntry> kFaqDatabase = [
     keywords: ['garantie', 'décennale', 'assurance', 'certification', 'qualifié', 'diplôme'],
     question: 'Certifications et garanties',
     answer: '🏆 **Nos certifications**\n\n'
-        '✅ **Garantie décennale** - Travaux couverts 10 ans\n'
+        '✅ **Garantie décennale** - Travaux couverts\n'
         '✅ **RC Professionnelle** - Protection complète\n'
         '✅ **Attestation fluides frigorigènes**\n'
         '✅ **Installateur qualifié**\n\n'
         '🔧 **Marques partenaires :**\n'
-        'Daikin, Mitsubishi, Atlantic, Toshiba\n\n'
-        '💯 +500 clients satisfaits',
+        'Daikin, Mitsubishi, Atlantic, Toshiba',
   ),
   _FaqEntry(
     category: 'Certifications',
@@ -8639,7 +8119,7 @@ const List<_FaqEntry> kFaqDatabase = [
         '📋 **Devis** - Estimation gratuite\n'
         '🔧 **Services** - Clim, plomberie, chauffage...\n'
         '🚨 **Urgences** - Intervention rapide\n'
-        '📍 **Zones** - 06 et 83\n'
+        '📍 **Zone** - Alpes-Maritimes (06)\n'
         '📞 **Contact** - Appel, WhatsApp, email\n\n'
         'Que souhaitez-vous savoir ?',
   ),
