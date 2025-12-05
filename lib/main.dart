@@ -2418,60 +2418,70 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  // ======================== POURQUOI NOUS ========================
+  // ======================== POURQUOI NOUS - BADGES HEXAGONAUX ANIMÉS ========================
   Widget _buildWhyUsSection(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 800;
+    
+    final badges = [
+      {'icon': Icons.verified_user, 'title': 'Artisan qualifié', 'subtitle': 'Frigoriste certifié', 'color': kPrimaryBlue},
+      {'icon': Icons.flash_on, 'title': 'Réactivité', 'subtitle': 'Intervention rapide', 'color': kAccentOrange},
+      {'icon': Icons.euro, 'title': 'Transparence', 'subtitle': 'Devis gratuit', 'color': kAccentYellow},
+      {'icon': Icons.workspace_premium, 'title': 'Garantie', 'subtitle': 'Satisfaction assurée', 'color': kPrimaryBlue},
+    ];
+    
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? colorScheme.surface : kLightBlue.withOpacity(0.4),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF0D2137), const Color(0xFF1E3A5F)]
+              : [kDarkBlue, kPrimaryBlue],
+        ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: isMobile ? 50 : 70),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: const BoxConstraints(maxWidth: 1100),
           child: Column(
             children: [
-              _buildSectionTitle(context,
+              // Titre avec style différent
+              Text(
                 'Pourquoi nous choisir ?',
-                'Artisan frigoriste et plombier chauffagiste de confiance – Intervention rapide Alpes-Maritimes (06)',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 26 : 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              const SizedBox(height: 48),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final isWide = constraints.maxWidth > 800;
-                  return isWide
-                      ? Row(
-                          children: [
-                            Expanded(child: _buildWhyUsItem(context, Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
-                            const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention rapide', kAccentOrange)),
-                            const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(context, Icons.description, 'Transparence', 'Devis gratuit détaillé', kPrimaryBlue)),
-                            const SizedBox(width: 24),
-                            Expanded(child: _buildWhyUsItem(context, Icons.thumb_up, 'Garantie', 'Satisfaction assurée', kAccentYellow)),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(child: _buildWhyUsItem(context, Icons.verified_user, 'Artisan qualifié', 'Frigoriste certifié', kPrimaryBlue)),
-                                const SizedBox(width: 16),
-                                Expanded(child: _buildWhyUsItem(context, Icons.flash_on, 'Réactivité', 'Intervention rapide', kAccentOrange)),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Expanded(child: _buildWhyUsItem(context, Icons.description, 'Transparence', 'Devis gratuit', kPrimaryBlue)),
-                                const SizedBox(width: 16),
-                                Expanded(child: _buildWhyUsItem(context, Icons.thumb_up, 'Garantie', 'Satisfaction', kAccentYellow)),
-                              ],
-                            ),
-                          ],
-                        );
-                },
+              const SizedBox(height: 12),
+              Text(
+                'Votre artisan de confiance dans les Alpes-Maritimes',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 14 : 16,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+              const SizedBox(height: 50),
+              
+              // Badges hexagonaux
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: isMobile ? 20 : 40,
+                runSpacing: 30,
+                children: badges.map((badge) => _buildHexBadge(
+                  badge['icon'] as IconData,
+                  badge['title'] as String,
+                  badge['subtitle'] as String,
+                  badge['color'] as Color,
+                  isDark,
+                  isMobile,
+                )).toList(),
               ),
             ],
           ),
@@ -2480,45 +2490,98 @@ class _AccueilPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWhyUsItem(BuildContext context, IconData icon, String title, String subtitle, Color color) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2)),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 32),
+  Widget _buildHexBadge(IconData icon, String title, String subtitle, Color color, bool isDark, bool isMobile) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 1.0, end: 1.0),
+        duration: const Duration(milliseconds: 200),
+        builder: (context, scale, child) => Transform.scale(
+          scale: scale,
+          child: child,
+        ),
+        child: SizedBox(
+          width: isMobile ? 140 : 180,
+          child: Column(
+            children: [
+              // Badge hexagonal
+              Container(
+                width: isMobile ? 90 : 110,
+                height: isMobile ? 100 : 120,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Forme hexagonale avec dégradé
+                    ClipPath(
+                      clipper: _HexagonClipper(),
+                      child: Container(
+                        width: isMobile ? 90 : 110,
+                        height: isMobile ? 100 : 120,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.white.withOpacity(0.25),
+                              Colors.white.withOpacity(0.1),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Bordure hexagonale
+                    CustomPaint(
+                      size: Size(isMobile ? 90 : 110, isMobile ? 100 : 120),
+                      painter: _HexagonBorderPainter(color: color),
+                    ),
+                    // Icône au centre
+                    Container(
+                      padding: EdgeInsets.all(isMobile ? 16 : 20),
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.2),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: color.withOpacity(0.5), width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: color.withOpacity(0.3),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        icon,
+                        color: Colors.white,
+                        size: isMobile ? 28 : 36,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Titre
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 15 : 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 4),
+              // Sous-titre
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isMobile ? 12 : 13,
+                  color: Colors.white.withOpacity(0.7),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -5522,6 +5585,65 @@ class _GoogleMapSection extends StatelessWidget {
       html.window.open(url, '_blank');
     }
   }
+}
+
+// ============================================================================
+// HEXAGON CLIPPER ET PAINTER POUR BADGES
+// ============================================================================
+
+/// Clipper pour forme hexagonale
+class _HexagonClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    final w = size.width;
+    final h = size.height;
+    
+    path.moveTo(w * 0.5, 0);
+    path.lineTo(w, h * 0.25);
+    path.lineTo(w, h * 0.75);
+    path.lineTo(w * 0.5, h);
+    path.lineTo(0, h * 0.75);
+    path.lineTo(0, h * 0.25);
+    path.close();
+    
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
+}
+
+/// Painter pour bordure hexagonale
+class _HexagonBorderPainter extends CustomPainter {
+  final Color color;
+  
+  _HexagonBorderPainter({required this.color});
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color.withOpacity(0.6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5;
+    
+    final path = Path();
+    final w = size.width;
+    final h = size.height;
+    
+    path.moveTo(w * 0.5, 0);
+    path.lineTo(w, h * 0.25);
+    path.lineTo(w, h * 0.75);
+    path.lineTo(w * 0.5, h);
+    path.lineTo(0, h * 0.75);
+    path.lineTo(0, h * 0.25);
+    path.close();
+    
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // ============================================================================
