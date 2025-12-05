@@ -1783,35 +1783,6 @@ class _AccueilPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-              // Intervention rapide
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white.withOpacity(0.3)),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.flash_on, color: kAccentYellow, size: 18),
-                        SizedBox(width: 8),
-                        Text(
-                          'Intervention rapide',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-              ),
-            ],
-          ),
             ],
         ),
         ),
@@ -1884,31 +1855,6 @@ class _AccueilPage extends StatelessWidget {
         _buildHeroButton('Appeler maintenant', Icons.phone, true),
         const SizedBox(height: 12),
         _buildHeroButton('Demander un devis', Icons.description_outlined, false),
-        const SizedBox(height: 20),
-        // Intervention rapide
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.3)),
-          ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-          children: [
-              Icon(Icons.flash_on, color: kAccentYellow, size: 18),
-              SizedBox(width: 8),
-              Text(
-                'Intervention rapide',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
