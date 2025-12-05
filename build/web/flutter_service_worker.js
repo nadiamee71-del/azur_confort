@@ -3,12 +3,13 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "215c80ed8a30bad28b09c84a9a467f0a",
-"assets/AssetManifest.bin.json": "72e50d20ba45034ad50ccc1f8a8a38e5",
-"assets/AssetManifest.json": "ad41bd7108bf8a10d5a21eed5c41aa2d",
+const RESOURCES = {"assets/AssetManifest.bin": "5ad7e5efdd198534d8598bd759c26aa3",
+"assets/AssetManifest.bin.json": "f23a160d9aa1425af5d9f7c5bf642c07",
+"assets/AssetManifest.json": "99e247e8c14f27c3192528f8f2166854",
 "assets/assets/images/about_hero.png": "f0ca6b0c0b68a9deec95bfc23807f9cb",
 "assets/assets/images/chatbot_mascot.png": "20f9df8429e7ffaeef484bba624a061a",
 "assets/assets/images/ChatGPT%2520Image%25205%2520d%25C3%25A9c.%25202025,%252013_19_35.png": "3d882a8500eca30752b29a4e6215e8ed",
+"assets/assets/images/ChatGPT%2520Image%25205%2520d%25C3%25A9c.%25202025,%252016_51_42.png": "0c1b44e4c57a19e5cfc7ae6f90d508f1",
 "assets/assets/images/contact_hero.png": "52355d598d3766fd31f32017054e98d9",
 "assets/assets/images/hero_background.png": "0e57225c29e70fe449c5321948015072",
 "assets/assets/images/logo%2520Azur%2520Confort%2520.png": "f7fb632d94fb8068b02e437b5519039e",
@@ -22,7 +23,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "215c80ed8a30bad28b09c84a9a467f0a
 "assets/assets/images/service_pac_new.png": "4fc1bcbb2a65c6b403aa233a004cf28a",
 "assets/assets/images/service_plomberie.png": "7eee114c48ee611093da8fd6d04797b3",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
-"assets/fonts/MaterialIcons-Regular.otf": "d3bbeaf39a02593875166ed5ab43b4cf",
+"assets/fonts/MaterialIcons-Regular.otf": "009ac297741b9a4b035b0e9380847a58",
 "assets/NOTICES": "c83c47e3dd9d17769304fc5d23892a67",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "33b7d9392238c04c131b6ce224e13711",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
@@ -40,14 +41,14 @@ const RESOURCES = {"assets/AssetManifest.bin": "215c80ed8a30bad28b09c84a9a467f0a
 "canvaskit/skwasm_heavy.wasm": "8034ad26ba2485dab2fd49bdd786837b",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "888483df48293866f9f41d3d9274a779",
-"flutter_bootstrap.js": "29dc181421f9756476c86cf4d86e50c9",
+"flutter_bootstrap.js": "c64bcabc7f6c6de7cbc037fb4a207250",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "index.html": "fcdcd7b1d4cc4bdaf2ba379b0eae9dc1",
 "/": "fcdcd7b1d4cc4bdaf2ba379b0eae9dc1",
-"main.dart.js": "6e94a3d078bd64928d20cafb817fc6bb",
+"main.dart.js": "d3983104e85e4b67198e668c3817e48e",
 "manifest.json": "84f88f1da05caa0d8a65c5e5f8c50b19",
 "version.json": "0c93f330c39e137f1c82aad999dd3b0f"};
 // The application shell files that are downloaded before a service worker can

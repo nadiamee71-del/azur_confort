@@ -5379,20 +5379,24 @@ class _GoogleMapSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Carte Google Maps (sans overlay pour laisser l'UI Google Maps visible)
+          // Image de la carte zone d'intervention
           ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            child: SizedBox(
+            child: Image.asset(
+              'assets/images/ChatGPT Image 5 déc. 2025, 16_51_42.png',
               width: double.infinity,
-              height: isMobile ? 200 : 280, // RÉDUIT
-              child: HtmlElementView(
-                viewType: 'google-map-iframe',
-                onPlatformViewCreated: (int viewId) {
-                  // Le view est créé
-                },
+              height: isMobile ? 220 : 300,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                width: double.infinity,
+                height: isMobile ? 220 : 300,
+                color: isDark ? colorScheme.surfaceVariant : kLightBlue,
+                child: const Center(
+                  child: Icon(Icons.map, size: 60, color: kPrimaryBlue),
+                ),
               ),
             ),
           ),
