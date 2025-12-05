@@ -760,90 +760,8 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
         title: Row(
           children: [
             // ============================================================
-            // LOGO DESIGN - INTERRUPTEUR JOUR/NUIT (DARK MODE)
+            // LOGO IMAGE CLIQUABLE AVEC EFFET WAOUH
             // ============================================================
-            Tooltip(
-              message: widget.isDarkMode ? 'Passer en mode jour ☀️' : 'Passer en mode nuit 🌙',
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: widget.onToggleTheme,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                        colors: widget.isDarkMode 
-                            ? [const Color(0xFF1A237E), const Color(0xFF3949AB)] // Bleu nuit
-                            : [kPrimaryBlue, kDarkBlue],
-                ),
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                          color: widget.isDarkMode 
-                              ? const Color(0xFF3949AB).withOpacity(0.4)
-                              : kPrimaryBlue.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                        color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                          // Icône flocon (froid) ou lune (nuit)
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            transitionBuilder: (child, animation) => ScaleTransition(
-                              scale: animation,
-                              child: child,
-                            ),
-                            child: Icon(
-                              widget.isDarkMode ? Icons.nightlight_round : Icons.ac_unit,
-                              key: ValueKey(widget.isDarkMode ? 'moon' : 'snow'),
-                              color: widget.isDarkMode ? const Color(0xFFFFD54F) : kPrimaryBlue,
-                              size: 20,
-                            ),
-                          ),
-                    Container(
-                      width: 1,
-                      height: 16,
-                      margin: const EdgeInsets.symmetric(horizontal: 6),
-                            color: colorScheme.outline.withOpacity(0.5),
-                          ),
-                          // Icône flamme (chaud) ou soleil (jour)
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            transitionBuilder: (child, animation) => ScaleTransition(
-                              scale: animation,
-                              child: child,
-                            ),
-                            child: Icon(
-                              widget.isDarkMode ? Icons.wb_sunny : Icons.local_fire_department,
-                              key: ValueKey(widget.isDarkMode ? 'sun' : 'fire'),
-                              color: kAccentOrange,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 14),
-            // Logo image cliquable avec effet waouh
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
@@ -866,6 +784,90 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            // ============================================================
+            // INTERRUPTEUR JOUR/NUIT (DARK MODE)
+            // ============================================================
+            Tooltip(
+              message: widget.isDarkMode ? 'Passer en mode jour ☀️' : 'Passer en mode nuit 🌙',
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: widget.onToggleTheme,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: widget.isDarkMode 
+                            ? [const Color(0xFF1A237E), const Color(0xFF3949AB)] // Bleu nuit
+                            : [kPrimaryBlue, kDarkBlue],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: widget.isDarkMode 
+                              ? const Color(0xFF3949AB).withOpacity(0.4)
+                              : kPrimaryBlue.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Icône flocon (froid) ou lune (nuit)
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) => ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            ),
+                            child: Icon(
+                              widget.isDarkMode ? Icons.nightlight_round : Icons.ac_unit,
+                              key: ValueKey(widget.isDarkMode ? 'moon' : 'snow'),
+                              color: widget.isDarkMode ? const Color(0xFFFFD54F) : kPrimaryBlue,
+                              size: 20,
+                            ),
+                          ),
+                          Container(
+                            width: 1,
+                            height: 16,
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
+                            color: colorScheme.outline.withOpacity(0.5),
+                          ),
+                          // Icône flamme (chaud) ou soleil (jour)
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) => ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            ),
+                            child: Icon(
+                              widget.isDarkMode ? Icons.wb_sunny : Icons.local_fire_department,
+                              key: ValueKey(widget.isDarkMode ? 'sun' : 'fire'),
+                              color: kAccentOrange,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
