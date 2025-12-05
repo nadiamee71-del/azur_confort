@@ -1481,15 +1481,33 @@ class _AccueilPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
-              // Stats
+              const SizedBox(height: 24),
+              // Intervention rapide
               Row(
                 children: [
-                  _buildStat('10+', 'Ans d\'expérience'),
-                  const SizedBox(width: 48),
-                  _buildStat('500+', 'Clients satisfaits'),
-                  const SizedBox(width: 48),
-                  _buildStat('Rapide', 'Intervention'),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white.withOpacity(0.3)),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.flash_on, color: kAccentYellow, size: 18),
+                        SizedBox(width: 8),
+                        Text(
+                          'Intervention rapide',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -1564,15 +1582,30 @@ class _AccueilPage extends StatelessWidget {
         _buildHeroButton('Appeler maintenant', Icons.phone, true),
         const SizedBox(height: 12),
         _buildHeroButton('Demander un devis', Icons.description_outlined, false),
-        const SizedBox(height: 32),
-        // Stats en ligne
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildStatMobile('10+', 'Ans'),
-            _buildStatMobile('500+', 'Clients'),
-            _buildStatMobile('Rapide', 'Réponse'),
-          ],
+        const SizedBox(height: 20),
+        // Intervention rapide
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withOpacity(0.3)),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.flash_on, color: kAccentYellow, size: 18),
+              SizedBox(width: 8),
+              Text(
+                'Intervention rapide',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -3639,21 +3672,18 @@ class _AProposPage extends StatelessWidget {
             child: isMobile
                 ? Column(
                     children: [
-                      _buildNumberCard('10+', 'Années d\'expérience', Icons.calendar_today),
-                      const SizedBox(height: 24),
-                      _buildNumberCard('500+', 'Clients satisfaits', Icons.people),
-                      const SizedBox(height: 24),
                       _buildNumberCard('Rapide', 'Intervention', Icons.flash_on),
                       const SizedBox(height: 24),
                       _buildNumberCard('100%', 'Devis gratuits', Icons.description),
+                      const SizedBox(height: 24),
+                      _buildNumberCard('06', 'Alpes-Maritimes', Icons.location_on),
                     ],
                   )
                 : Row(
                     children: [
-                      Expanded(child: _buildNumberCard('10+', 'Années d\'expérience', Icons.calendar_today)),
-                      Expanded(child: _buildNumberCard('500+', 'Clients satisfaits', Icons.people)),
                       Expanded(child: _buildNumberCard('Rapide', 'Intervention', Icons.flash_on)),
                       Expanded(child: _buildNumberCard('100%', 'Devis gratuits', Icons.description)),
+                      Expanded(child: _buildNumberCard('06', 'Alpes-Maritimes', Icons.location_on)),
                     ],
                   ),
           ),
