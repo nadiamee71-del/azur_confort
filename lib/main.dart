@@ -5014,6 +5014,8 @@ class _ContactPageState extends State<_ContactPage> {
               const SizedBox(height: 16),
               _buildScheduleRow('Lundi - Vendredi', '8h00 - 17h00'),
               const SizedBox(height: 8),
+              _buildScheduleRow('Samedi', '9h00 - 17h00'),
+              const SizedBox(height: 8),
               _buildScheduleRow('Urgences', '7j/7', isHighlight: true),
             ],
           ),
@@ -7762,6 +7764,7 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
               '📧 **Email :** azurconfort21@gmail.com\n\n'
               '🕐 **Horaires :**\n'
               '• Lun-Ven : 8h - 17h\n'
+              '• Samedi : 9h - 17h\n'
               '• Urgences : 7j/7\n\n'
               '📍 Nice et tout le département des Alpes-Maritimes (06)';
           subOptions = [
@@ -8796,7 +8799,7 @@ const List<_FaqEntry> kFaqDatabase = [
     answer: '🕐 **Nos horaires**\n\n'
         '**Interventions standards :**\n'
         '• Lundi - Vendredi : **8h - 17h**\n'
-        '• Dimanche : sur rendez-vous\n\n'
+        '• Samedi : **9h - 17h**\n\n'
         '**Urgences :**\n'
         '• Disponible **7j/7**\n'
         '• Intervention rapide selon disponibilité\n\n'
