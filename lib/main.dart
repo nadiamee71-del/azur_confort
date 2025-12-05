@@ -414,7 +414,7 @@ void main() {
 /// Enregistre l'iframe Google Maps pour l'adresse Azur Confort (page Contact)
 void _registerGoogleMapIframe() {
   // URL de l'iframe Google Maps avec recherche de l'adresse
-  // Adresse : 60 bis avenue de la Bornala, Résidence Le Vallon Monari, 06200 Nice
+  // Adresse : 60 avenue de la Bornala, 06200 Nice
   // Note: Pour afficher "Azur Confort" sur le marqueur, l'entreprise doit être
   // enregistrée sur Google My Business. En attendant, on affiche l'adresse.
   ui_web.platformViewRegistry.registerViewFactory(
@@ -422,7 +422,7 @@ void _registerGoogleMapIframe() {
     (int viewId) {
       final iframe = html.IFrameElement()
         // Recherche avec le nom de l'entreprise + adresse
-        ..src = 'https://www.google.com/maps?q=Azur+Confort+60+bis+Avenue+de+la+Bornala+06200+Nice+France&output=embed'
+        ..src = 'https://www.google.com/maps?q=Azur+Confort+60+Avenue+de+la+Bornala+06200+Nice+France&output=embed'
         ..style.border = 'none'
         ..style.width = '100%'
         ..style.height = '100%'
@@ -725,38 +725,38 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
                       ),
                       const SizedBox(width: 10),
                       // Texte Azur Confort
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ShaderMask(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ShaderMask(
                             shaderCallback: (bounds) => LinearGradient(
                               colors: widget.isDarkMode 
                                   ? [kDarkTextPrimary, kPrimaryBlue]
                                   : [kDarkBlue, kPrimaryBlue],
-                            ).createShader(bounds),
-                            child: Text(
-                              'AZUR',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
+                  ).createShader(bounds),
+                  child: Text(
+                    'AZUR',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
                                 fontSize: isMobile ? 14 : 18,
-                                letterSpacing: 2,
-                                height: 1,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'CONFORT',
-                            style: TextStyle(
-                              color: kAccentOrange,
-                              fontWeight: FontWeight.w600,
+                      letterSpacing: 2,
+                      height: 1,
+                    ),
+                  ),
+                ),
+                Text(
+                  'CONFORT',
+                  style: TextStyle(
+                    color: kAccentOrange,
+                    fontWeight: FontWeight.w600,
                               fontSize: isMobile ? 9 : 11,
-                              letterSpacing: 3,
-                              height: 1.2,
-                            ),
-                          ),
-                        ],
+                    letterSpacing: 3,
+                    height: 1.2,
+                  ),
+                ),
+              ],
                       ),
                     ],
                   ),
@@ -1702,11 +1702,11 @@ class _AccueilPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                ],
               ),
             ],
           ),
+            ],
+        ),
         ),
         // Illustration à droite - DECOR BACKGROUND ICON IMPROVED
         Expanded(
@@ -1788,7 +1788,7 @@ class _AccueilPage extends StatelessWidget {
           ),
           child: const Row(
             mainAxisSize: MainAxisSize.min,
-            children: [
+          children: [
               Icon(Icons.flash_on, color: kAccentYellow, size: 18),
               SizedBox(width: 8),
               Text(
@@ -2096,8 +2096,8 @@ class _AccueilPage extends StatelessWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1000),
-          child: Column(
-            children: [
+            child: Column(
+              children: [
               // Titre
               Container(
                 padding: const EdgeInsets.all(14),
@@ -4988,7 +4988,7 @@ class _ContactPageState extends State<_ContactPage> {
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                children: [
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -5293,8 +5293,8 @@ class _GoogleMapSection extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     
     // URL de l'iframe Google Maps avec l'adresse Azur Confort
-    // Adresse : 60 bis avenue de la Bornala, Résidence Le Vallon Monari, 06200 Nice
-    const String mapEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2884.8!2d7.2558!3d43.7034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd0106a852d31%3A0x5f0!2s60+Bis+Avenue+de+la+Bornala%2C+06200+Nice%2C+France!5e0!3m2!1sfr!2sfr!4v1701700000000!5m2!1sfr!2sfr';
+    // Adresse : 60 avenue de la Bornala, 06200 Nice
+    const String mapEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2884.8!2d7.2558!3d43.7034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd0106a852d31%3A0x5f0!2s60+Avenue+de+la+Bornala%2C+06200+Nice%2C+France!5e0!3m2!1sfr!2sfr!4v1701700000000!5m2!1sfr!2sfr';
     
     return Container(
       width: double.infinity,
@@ -5378,7 +5378,7 @@ class _GoogleMapSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '60 bis avenue de la Bornala, Résidence Le Vallon Monari',
+                        '60 avenue de la Bornala, 06200 Nice',
                         style: TextStyle(
                           fontSize: 13,
                           color: colorScheme.onSurfaceVariant,
@@ -5439,7 +5439,7 @@ class _GoogleMapSection extends StatelessWidget {
   
   void _launchMapsUrl() {
     // URL Google Maps pour l'itinéraire
-    const url = 'https://www.google.com/maps/dir/?api=1&destination=60+Bis+Avenue+de+la+Bornala,+06200+Nice,+France';
+    const url = 'https://www.google.com/maps/dir/?api=1&destination=60+Avenue+de+la+Bornala,+06200+Nice,+France';
     // ignore: undefined_prefixed_name
     if (kIsWeb) {
       // Pour Flutter Web, utiliser dart:html

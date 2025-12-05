@@ -42134,7 +42134,7 @@ if(s!=null)s.m4(this.b)},
 $S:0}
 A.ayn.prototype={
 $1(a){var s,r=document.createElement("iframe")
-r.src="https://www.google.com/maps?q=Azur+Confort+60+bis+Avenue+de+la+Bornala+06200+Nice+France&output=embed"
+r.src="https://www.google.com/maps?q=Azur+Confort+60+Avenue+de+la+Bornala+06200+Nice+France&output=embed"
 s=r.style
 s.border="none"
 s=r.style
@@ -43010,7 +43010,7 @@ q=A.a5(l,B.Q_,B.i,l,l,new A.a8(l,l,l,A.ay(12),l,B.mA,B.t),l,l,l,B.eq,l,l,l)
 p=A.an("Azur Confort \u2013 Artisan frigoriste Alpes-Maritimes (06)",l,l,l,l,A.ax(l,l,i?k.k3:B.C,l,l,l,l,l,l,l,l,15,l,l,B.F,l,l,!0,l,l,l,l,l,l,l,l),l,l)
 o=k.rx
 i=o==null
-n=A.an("60 bis avenue de la Bornala, R\xe9sidence Le Vallon Monari",l,l,l,l,A.ax(l,l,i?k.k3:o,l,l,l,l,l,l,l,l,13,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)
+n=A.an("60 avenue de la Bornala, 06200 Nice",l,l,l,l,A.ax(l,l,i?k.k3:o,l,l,l,l,l,l,l,l,13,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)
 m=t.p
 o=A.b([q,B.bH,A.bT(A.bm(A.b([p,B.nO,n,A.an("06200 Nice, France",l,l,l,l,A.ax(l,l,i?k.k3:o,l,l,l,l,l,l,l,l,13,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)],m),B.a7,B.n,B.r),1)],m)
 if(!g){i=A.v(B.c.W(25.5),B.f.k()>>>16&255,B.f.k()>>>8&255,B.f.k()&255)
@@ -43023,7 +43023,7 @@ $S:20}
 A.asc.prototype={
 $0(){var s=window
 s.toString
-B.ol.HG(s,"https://www.google.com/maps/dir/?api=1&destination=60+Bis+Avenue+de+la+Bornala,+06200+Nice,+France","_blank")},
+B.ol.HG(s,"https://www.google.com/maps/dir/?api=1&destination=60+Avenue+de+la+Bornala,+06200+Nice,+France","_blank")},
 $S:0}
 A.nU.prototype={
 av(){return new A.Wi(null,null)}}
