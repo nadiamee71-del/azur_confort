@@ -7511,13 +7511,22 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
   void _toggleChat() {
     setState(() {
       _isOpen = !_isOpen;
-      _showWelcome = false;
-      if (_isOpen && _messages.isEmpty) {
-        // Message d'accueil du bot
-        _messages.add(_ChatMessage(
-          text: 'Bonjour ! 👋 Je suis Clim\', votre assistant Azur Confort.\n\nComment puis-je vous aider aujourd\'hui ?',
-          isBot: true,
-        ));
+      if (_isOpen) {
+        _showWelcome = false;
+        if (_messages.isEmpty) {
+          // Message d'accueil du bot
+          _messages.add(_ChatMessage(
+            text: 'Bonjour ! 👋 Je suis Clim\', votre assistant Azur Confort.\n\nComment puis-je vous aider aujourd\'hui ?',
+            isBot: true,
+          ));
+        }
+      } else {
+        // Réafficher la bulle "Besoin d'aide ?" après 5 secondes quand on ferme le chatbot
+        Future.delayed(const Duration(seconds: 5), () {
+          if (mounted && !_isOpen) {
+            setState(() => _showWelcome = true);
+          }
+        });
       }
     });
   }
@@ -7991,7 +8000,15 @@ class _AzurChatbotState extends State<AzurChatbot> with SingleTickerProviderStat
                     ),
                     const SizedBox(width: 6),
                     GestureDetector(
-                      onTap: () => setState(() => _showWelcome = false),
+                      onTap: () {
+                        setState(() => _showWelcome = false);
+                        // Réafficher après 10 secondes
+                        Future.delayed(const Duration(seconds: 10), () {
+                          if (mounted && !_isOpen) {
+                            setState(() => _showWelcome = true);
+                          }
+                        });
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
