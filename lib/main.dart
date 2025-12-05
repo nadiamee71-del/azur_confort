@@ -4091,73 +4091,197 @@ class _AProposPage extends StatelessWidget {
   Widget _buildQualityCommitment(BuildContext context, bool isMobile) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    final commitments = [
+      {'icon': Icons.engineering, 'title': 'Travail soigné', 'desc': 'Artisan qualifié et professionnel'},
+      {'icon': Icons.verified, 'title': 'Normes respectées', 'desc': 'Conformité garantie'},
+      {'icon': Icons.high_quality, 'title': 'Équipements qualité', 'desc': 'Matériel premium'},
+      {'icon': Icons.schedule, 'title': 'Durabilité', 'desc': 'Installations pérennes'},
+    ];
+    
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: 70,
-      ),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        border: Border(
-          top: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
-          bottom: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [const Color(0xFF0D2137), const Color(0xFF1E3A5F)]
+              : [kDarkBlue, kPrimaryBlue],
         ),
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: kPrimaryBlue.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.verified_user, color: kPrimaryBlue, size: 40),
+      child: Stack(
+        children: [
+          // Motif décoratif
+          Positioned(
+            right: -50,
+            top: -50,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.05),
               ),
-              const SizedBox(height: 24),
-              Text(
-                'Notre engagement qualité',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? colorScheme.onSurface : kDarkBlue,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'En tant qu\'artisan frigoriste qualifié, nous nous engageons à fournir un travail soigné et professionnel. Nous respectons scrupuleusement les normes en vigueur et utilisons exclusivement des équipements de qualité pour garantir la performance et la durabilité de vos installations.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17,
-                  color: colorScheme.onSurfaceVariant,
-                  height: 1.8,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                decoration: BoxDecoration(
-                  color: isDark ? kPrimaryBlue.withOpacity(0.15) : kLightBlue,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '« Notre objectif : votre confort thermique optimal, été comme hiver, tout en maîtrisant votre consommation d\'énergie. »',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                    color: isDark ? colorScheme.onSurface : kDarkBlue,
-                    height: 1.6,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            left: -30,
+            bottom: -30,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.05),
+              ),
+            ),
+          ),
+          // Contenu
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 24 : 80,
+              vertical: 70,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1100),
+                child: Column(
+                  children: [
+                    // Badge animé
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [kAccentOrange, kAccentYellow],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: kAccentOrange.withOpacity(0.4),
+                            blurRadius: 20,
+                            spreadRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Icons.workspace_premium, color: Colors.white, size: 40),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Notre engagement qualité',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: isMobile ? 26 : 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: Text(
+                        'En tant qu\'artisan frigoriste qualifié, nous nous engageons à fournir un travail soigné et professionnel pour garantir votre satisfaction.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: isMobile ? 15 : 17,
+                          color: Colors.white.withOpacity(0.85),
+                          height: 1.6,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    
+                    // 4 engagements en grille
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 20,
+                      runSpacing: 20,
+                      children: commitments.map((c) => _buildCommitmentCard(
+                        c['icon'] as IconData,
+                        c['title'] as String,
+                        c['desc'] as String,
+                        isMobile,
+                      )).toList(),
+                    ),
+                    
+                    const SizedBox(height: 40),
+                    
+                    // Citation
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white.withOpacity(0.2)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.format_quote, color: kAccentYellow, size: 30),
+                          const SizedBox(width: 16),
+                          Flexible(
+                            child: Text(
+                              'Votre confort thermique optimal, été comme hiver, tout en maîtrisant votre consommation d\'énergie.',
+                              style: TextStyle(
+                                fontSize: isMobile ? 14 : 16,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.white,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildCommitmentCard(IconData icon, String title, String desc, bool isMobile) {
+    return Container(
+      width: isMobile ? 150 : 180,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: kAccentYellow, size: isMobile ? 28 : 32),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: isMobile ? 14 : 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            desc,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: isMobile ? 11 : 12,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
       ),
     );
   }
