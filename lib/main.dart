@@ -849,7 +849,7 @@ class _AzurConfortHomeState extends State<AzurConfortHome> {
               child: GestureDetector(
                 onTap: () => _showTrustMessage(context),
                 child: Image.asset(
-                  'assets/images/logo Azur Confort .png',
+                  'assets/images/ChatGPT Image 5 déc. 2025, 13_19_35.png',
                   height: isMobile ? 40 : 50,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => Row(

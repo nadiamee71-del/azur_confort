@@ -104,6 +104,7 @@ flutter:
     - assets/images/contact_hero.png
     - assets/images/about_hero.png
     - "assets/images/logo Azur Confort .png"
+    - "assets/images/ChatGPT Image 5 déc. 2025, 13_19_35.png"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
